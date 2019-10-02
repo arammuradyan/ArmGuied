@@ -13,15 +13,19 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.ArmGuide.tourapplication.R;
+import com.google.android.libraries.maps.GoogleMap;
+import com.google.android.libraries.maps.OnMapReadyCallback;
+import com.google.android.libraries.maps.SupportMapFragment;
 
-public class SlideshowFragment extends Fragment {
+public class SlideshowFragment extends Fragment{
 
     private SlideshowViewModel slideshowViewModel;
 
+
+
+
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel =
-                ViewModelProviders.of(this).get(SlideshowViewModel.class);
+                             ViewGroup container, Bundle savedInstanceState) { slideshowViewModel = ViewModelProviders.of(this).get(SlideshowViewModel.class);
         View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
         final TextView textView = root.findViewById(R.id.text_slideshow);
         slideshowViewModel.getText().observe(this, new Observer<String>() {
@@ -32,4 +36,8 @@ public class SlideshowFragment extends Fragment {
         });
         return root;
     }
+
+
+
+
 }
