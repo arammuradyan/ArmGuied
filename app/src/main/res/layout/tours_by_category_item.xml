@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="8dp"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="6dp"
+    app:cardUseCompatPadding="true">
+    <androidx.constraintlayout.widget.ConstraintLayout
+         android:id="@+id/const_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/tour_category_img"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/testing_img"
+            app:civ_border_color="#3f51b5"
+            app:civ_border_width="4dp"
+            app:civ_shadow="true"
+            app:civ_shadow_radius="10"
+            app:civ_shadow_color="#3f51b5"
+            app:layout_constraintTop_toTopOf="@id/const_lay"
+            app:layout_constraintBottom_toBottomOf="@id/const_lay"
+            app:layout_constraintLeft_toLeftOf="@id/const_lay"
+            android:transitionName="img_trans"/>
+        <ImageView
+            android:id="@+id/tour_agency_img"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_application"
+            app:layout_constraintTop_toTopOf="@id/const_lay"
+            app:layout_constraintEnd_toEndOf="@id/const_lay"/>
+        <TextView
+            android:id="@+id/tour_agency_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agency name"
+            android:layout_marginStart="6dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintTop_toTopOf="@id/const_lay"
+            app:layout_constraintLeft_toRightOf="@id/tour_category_img"
+            app:layout_constraintBottom_toTopOf="@id/tours_tv"
+            android:drawableEnd="@drawable/ic_add_tour_black"
+            android:drawablePadding="6dp"/>
+        <TextView
+            android:id="@+id/tours_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dilijan,Caxkadzor"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintTop_toBottomOf="@id/tour_agency_name_tv"
+            app:layout_constraintLeft_toLeftOf="@id/tour_agency_name_tv"
+            app:layout_constraintBottom_toTopOf="@id/price_tv"/>
+        <TextView
+            android:id="@+id/price_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintTop_toBottomOf="@id/tours_tv"
+            app:layout_constraintLeft_toLeftOf="@id/tours_tv"
+            app:layout_constraintBottom_toTopOf="@id/duration_tv"/>
+        <TextView
+            android:id="@+id/duration_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="29.09.2019 - 10.10.2019"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintTop_toBottomOf="@id/price_tv"
+            app:layout_constraintLeft_toLeftOf="@id/price_tv"
+            app:layout_constraintBottom_toBottomOf="@id/const_lay"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

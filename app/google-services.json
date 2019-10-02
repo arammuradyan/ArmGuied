@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1005707394501",
+    "firebase_url": "https://armguide-abdb1.firebaseio.com",
+    "project_id": "armguide-abdb1",
+    "storage_bucket": "armguide-abdb1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005707394501:android:e282e669463b13e1f19fac",
+        "android_client_info": {
+          "package_name": "com.ArmGuide.tourapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1005707394501-4ejupfdc694j82a0diei2c93c6qeta8u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ArmGuide.tourapplication",
+            "certificate_hash": "e1c9dfef8fe7689826737f0120e0be69527526e3"
+          }
+        },
+        {
+          "client_id": "1005707394501-l9uqgj66v3gu0kdqouvtva88lqmlaf4b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQowSumhHgacPo_LedaEI9OyO1wcPRoDU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1005707394501-l9uqgj66v3gu0kdqouvtva88lqmlaf4b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
