@@ -24,6 +24,8 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <activity android:name=".ui.createTour.ChooseATravelPackage"/>
+        <activity android:name=".ui.createTour.CreateTour"/>
         <activity
             android:name=".ui.splash.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">
