@@ -1,7 +1,10 @@
 package com.ArmGuide.tourapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import com.ArmGuide.tourapplication.ui.register.LoginActivity;
+import com.ArmGuide.tourapplication.ui.register.Main2Activity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -21,7 +24,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity<onClick> extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -35,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+                startActivity(intent);
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -66,4 +71,5 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
 }
