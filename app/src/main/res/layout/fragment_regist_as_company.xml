@@ -27,15 +27,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
-                android:text="Sign up as tourist"
+                android:text="Sign up as tourism organization"
                 android:textColor="#000000"
                 android:textSize="30sp"
                 android:textStyle="bold"
@@ -63,36 +61,21 @@
             <!--        app:layout_constraintTop_toBottomOf="@+id/lastname" />-->
 
             <EditText
-                android:id="@+id/firstname"
+                android:id="@+id/company_name_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/sevramka"
-                android:hint="First name"
+                android:hint="Company name"
                 android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="@+id/view"
                 app:layout_constraintStart_toStartOf="@+id/view"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
             <EditText
-                android:id="@+id/lastname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="36dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/sevramka"
-                android:hint="Surname"
-                android:padding="16dp"
-                app:layout_constraintEnd_toEndOf="@+id/view"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/firstname" />
-
-            <EditText
-                android:id="@+id/email"
+                android:id="@+id/company_email_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -100,15 +83,15 @@
                 android:layout_marginEnd="16dp"
                 android:padding="16dp"
                 android:background="@drawable/sevramka"
-                android:hint="email adress"
+                android:hint="Email adress"
                 android:inputType="textEmailAddress"
                 app:layout_constraintEnd_toEndOf="@+id/view"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/lastname" />
+                app:layout_constraintTop_toBottomOf="@+id/company_name_et" />
 
             <EditText
-                android:id="@+id/newpassword"
+                android:id="@+id/company_password_et"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
@@ -121,9 +104,9 @@
                 app:layout_constraintEnd_toEndOf="@+id/view"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/email" />
+                app:layout_constraintTop_toBottomOf="@+id/company_email_et" />
             <EditText
-                android:id="@+id/conifirmpassword"
+                android:id="@+id/company_conifirm_password_et"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
@@ -136,23 +119,24 @@
                 app:layout_constraintEnd_toEndOf="@+id/view"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/newpassword" />
+                app:layout_constraintTop_toBottomOf="@+id/company_password_et" />
+
 
             <EditText
-                android:id="@+id/url"
+                android:id="@+id/company_url_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="36dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/sevramka"
-                android:hint="Enter url"
+                android:hint="Enter website url"
                 android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="@+id/view"
                 app:layout_constraintStart_toStartOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/conifirmpassword"/>
+                app:layout_constraintTop_toBottomOf="@+id/company_conifirm_password_et"/>
             <EditText
-                android:id="@+id/phoneNumber"
+                android:id="@+id/company_phonenumber_et"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
@@ -164,10 +148,24 @@
                 app:layout_constraintEnd_toEndOf="@+id/view"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/conifirmpassword" />
+                app:layout_constraintTop_toBottomOf="@+id/company_url_et" />
+            <EditText
+                android:id="@+id/company_address_et"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/sevramka"
+                android:hint="Address"
+                android:padding="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/view"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/view"
+                app:layout_constraintTop_toBottomOf="@+id/company_phonenumber_et" />
 
             <ImageView
-                android:id="@+id/profileImage"
+                android:id="@+id/company_profileImage_img"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="20dp"
@@ -175,11 +173,11 @@
                 app:layout_constraintEnd_toEndOf="@+id/view"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/url"
+                app:layout_constraintTop_toBottomOf="@+id/company_address_et"
                 tools:ignore="MissingConstraints" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/company_signup_btn"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
@@ -187,17 +185,27 @@
                 android:layout_marginEnd="16dp"
                 android:background="#050404"
                 android:text="Sign up"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textColor="#FFFEFE"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintEnd_toEndOf="@+id/view"
                 app:layout_constraintStart_toStartOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/profileImage" />
+                app:layout_constraintTop_toBottomOf="@+id/company_profileImage_img"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="10dp"/>
-
         </LinearLayout>
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/company_pb"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

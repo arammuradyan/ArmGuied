@@ -1,0 +1,108 @@
+package com.ArmGuide.tourapplication.models;
+
+import java.util.List;
+
+public class Tourist {
+   private String id;
+   private String email;
+   private String fullName;
+   private String password;
+   private String phoneNumber;
+   private String avatarUrl;
+   private boolean IsCompany;
+   private List<Tour> tours;
+
+    public Tourist() {
+    }
+
+    public Tourist(String id, String email, String fullName,
+                   String password, String phoneNumber, String avatarUrl,
+                   boolean isCompany, List<Tour> tours) {
+        this.id = id;
+        this.email = email;
+        this.fullName = fullName;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.avatarUrl = avatarUrl;
+        IsCompany = isCompany;
+        this.tours = tours;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public boolean getIsCompany() {
+        return IsCompany;
+    }
+
+    public void setIsCompany(boolean company) {
+        IsCompany = company;
+    }
+
+    public List<Tour> getTours() {
+        return tours;
+    }
+
+    public void setTours(List<Tour> tours) {
+        this.tours = tours;
+    }
+
+    @Override
+    public String toString() {
+        return "Tourist{" +
+                "id='" + id + '\'' +
+                ", email='" + email + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", password='" + password + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
+                ", IsCompany=" + IsCompany +
+                ", tours=" + tours +
+                '}';
+    }
+}

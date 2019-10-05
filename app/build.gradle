@@ -11,6 +11,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.debug
     }
     buildTypes {
         release {
@@ -66,6 +67,8 @@ dependencies {
     //implementation 'com.google.android.libraries.places:places-compat:2.0.0'
     implementation 'com.google.android.gms:play-services-places:16.0.0'
 
+    // Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
 
     androidTestImplementation 'androidx.test:runner:1.2.0'
