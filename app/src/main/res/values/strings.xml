@@ -30,4 +30,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    //for home places
+    <string name="landscapeIntro">Rich in breathtaking natural, historical, and cultural landscapes, Armenia
+        offers countless fascinating attractions to the curious and adventurous traveler. With many mountains,
+        rivers, and lush forests to enjoy along with remote regions, forts, and monasteries to discover,the country will never cease
+        to impress. We explore the ten most beautiful landscapes in Armenia that are must-visits.</string>
+    //
 </resources>
