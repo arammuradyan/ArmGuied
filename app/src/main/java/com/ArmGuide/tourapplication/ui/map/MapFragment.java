@@ -131,18 +131,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         place_picker_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(placeInfoFromActivity!=null){
+              /*  if(placeInfoFromActivity!=null){
                     startNearByPlacesForChoosenPlace();
                }
                 else{
-                   /*Intent intent=new Intent(Intent.ACTION_VIEW);
+                   Intent intent=new Intent(Intent.ACTION_VIEW);
                    Uri gmmIntentUri = Uri.parse("geo:0,0");
                    intent.setData(gmmIntentUri);
-                   startActivity(intent);*/
+                   startActivity(intent);
 
                    startNearByPlacesForLocation();
-                }
-                //placePicker();
+                }*/
+                placePicker();
             }
         });
 

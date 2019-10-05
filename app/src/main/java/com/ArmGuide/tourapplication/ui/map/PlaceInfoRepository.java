@@ -6,12 +6,14 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class  PlaceInfoRepository {
     // PLACES constants
-    public static final String DILIJAN="dilijan";
-    public static final String CAXKADZOR="caxkadzor";
+    public static final String DILIJAN="Dilijan";
+    public static final String CAXKADZOR="Caxkadzor";
+    public static final String ARMENIA="Armenia";
 
     // ZOOM constants
     public static final float ZOOM_WORLD=1.0f;
     public static final float ZOOM_CONTINENT=5.0f;
+    public static final float ZOOM_COUTRY=7.0f;
     public static final float ZOOM_CITY=10.0f;
     public static final float ZOOM_STREETS=15.0f;
     public static final float ZOOM_BUILDINGS=20.0f;
@@ -36,6 +38,16 @@ public class  PlaceInfoRepository {
             placeInfo.setName(CAXKADZOR);
             placeInfo.setWebsiteUri(Uri.parse("https://www.youtube.com/watch?v=iGbMNfv2KxA"));
             placeInfo.setPhoneNumber("094 894 644");
+            return placeInfo;
+        }
+        if(placeName.equals(ARMENIA)){
+            com.google.android.gms.maps.model.LatLng armenia= new LatLng(40.177200,
+                    44.503490);
+            PlaceInfo placeInfo=new PlaceInfo();
+            placeInfo.setLatLng(armenia);
+            placeInfo.setName(ARMENIA);
+            //placeInfo.setWebsiteUri(Uri.parse("https://www.youtube.com/watch?v=iGbMNfv2KxA"));
+           // placeInfo.setPhoneNumber("094 894 644");
             return placeInfo;
         }
         else {

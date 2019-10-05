@@ -18,4 +18,11 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     
 
+<!--    <style name="TollbarThemeOverlay" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">-->
+<!--        <item name="android:textColor">@color/colorBlack</item>-->
+<!--        <item name="android:fontFamily">@color/colorBlack</item>-->
+
+<!--    </style>-->
+
+
 </resources>

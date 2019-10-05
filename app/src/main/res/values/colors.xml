@@ -8,4 +8,6 @@
     <color name="customGreenLight">#00d34e</color>
     <color name="customGreenDark">#007000</color>
     <color name="customGreenVeryDark">#043D04</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
 </resources>

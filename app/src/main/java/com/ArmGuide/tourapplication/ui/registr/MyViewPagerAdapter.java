@@ -1,4 +1,4 @@
-package com.ArmGuide.tourapplication.ui.register;
+package com.ArmGuide.tourapplication.ui.registr;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
