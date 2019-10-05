@@ -39,7 +39,6 @@ public class Main2Activity extends AppCompatActivity {
 
         pager.setAdapter(adapter);
         tableLayout.setupWithViewPager(pager);
-
     }
 
     @Override
