@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:id="@+id/constraintLayoutChangeable"
+        android:layout_height="500dp"
+        android:background="@drawable/linearlayoutshape"
+        android:layout_margin="14dp">
+
+        <TextView
+            android:id="@+id/tv_LandscapeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/aclonica"
+            android:gravity="center"
+            android:text="LAKE SEVAN"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+        </TextView>
+
+        <ImageView
+            android:id="@+id/iv_LandscapeGoBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_left_arrow"
+            android:layout_marginStart="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginTop="30dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/iv_LandscapeGoForward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_right_arrow"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="30dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+        </ImageView>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/circleImageLand"
+            android:layout_width="188dp"
+            android:layout_height="188dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="10dp"
+            android:clickable="true"
+            android:src="@drawable/shikavox"
+            app:civ_border_color="@color/customGreenLight"
+            app:civ_border_width="2dp"
+            app:layout_constraintBottom_toTopOf="@id/cardViewDescription"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/ivMapLandScape"
+            app:layout_constraintTop_toTopOf="parent">
+        </de.hdodenhof.circleimageview.CircleImageView>
+
+        <TextView
+            android:id="@+id/tv_Location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LOCATION"
+            android:textStyle="bold"
+            android:textSize="10sp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/ivMapLandScape"
+            app:layout_constraintTop_toBottomOf="@id/tv_LandscapeName"
+            android:layout_marginRight="58dp"
+            android:fontFamily="@font/aclonica"
+            android:layout_marginTop="44dp">
+        </TextView>
+
+        <ImageView
+            android:id="@+id/ivMapLandScape"
+            android:layout_width="130dp"
+            android:layout_height="107dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/resizedmap"
+            app:layout_constraintBottom_toTopOf="@id/cardViewDescription"
+            app:layout_constraintLeft_toRightOf="@id/circleImageLand"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_LandscapeName">
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/iv_placeIcon"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_right_arrow"
+            app:layout_constraintBottom_toBottomOf="@id/ivMapLandScape"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="@id/ivMapLandScape"
+            app:layout_constraintRight_toRightOf="@id/ivMapLandScape"
+            app:layout_constraintTop_toTopOf="@id/ivMapLandScape"
+            app:layout_constraintVertical_bias="1">
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/iv_pressIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_press"
+
+            app:layout_constraintBottom_toBottomOf="@id/ivMapLandScape"
+            app:layout_constraintHorizontal_bias="0.3"
+            app:layout_constraintLeft_toLeftOf="@id/ivMapLandScape"
+            app:layout_constraintRight_toRightOf="@id/ivMapLandScape"
+            app:layout_constraintTop_toTopOf="@id/ivMapLandScape"
+            app:layout_constraintVertical_bias="0.6">
+        </ImageView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/customGreenDark"
+            app:cardCornerRadius="20dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="16dp"
+            app:cardElevation="15dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/circleImageLand"
+            app:layout_constraintBottom_toTopOf="@id/conLay_mini">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="170dp">
+
+                <TextView
+                    android:id="@+id/tv_LandscapeDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:fontFamily="@font/oleo_script_bold"
+                    android:gravity="center"
+                    android:padding="2dp"
+                    android:text=" ocean equivalent for this land-locked country. Located 1,905 meters (6,250 ft.) above sea level, this
+        incredible freshwater lake is one of the world’s largest high-altitude lakes and the perfect place
+        to take a dip on hot summer days. There is also Sevanavank, a stunning ancient monastery made out of
+        crude black stones that travelers can visit. ocean equivalent for this land-locked country. Located 1,905 meters (6,250 ft.)
+       above sea level, this
+        incredible freshwater lake is one of the world’s largest high-altitude lakes and the perfect place
+        to take a dip on hot summer days. There is also Sevanavank, a stunning ancient monastery made out of
+        crude black stones that travelers can visit.
+        The church is a perfect viewpoint, too. While at the lake, make sure to try the local grilled trout
+        The church is a perfect viewpoint, too. While at the lake, make sure to try the local grilled trout"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp">
+                </TextView>
+            </ScrollView>
+
+
+
+        </androidx.cardview.widget.CardView>
+
+
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/conLay_mini"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/linearlayoutshapemini"
+           >
+
+            <TextView
+                android:id="@+id/tv_ViewMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View More\n info"
+                android:gravity="center"
+
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:padding="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/buttonshape"
+                android:textStyle="bold"
+                android:fontFamily="@font/aclonica"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+            </TextView>
+
+            <CheckBox
+                android:fontFamily="@font/aclonica"
+                android:id="@+id/checkBox_places"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/tv_ViewMore"
+                app:layout_constraintRight_toLeftOf="@id/tv_viewTours"
+                android:textColor="@android:color/white"
+                android:padding="10dp"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                android:text="subscribe\non new\n tours"
+                >
+            </CheckBox>
+
+            <TextView
+                android:id="@+id/tv_viewTours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View Tours\n to here"
+                android:layout_marginTop="10dp"
+
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:padding="10dp"
+                android:clickable="true"
+                android:gravity="center"
+                android:focusable="true"
+                android:background="@drawable/buttonshape"
+                android:textStyle="bold"
+                android:fontFamily="@font/aclonica"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+            </TextView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</LinearLayout>
