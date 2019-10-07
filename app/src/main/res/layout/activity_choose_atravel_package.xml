@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.createTour.ChooseATravelPackage"
-    android:background="#1AF820"
+    android:background="@color/colorBlack"
     android:orientation="vertical">
 
     <LinearLayout
@@ -42,7 +42,7 @@
                     android:textColor="#F7F2F2"
                     android:layout_marginTop="30dp"
                     android:layout_marginLeft="8dp" />
-                <Spinner android:id="@+id/touristDestinations"
+                <Spinner android:id="@+id/touristDestinations_sp"
                     android:layout_width="204dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="14dp"

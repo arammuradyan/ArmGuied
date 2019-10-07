@@ -24,19 +24,25 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+       View view=inflater.inflate(R.layout.fragment_home, container, false);
+
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        viewPagerLand = view.findViewById(R.id.viewPagerLand);
+        adapterViewPager = new AdapterViewPager(getActivity().getSupportFragmentManager());
+        viewPagerLand.setAdapter(adapterViewPager);
+        return view;
     }
 
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        viewPagerLand = view.findViewById(R.id.viewPagerLand);
-        adapterViewPager = new AdapterViewPager(((FragmentActivity)view.getContext()).getSupportFragmentManager());
-        viewPagerLand.setAdapter(adapterViewPager);
-
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //viewPagerLand.setAdapter(adapterViewPager);
+
+    }
 }
