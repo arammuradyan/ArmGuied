@@ -12,6 +12,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,9 @@ import androidx.fragment.app.Fragment;
 
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.WebActivity;
+import com.ArmGuide.tourapplication.ui.map.MapFragment;
+import com.ArmGuide.tourapplication.ui.map.PlaceInfoRepository;
+import com.ArmGuide.tourapplication.ui.tours.by.category.ToursByCategoryFragment;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -40,21 +44,29 @@ public class BlankFragment extends Fragment {
     private Animation animationBackForward, animationPress, animationPlaceIconAppear, animationFragmentClosing;
     private ObjectAnimator objectAnimatorScaleX, objectAnimatorScaleY, objectAnimatorPivotX, objectAnimatorPivotY;
     private AnimatorSet animatorSet;
-    private TextView textViewLandScapeName, textViewDescription, textViewViewMore;
+    private TextView textViewLandScapeName, textViewDescription, textViewViewMore,textViewViewTours;
     private ImageView imageViewBack, imageViewForward, imageViewMap, imageViewPressHand, imageViewPlace;
     private CircleImageView circleImageView;
     private CardView cardViewDescription;
     private Intent intentWeb;
     private AccelerateInterpolator accelerateInterpolator;
 
+    //TODO Constructorov tal tvyal Place - i id in vorov
+    // kgtni placin hamapatasxan turer@ u Place - i informacian Mapi vra cuyc talu hamar
+
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_blank, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_blank, container, false);
 
+
+        return view;
+    }
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -73,10 +85,13 @@ public class BlankFragment extends Fragment {
             imageViewPlace = view.findViewById(R.id.iv_placeIcon);
             circleImageView = view.findViewById(R.id.circleImageLand);
             imageViewMap = view.findViewById(R.id.ivMapLandScape);
+
             textViewLandScapeName = view.findViewById(R.id.tv_LandscapeName);
             textViewViewMore = view.findViewById(R.id.tv_ViewMore);
+            textViewViewTours = view.findViewById(R.id.tv_viewTours);
             textViewDescription = view.findViewById(R.id.tv_LandscapeDescription);
             cardViewDescription = view.findViewById(R.id.cardViewDescription);
+
         }
 
 
@@ -96,9 +111,33 @@ public class BlankFragment extends Fragment {
                 startActivity(intentWeb);
             }
         });
+        textViewViewTours.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(getActivity()!=null){
+                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack("placies")
+                        .replace(R.id.layoutMainForLandscape,
+                        new ToursByCategoryFragment()).commit();
+                }
+            }
+        });
+        imageViewMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(getActivity()!=null)
+               getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .addToBackStack("map")
+                        .replace(R.id.layoutMainForLandscape,new MapFragment(true,PlaceInfoRepository.ZOOM_CITY,
+                                        PlaceInfoRepository.getPlaceInfo(PlaceInfoRepository.ARMENIA)))
+                        .commit();
 
-
+            }
+        });
     }
+
+
+
 }
 
 

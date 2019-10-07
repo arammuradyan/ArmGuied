@@ -2,6 +2,7 @@ package com.ArmGuide.tourapplication.ui.createTour;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.CheckBox;
 import android.widget.Spinner;
@@ -39,11 +40,9 @@ public class ChooseATravelPackage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_atravel_package);
 
-
-
         image=findViewById(R.id.image);
         selectTheDirection=findViewById(R.id.selectTheDirection);
-        touristDestinations=findViewById(R.id.touristDestinations);
+        touristDestinations=findViewById(R.id.touristDestinations_sp);
         title_tourData_TV=findViewById(R.id.title_tourData_TV);
         tourData_TV=findViewById(R.id.tourData_TV);
         title_price_TV=findViewById(R.id.title_price_TV);
@@ -60,6 +59,17 @@ public class ChooseATravelPackage extends AppCompatActivity {
         vineDegustation_CB=findViewById(R.id.vineDegustation_CB);
         freeWifiDuringTour_CB=findViewById(R.id.freeWifiDuringTour_CB);
         title_moreInfo_TV=findViewById(R.id.title_moreInfo_TV);
-        moreInformation_TV=findViewById(R.id.moreInformation_ET);
+        moreInformation_TV=findViewById(R.id.moreInformation_TV);
+
+        Intent intent=getIntent();
+        if(intent!=null){
+            int price=intent.getIntExtra("price",0);
+            String palceName=intent.getStringExtra("placeName");
+            String id=intent.getStringExtra("id");
+
+            price_TV.setText(String.valueOf(price));
+            moreInformation_TV.setText(palceName);
+        }
+
     }
 }

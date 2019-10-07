@@ -9,15 +9,15 @@
             android:icon="@drawable/ic_home"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_tour_companies"
             android:icon="@drawable/ic_tour_company"
             android:title="@string/menu_tour_companies" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_all_tours"
             android:icon="@drawable/ic_all_tours"
             android:title="@string/menu_all_tours" />
         <item
-            android:id="@+id/nav_tools"
+            android:id="@+id/nav_my_tours"
             android:icon="@drawable/ic_my_choosen_tours"
             android:title="@string/menu_my_tours" />
     </group>
@@ -25,12 +25,12 @@
     <item android:title="Maps">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_map_of_armenia"
                 android:icon="@drawable/ic_map_place_picker"
                 android:title="@string/menu_map_armenia"
                 android:checkable="true"/>
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/nav_current_location"
                 android:icon="@drawable/ic_location"
                 android:title="@string/menu_map_my_location"
                 android:checkable="true"/>

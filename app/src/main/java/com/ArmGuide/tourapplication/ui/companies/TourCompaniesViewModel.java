@@ -1,16 +1,16 @@
-package com.ArmGuide.tourapplication.ui.tools;
+package com.ArmGuide.tourapplication.ui.companies;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ToolsViewModel extends ViewModel {
+public class TourCompaniesViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public ToolsViewModel() {
+    public TourCompaniesViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is tools fragment");
+        mText.setValue("This is gallery fragment");
     }
 
     public LiveData<String> getText() {
