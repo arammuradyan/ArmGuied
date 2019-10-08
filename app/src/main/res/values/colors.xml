@@ -4,10 +4,12 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="customGreenFon">#00a01b</color>
-    <color name="customGreenLight">#00d34e</color>
-    <color name="customGreenDark">#007000</color>
-    <color name="customGreenVeryDark">#043D04</color>
+    <color name="customViolFon">#b388ff</color>
+    <color name="customViolLight">#e7b9ff</color>
+    <color name="customViolDark">#BF805ACB</color>
+    <color name="customViolVeryDark">#4a148c</color>
+    <color name="customWhiteTransparent">#66FFFFFF</color>
+
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
 </resources>
