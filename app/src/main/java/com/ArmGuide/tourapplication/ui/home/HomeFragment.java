@@ -15,34 +15,60 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import com.ArmGuide.tourapplication.R;
+import com.ArmGuide.tourapplication.models.Place;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
 
     ViewPager viewPagerLand;
     AdapterViewPager adapterViewPager;
-    private HomeViewModel homeViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
        View view=inflater.inflate(R.layout.fragment_home, container, false);
-
-        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
-        viewPagerLand = view.findViewById(R.id.viewPagerLand);
-        adapterViewPager = new AdapterViewPager(getActivity().getSupportFragmentManager());
-        viewPagerLand.setAdapter(adapterViewPager);
         return view;
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        viewPagerLand = view.findViewById(R.id.viewPagerLand);
+        test();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //viewPagerLand.setAdapter(adapterViewPager);
+    }
 
+    private void test(){
+        FirebaseDatabase.getInstance().getReference().child("Places")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    List<Place> places = new ArrayList<>();
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        for (DataSnapshot d: dataSnapshot.getChildren()
+                        ) {
+                            Place curPlace = d.getValue(Place.class);
+                            places.add(curPlace);
+                        }
+                        adapterViewPager = new AdapterViewPager(getActivity().getSupportFragmentManager(),places);
+                        viewPagerLand.setAdapter(adapterViewPager);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 }
