@@ -33,11 +33,17 @@ import com.ArmGuide.tourapplication.models.Company;
 import com.ArmGuide.tourapplication.models.Tourist;
 import com.ArmGuide.tourapplication.ui.allTours.AllToursFragment;
 import com.ArmGuide.tourapplication.ui.companies.TourCompaniesFragment;
+import com.ArmGuide.tourapplication.ui.createTour.CreateTourActivity;
+import com.ArmGuide.tourapplication.ui.gallery.GalleryFragment;
 import com.ArmGuide.tourapplication.ui.home.HomeFragment;
 import com.ArmGuide.tourapplication.ui.map.MapFragment;
 import com.ArmGuide.tourapplication.ui.map.PlaceInfoRepository;
 import com.ArmGuide.tourapplication.ui.myTours.MyToursFragment;
 import com.ArmGuide.tourapplication.ui.registr.LoginActivity;
+import com.ArmGuide.tourapplication.ui.slideshow.SlideshowFragment;
+import com.ArmGuide.tourapplication.ui.splash.SplashActivity;
+import com.ArmGuide.tourapplication.ui.tools.ToolsFragment;
+import com.ArmGuide.tourapplication.ui.tours.by.category.ToursByCategoryFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -337,6 +343,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
        if(mAuth.getCurrentUser()==null){
           // DEFOULT items
            switch (menuItem.getItemId()) {
+
                case R.id.nav_home:
                    showHomeFragment();
                    break;
