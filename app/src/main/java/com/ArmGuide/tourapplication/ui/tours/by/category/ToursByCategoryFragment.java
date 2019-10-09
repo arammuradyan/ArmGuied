@@ -17,7 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.models.Tour;
-import com.ArmGuide.tourapplication.ui.createTour.ChooseATravelPackage;
+import com.ArmGuide.tourapplication.ui.createTour.ChooseATravelPackageAdd;
+import com.ArmGuide.tourapplication.ui.createTour.CreateTourActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +64,7 @@ public class ToursByCategoryFragment extends Fragment implements ToursRecyclerVi
     @Override
     public void onToursViewHolderClick(int position) {
         Tour tour=adapter.getTour(position);
-        Intent intent = new Intent(getActivity(), ChooseATravelPackage.class);
+        Intent intent = new Intent(getActivity(), ChooseATravelPackageAdd.class);
         intent.putExtra("id",tour.getId());
         intent.putExtra("placeName",tour.getPlaceName());
         intent.putExtra("price",tour.getPrice());
