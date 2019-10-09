@@ -5,4 +5,6 @@ public class Constants {
     public static final String TOURISTS_DATABASE_REFERENCE="Tourists";
     public static final String COMPANIES_AVATARS_STORAGE="Companyies Avatars";
     public static final String COMPANIES_DATABASE_REFERENCE="Companies";
+    public static final String PLACES="Places";
+
 }
