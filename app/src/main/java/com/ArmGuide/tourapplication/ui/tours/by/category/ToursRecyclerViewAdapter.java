@@ -10,15 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ArmGuide.tourapplication.R;
+import com.ArmGuide.tourapplication.models.Tour;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ToursRecyclerViewAdapter extends RecyclerView.Adapter<ToursRecyclerViewAdapter.ToursViewHolder> {
-    protected List<String> names;
+    private List<Tour> tours;
+    private OnToursViewHolderCLickListener onToursViewHolderCLickListener;
 
     public ToursRecyclerViewAdapter() {
-        names = new ArrayList<>();
+        tours = new ArrayList<>();
     }
 
     @NonNull
@@ -29,22 +31,42 @@ public class ToursRecyclerViewAdapter extends RecyclerView.Adapter<ToursRecycler
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ToursViewHolder holder, int position) {
-     String name=names.get(position);
-     holder.bind(name);
+    public void onBindViewHolder(@NonNull ToursViewHolder holder, final int position) {
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onToursViewHolderCLickListener.onToursViewHolderClick(position);
+            }
+        });
+
+        Tour tour=tours.get(position);
+        holder.bind(tour);
     }
 
     @Override
     public int getItemCount() {
-        return names.size();
+        return tours.size();
     }
 
-    protected void setNames(List<String> namesList){
-        names.addAll(namesList);
+    public void setTours(List<Tour> toursList){
+        tours.addAll(toursList);
         notifyDataSetChanged();
     }
+    public void setOnToursViewHolderCLickListener(OnToursViewHolderCLickListener onToursViewHolderCLickListener){
+        this.onToursViewHolderCLickListener=onToursViewHolderCLickListener;
+    }
 
-   protected static class ToursViewHolder extends RecyclerView.ViewHolder{
+    public interface OnToursViewHolderCLickListener{
+         void onToursViewHolderClick(int position);
+    }
+
+    public Tour getTour(int position){
+        Tour tour=tours.get(position);
+        return tour;
+    }
+
+   public static class ToursViewHolder extends RecyclerView.ViewHolder{
         private TextView agency_name_tv, tours_tv, price_tv, duration_tv;
         private ImageView  tour_category_img,agency_img;
         ToursViewHolder(@NonNull View itemView) {
@@ -52,8 +74,10 @@ public class ToursRecyclerViewAdapter extends RecyclerView.Adapter<ToursRecycler
             viewInit(itemView);
         }
 
-        private void bind(String name){
-            agency_name_tv.setText(name);
+        private void bind(Tour tour){
+            agency_name_tv.setText(tour.getId());
+            price_tv.setText(String.valueOf(tour.getPrice()));
+            tours_tv.setText(tour.getPlaceName());
         }
 
    private void viewInit(@NonNull View itemView){

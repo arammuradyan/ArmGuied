@@ -7,7 +7,10 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="action_add_new_tour">Add new tour</string>
+    <string name="deafault_name">Name</string>
+    <string name="default_Email">Email</string>
     <string name="action_sign_out">Sign out</string>
+    <string name="sign_out_dialog_message">Are you sure you want to sign out?</string>
     <string name="action_sign_in">Sign in</string>
 
 
@@ -35,6 +38,7 @@
     <string name="landscapeIntro">Rich in breathtaking natural, historical, and cultural landscapes, Armenia
         offers countless fascinating attractions to the curious and adventurous traveler. With many mountains,
         rivers, and lush forests to enjoy along with remote regions, forts, and monasteries to discover,the country will never cease
-        to impress. We explore the ten most beautiful landscapes in Armenia that are must-visits.</string>
+        to impress. We explore the 12 most beautiful places to visit.</string>
+    <string name="location">Go to location clicking\n on the map </string>
     //
 </resources>

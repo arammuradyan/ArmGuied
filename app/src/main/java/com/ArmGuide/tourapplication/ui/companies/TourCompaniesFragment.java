@@ -1,4 +1,4 @@
-package com.ArmGuide.tourapplication.ui.gallery;
+package com.ArmGuide.tourapplication.ui.companies;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,13 +14,13 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.ArmGuide.tourapplication.R;
 
-public class GalleryFragment extends Fragment {
+public class TourCompaniesFragment extends Fragment {
 
-    private GalleryViewModel galleryViewModel;
+    private TourCompaniesViewModel galleryViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        galleryViewModel = ViewModelProviders.of(this).get(GalleryViewModel.class);
+        galleryViewModel = ViewModelProviders.of(this).get(TourCompaniesViewModel.class);
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
         final TextView textView = root.findViewById(R.id.text_gallery);
         galleryViewModel.getText().observe(this, new Observer<String>() {

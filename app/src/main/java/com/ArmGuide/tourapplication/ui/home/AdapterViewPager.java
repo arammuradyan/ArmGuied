@@ -5,35 +5,37 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.ArmGuide.tourapplication.models.Place;
+import com.ArmGuide.tourapplication.models.PlaceKEY;
+import com.ArmGuide.tourapplication.models.UserState;
+
+import java.util.List;
+
 
 public class AdapterViewPager extends FragmentPagerAdapter {
 
-    public AdapterViewPager(@NonNull FragmentManager fm) {
+    private List<Place> places;
+    private List<String> placeKeys;
+    private UserState state;
+
+    public AdapterViewPager(@NonNull FragmentManager fm, List<Place> places, UserState state){
         super(fm);
+            this.places = places;
+            placeKeys = PlaceKEY.getInstance().getKeyList();
+            this.state = state;
     }
 
 
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        Fragment landFragment = null;
-        switch (position) {
-            case 0:
-                landFragment = new BlankFragment();
-                break;
-            case 1:
-                landFragment = new BlankFragment();
-                break;
-            case 2:
-                landFragment = new BlankFragment();
-                break;
-
-        }
+        String key = placeKeys.get(position);
+        BlankFragment landFragment  = new BlankFragment(places.get(position),key, state);
         return landFragment;
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return places!=null?places.size():0;
     }
 }

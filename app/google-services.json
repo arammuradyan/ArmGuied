@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1005707394501-9oor57u5633nco45ue7bsthd85ed94sh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ArmGuide.tourapplication",
+            "certificate_hash": "c95931fd729d8ac483a3497fb9cc28dce16fcc1d"
+          }
+        },
+        {
           "client_id": "1005707394501-4ejupfdc694j82a0diei2c93c6qeta8u.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -29,7 +37,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBQowSumhHgacPo_LedaEI9OyO1wcPRoDU"
+          "current_key": "AIzaSyCez2RfwHnlvf-Kyp9QorPWP8qqUT5bxDg"
         }
       ],
       "services": {

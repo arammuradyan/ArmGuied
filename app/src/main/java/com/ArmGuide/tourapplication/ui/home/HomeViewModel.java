@@ -4,16 +4,18 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.ArmGuide.tourapplication.Repositories.RepositoryForPlaces;
+import com.ArmGuide.tourapplication.models.Place;
+
+import java.util.List;
+
 public class HomeViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private MutableLiveData<List<Place>> mutableLiveData;
 
-    public HomeViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
-    }
-
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<List<Place>> getLiveData(){
+        if(mutableLiveData==null)
+            mutableLiveData = RepositoryForPlaces.getInstance().getListMutableLiveData();
+        return mutableLiveData;
     }
 }

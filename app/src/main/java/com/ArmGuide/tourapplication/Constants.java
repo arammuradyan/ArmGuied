@@ -7,4 +7,7 @@ public class Constants {
     public static final String COMPANIES_DATABASE_REFERENCE="Companies";
     public static final String PLACES="Places";
 
+    public static final String TOURS_DATABASE_REFERENCE="Tours";
+
+
 }

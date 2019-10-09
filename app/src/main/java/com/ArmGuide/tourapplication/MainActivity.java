@@ -3,6 +3,7 @@ package com.ArmGuide.tourapplication;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -29,11 +31,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.ArmGuide.tourapplication.models.Company;
 import com.ArmGuide.tourapplication.models.Tourist;
+import com.ArmGuide.tourapplication.ui.allTours.AllToursFragment;
+import com.ArmGuide.tourapplication.ui.companies.TourCompaniesFragment;
 import com.ArmGuide.tourapplication.ui.createTour.CreateTourActivity;
 import com.ArmGuide.tourapplication.ui.gallery.GalleryFragment;
 import com.ArmGuide.tourapplication.ui.home.HomeFragment;
 import com.ArmGuide.tourapplication.ui.map.MapFragment;
 import com.ArmGuide.tourapplication.ui.map.PlaceInfoRepository;
+import com.ArmGuide.tourapplication.ui.myTours.MyToursFragment;
 import com.ArmGuide.tourapplication.ui.registr.LoginActivity;
 import com.ArmGuide.tourapplication.ui.slideshow.SlideshowFragment;
 import com.ArmGuide.tourapplication.ui.splash.SplashActivity;
@@ -75,8 +80,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private  NavigationView navigationView;
     //FAB
     private FloatingActionButton fab;
-
-   // private Tourist tourist=new Tourist();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,25 +124,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (savedInstanceState == null) {
             // ARAJIN@ BACVOX FRAGMENT
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ToursByCategoryFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }
         avatar_img=hView.findViewById(R.id.header_avatar_img);
         name_tv= hView.findViewById(R.id.header_username_tv);
         email_tv=hView.findViewById(R.id.header_email_tv);
 
-        fab=findViewById(R.id.fab);
+       // fab=findViewById(R.id.fab);
 
-        fab.setVisibility(View.GONE);
+      /*  fab.setVisibility(View.GONE);
         if(mAuth.getCurrentUser()==null){
             fab.setVisibility(View.VISIBLE);
-        }
-        fab.setOnClickListener(new View.OnClickListener() {
+        }*/
+       /* fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
-        });
+        });*/
 
     }
 
@@ -183,9 +186,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                              .centerCrop()
                              .into(avatar_img);
 
-                        if(!TOUR_AGENCY){
+                      /*  if(!TOUR_AGENCY){
                             fab.setVisibility(View.GONE);
-                        }
+                        }*/
                    reloadMenu(TOUR_AGENCY);
 
                     }else{
@@ -213,9 +216,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if(company!=null){
                                 TOUR_AGENCY=company.isCompany();
 
-                                if(TOUR_AGENCY){
+                             /*   if(TOUR_AGENCY){
                                     fab.setVisibility(View.VISIBLE);
-                                }
+                                }*/
                                 reloadMenu(TOUR_AGENCY);
 
                                 name_tv.setText(company.getCompanyName());
@@ -285,9 +288,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
         if(mAuth.getCurrentUser()==null){
-
             // NO USER defoult menu
             switch (item.getItemId()){
 //                case R.id.action_add_new_tour:
@@ -305,7 +306,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
         else if(TOUR_AGENCY){
-
             // COMPANI items
             switch (item.getItemId()){
 //                case R.id.action_add_new_tour:
@@ -316,7 +316,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
 
                 case R.id.action_sign_out:
-                    signOut();
+                    showSignOutDialog();
+                    //signOut();
                     Toast.makeText(this, "company sign out", Toast.LENGTH_SHORT).show();
                     break;
             }
@@ -327,7 +328,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(this, "tourist setings item", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.action_sign_out:
-                   signOut();
+                    showSignOutDialog();
+                    //signOut();
                     Toast.makeText(this, "tourist sign out", Toast.LENGTH_SHORT).show();
                     break;
             }
@@ -335,6 +337,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
        if(mAuth.getCurrentUser()==null){
@@ -342,155 +345,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
            switch (menuItem.getItemId()) {
 
                case R.id.nav_home:
-                   //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-                   getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                           new ToursByCategoryFragment()).commit();
+                   showHomeFragment();
                    break;
-               case R.id.nav_gallery:
-                   getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                           new GalleryFragment()).addToBackStack("mainStack").commit();
+               case R.id.nav_tour_companies:
+                   showTourCompaniesFragment();
                    break;
-               case R.id.nav_slideshow:
-                   getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                           new SlideshowFragment()).addToBackStack("mainStack").commit();
+               case R.id.nav_all_tours:
+                  showAllToursFragment();
                    break;
-               case R.id.nav_tools:
-                   getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                           new ToolsFragment()).addToBackStack("mainStack").commit();
+               case R.id.nav_my_tours:
+                  // fab.setVisibility(View.VISIBLE);
+                   showMyToursFragment();
                    break;
-               case R.id.nav_share:
-               {//CURENT location
-                   getLocationPermission();
-                   if(locationPermissionsGrabted){
-                       getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapFragment(
-                           locationPermissionsGrabted)).commit();
-                   }
-                   else{
-                       Toast.makeText(this, " Cant show curent location permissions denied", Toast.LENGTH_SHORT).show();
-                   }
-
-                   Toast.makeText(this, " defoult share item", Toast.LENGTH_SHORT).show();
+               case R.id.nav_map_of_armenia:
+               showMapofArmenia();
                    break;
-               }
-               case R.id.nav_send:
-                   //COOSEN PLACE
-                   getLocationPermission();
-
-                   getSupportFragmentManager()
-                           .beginTransaction()
-                           .replace(R.id.fragment_container,
-                                   new MapFragment(locationPermissionsGrabted,
-                                           PlaceInfoRepository.ZOOM_CITY,
-                                           PlaceInfoRepository.getPlaceInfo(PlaceInfoRepository.CAXKADZOR)))
-                           .commit();
-                   Toast.makeText(this, "defoult send item", Toast.LENGTH_SHORT).show();
+               case R.id.nav_current_location:
+                  showCurrentLocation();
                    break;
            }
        }else if(TOUR_AGENCY) {
             // COMPANY items
             switch (menuItem.getItemId()) {
                 case R.id.nav_home:
-                    //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+                    showHomeFragment();
                     break;
-                case R.id.nav_gallery:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            new GalleryFragment()).addToBackStack("mainStack").commit();
+                case R.id.nav_tour_companies:
+                    showTourCompaniesFragment();
                     break;
-                case R.id.nav_slideshow:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            new SlideshowFragment()).addToBackStack("mainStack").commit();
+                case R.id.nav_all_tours:
+                   showAllToursFragment();
                     break;
-                case R.id.nav_tools:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            new ToolsFragment()).addToBackStack("mainStack").commit();
+                case R.id.nav_my_tours:
+                    showMyToursFragment();
+                   // fab.setVisibility(View.VISIBLE);
                     break;
-                case R.id.nav_share:
-                {//CURENT location
-                    getLocationPermission();
-                    if(locationPermissionsGrabted){
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapFragment(
-                                locationPermissionsGrabted)).commit();
-                    }
-                    else{
-                        Toast.makeText(this, " Cant show curent location permissions denied", Toast.LENGTH_SHORT).show();
+                case R.id.nav_map_of_armenia:
+                    showMapofArmenia();
+                    break;
 
-                    }
-                    Toast.makeText(this, " COMPANY share item", Toast.LENGTH_SHORT).show();
-                    break;
-                }
-                case R.id.nav_send:
-                    //COOSEN PLACE
-                    getLocationPermission();
-
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragment_container,
-                            new MapFragment(locationPermissionsGrabted,
-                                    PlaceInfoRepository.ZOOM_CITY,
-                                    PlaceInfoRepository.getPlaceInfo(PlaceInfoRepository.CAXKADZOR)))
-                                    .commit();
-                    Toast.makeText(this, "COMPANY send item", Toast.LENGTH_SHORT).show();
+                case R.id.nav_current_location:
+                   showCurrentLocation();
                     break;
             }
        } else{
             // TOURIST menu items
             switch (menuItem.getItemId()) {
                 case R.id.nav_home:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            new HomeFragment()).commit();
-                    if(getSupportActionBar()!=null)
-                    getSupportActionBar().setTitle("Tour diractions");
+                    showHomeFragment();
                     break;
-                case R.id.nav_gallery:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            new GalleryFragment()).commit();
-                    if(getSupportActionBar()!=null)
-                        getSupportActionBar().setTitle("Tour companies");
+                case R.id.nav_tour_companies:
+                    showTourCompaniesFragment();
                     break;
-                case R.id.nav_slideshow:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            new SlideshowFragment()).commit();
-                    if(getSupportActionBar()!=null)
-                        getSupportActionBar().setTitle("All tours");
-
+                case R.id.nav_all_tours:
+                   showAllToursFragment();
+                   break;
+                case R.id.nav_my_tours:
+                   showMyToursFragment();
                     break;
-                case R.id.nav_tools:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            new ToolsFragment()).commit();
-                    if(getSupportActionBar()!=null)
-                        getSupportActionBar().setTitle("My tours");
-
+                case R.id.nav_map_of_armenia:
+                    showMapofArmenia();
                     break;
-                case R.id.nav_share:
-                    getLocationPermission();
-                    //COOSEN PLACE
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragment_container,
-                                    new MapFragment(locationPermissionsGrabted,
-                                            PlaceInfoRepository.ZOOM_COUTRY,
-                                            PlaceInfoRepository.getPlaceInfo(PlaceInfoRepository.ARMENIA)))
-                            .commit();
-                    if(getSupportActionBar()!=null)
-                        getSupportActionBar().setTitle("Map of Armenia");
-
-                    Toast.makeText(this, "TOURIST share item", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.nav_send:
-                    //CURENT location
-                    getLocationPermission();
-                    if(locationPermissionsGrabted){
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapFragment(
-                                locationPermissionsGrabted)).commit();
-                    }
-                    else{
-                        Toast.makeText(this, " Cant show curent location permissions denied", Toast.LENGTH_SHORT).show();
-
-                    }
-                    if(getSupportActionBar()!=null)
-                        getSupportActionBar().setTitle("Curent location");
-                    Toast.makeText(this, "TOURIST send item", Toast.LENGTH_SHORT).show();
+                case R.id.nav_current_location:
+                   showCurrentLocation();
                     break;
             }
        }
@@ -502,9 +419,97 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onBackPressed() {
         if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
-        }else{
+        } else if( navigationView.getCheckedItem().getItemId()!=R.id.nav_home){
+            navigationView.setCheckedItem(R.id.nav_home);
+            showHomeFragment();
+        }
+        else{
             super.onBackPressed();}
     }
+
+    private void showHomeFragment(){
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new HomeFragment()).commit();
+        if(getSupportActionBar()!=null)
+            getSupportActionBar().setTitle("Tour diractions");
+    }
+    private void showTourCompaniesFragment(){
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new TourCompaniesFragment()).commit();
+        if(getSupportActionBar()!=null)
+            getSupportActionBar().setTitle("Tour companies");
+    }
+    private void showAllToursFragment(){
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new AllToursFragment()).commit();
+        if(getSupportActionBar()!=null)
+            getSupportActionBar().setTitle("All tours");
+    }
+
+    private void showMyToursFragment(){
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new MyToursFragment(TOUR_AGENCY)).commit();
+        if(getSupportActionBar()!=null)
+            getSupportActionBar().setTitle("My tours");
+    }
+
+    private void showMapofArmenia(){
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container,
+                        new MapFragment(locationPermissionsGrabted,
+                                PlaceInfoRepository.ZOOM_COUTRY,
+                                PlaceInfoRepository.getPlaceInfo(PlaceInfoRepository.ARMENIA)))
+                .commit();
+        if(getSupportActionBar()!=null)
+            getSupportActionBar().setTitle("Map of Armenia");
+    }
+
+
+    private void showCurrentLocation(){
+        getLocationPermission();
+        if(locationPermissionsGrabted){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapFragment(
+                    locationPermissionsGrabted)).commit();
+        }
+        else{
+            Toast.makeText(this, " Cant show curent location permissions denied", Toast.LENGTH_SHORT).show();
+
+        }
+        if(getSupportActionBar()!=null)
+            getSupportActionBar().setTitle("Curent location");
+        Toast.makeText(this, "TOURIST send item", Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void showSignOutDialog(){
+        String title="";
+        if(mAuth.getCurrentUser()!=null){
+        title=mAuth.getCurrentUser().getEmail();}
+        if(title.isEmpty()){
+            title="Signing out";
+        }
+        AlertDialog.Builder builder=new AlertDialog.Builder(this)
+                                           .setTitle(title)
+                                           .setMessage(R.string.sign_out_dialog_message)
+                                           .setIcon(R.drawable.ic_application)
+                .setPositiveButton(R.string.action_sign_out, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        signOut();
+                        dialog.dismiss();
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+       AlertDialog signOutDialog=builder.create();
+       signOutDialog.show();
+    }
+
+
 
     @SuppressLint("RestrictedApi")
     public void signOut(){
@@ -512,17 +517,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mAuth.signOut();
 
         avatar_img.setImageDrawable(getResources().getDrawable(R.drawable.ic_avatar));
-        name_tv.setText("Name");
-        email_tv.setText("Email");
+        name_tv.setText(R.string.deafault_name);
+        email_tv.setText(R.string.default_Email);
         TOUR_AGENCY=true;
         userUid="";
-        fab.setVisibility(View.VISIBLE);
 
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.activity_main_drawer);
         invalidateOptionsMenu();
+        showHomeFragment();
         }
     }
+
+
+
 
     /*
     * ------------------------------MAP PERMISSIONS END GOOGLE MAP SERVICE CHECK----------------------------------------------------

@@ -1,31 +1,49 @@
 package com.ArmGuide.tourapplication.ui.home;
 
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-
+import androidx.fragment.app.FragmentActivity;
 
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.WebActivity;
+import com.ArmGuide.tourapplication.models.Company;
+import com.ArmGuide.tourapplication.models.Place;
+import com.ArmGuide.tourapplication.models.PlaceKEY;
+import com.ArmGuide.tourapplication.models.Tourist;
+import com.ArmGuide.tourapplication.models.UserState;
+import com.ArmGuide.tourapplication.ui.Images.ImagesFragment;
+
+import com.ArmGuide.tourapplication.ui.map.MapFragment;
+import com.ArmGuide.tourapplication.ui.map.PlaceInfoRepository;
+import com.ArmGuide.tourapplication.ui.tours.by.category.ToursByCategoryFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
 
 
 /**
@@ -33,25 +51,35 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class BlankFragment extends Fragment {
 
-    public BlankFragment() {
+    private Place place;
+    private String placeKey;
+    private UserState state;
+
+
+    public BlankFragment(Place place) {
+        this.place = place;
     }
 
-    private ConstraintLayout constraintLayout;
-    private Animation animationBackForward, animationPress, animationPlaceIconAppear, animationFragmentClosing;
-    private ObjectAnimator objectAnimatorScaleX, objectAnimatorScaleY, objectAnimatorPivotX, objectAnimatorPivotY;
-    private AnimatorSet animatorSet;
-    private TextView textViewLandScapeName, textViewDescription, textViewViewMore;
-    private ImageView imageViewBack, imageViewForward, imageViewMap, imageViewPressHand, imageViewPlace;
+    public BlankFragment(Place place, String placeKey, UserState state) {
+        this.place = place;
+        this.placeKey = placeKey;
+        this.state = state;
+    }
+
+    private Animation animationBackForward, animationPress;
+    private TextView textViewViewMore, textViewDescription, textViewPlaceName, textViewViewTours;
+    private ImageView imageViewBack, imageViewForward, imageViewMap, imageViewPressHand;
     private CircleImageView circleImageView;
-    private CardView cardViewDescription;
+    private CheckBox checkBoxSubscribe;
     private Intent intentWeb;
-    private AccelerateInterpolator accelerateInterpolator;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Log.d("MyLog", "BlankFragment - onCreateView" + placeKey);
+
         return inflater.inflate(R.layout.fragment_blank, container, false);
     }
 
@@ -59,45 +87,157 @@ public class BlankFragment extends Fragment {
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //findViewById + anim
-        {
-            animationBackForward = AnimationUtils.loadAnimation(view.getContext(), R.anim.forward_back_anim);
-            animationPress = AnimationUtils.loadAnimation(view.getContext(), R.anim.press_anim);
-            animationPlaceIconAppear = AnimationUtils.loadAnimation(view.getContext(), R.anim.placeiconapear_anim);
-            animationFragmentClosing = AnimationUtils.loadAnimation(view.getContext(), R.anim.handfragmentclosinganim);
+        Log.d("MyLog", "BlankFragment - onViewCreated" + placeKey);
 
-            constraintLayout = view.findViewById(R.id.constraintLayoutChangeable);
-            imageViewBack = view.findViewById(R.id.iv_LandscapeGoBack);
-            imageViewForward = view.findViewById(R.id.iv_LandscapeGoForward);
-            imageViewPressHand = view.findViewById(R.id.iv_pressIcon);
-            imageViewPlace = view.findViewById(R.id.iv_placeIcon);
-            circleImageView = view.findViewById(R.id.circleImageLand);
-            imageViewMap = view.findViewById(R.id.ivMapLandScape);
-            textViewLandScapeName = view.findViewById(R.id.tv_LandscapeName);
-            textViewViewMore = view.findViewById(R.id.tv_ViewMore);
-            textViewDescription = view.findViewById(R.id.tv_LandscapeDescription);
-            cardViewDescription = view.findViewById(R.id.cardViewDescription);
-        }
+        animationBackForward = AnimationUtils.loadAnimation(view.getContext(), R.anim.forward_back_anim);
+        animationPress = AnimationUtils.loadAnimation(view.getContext(), R.anim.press_anim);
 
+        imageViewBack = view.findViewById(R.id.iv_LandscapeGoBack);
+        imageViewForward = view.findViewById(R.id.iv_LandscapeGoForward);
+        imageViewPressHand = view.findViewById(R.id.iv_pressIcon);
+        circleImageView = view.findViewById(R.id.circleImageLand);
+        imageViewMap = view.findViewById(R.id.ivMapLandScape);
+        textViewViewMore = view.findViewById(R.id.tv_ViewMore);
+        textViewPlaceName = view.findViewById(R.id.tv_LandscapeName);
+        textViewDescription = view.findViewById(R.id.tv_LandscapeDescription);
+        textViewViewTours = view.findViewById(R.id.tv_viewTours);
+        checkBoxSubscribe = view.findViewById(R.id.checkBox_Subscribe);
 
         //<- and -> animation
         imageViewBack.startAnimation(animationBackForward);
         imageViewForward.startAnimation(animationBackForward);
         imageViewPressHand.startAnimation(animationPress);
         //
+        List<String> keys = PlaceKEY.getInstance().getKeyList();
+        if (placeKey.equals(keys.get(0)))
+            imageViewBack.setVisibility(View.GONE);
+        else if (placeKey.equals(keys.get(keys.size() - 1)))
+            imageViewForward.setVisibility(View.GONE);
+
+        textViewPlaceName.setText(place.getName());
+        textViewDescription.setText(place.getDescription());
+        Picasso.get().load(place.getImageUrls().get(0)).placeholder(R.drawable.loading_placeholder).into(circleImageView);
 
 
+        circleImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putStringArrayList("imageUrls", (ArrayList<String>) place.getImageUrls());
+                ImagesFragment imagesFragment = new ImagesFragment();
+                imagesFragment.setArguments(bundle);
+                ((FragmentActivity) view.getContext()).getSupportFragmentManager()
+                        .beginTransaction().add(R.id.fragment_container, imagesFragment).addToBackStack(null).commit();
+            }
+        });
 
         textViewViewMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                textViewViewMore.setTextSize(18);
                 intentWeb = new Intent(view.getContext(), WebActivity.class);
-                intentWeb.putExtra("uri", "https://en.wikipedia.org/wiki/Shikahogh_State_Reserve");
+                intentWeb.putExtra("uri", place.getUrl_Wiki());
                 startActivity(intentWeb);
             }
         });
 
 
+
+        final Bundle bundle = new Bundle();
+        bundle.putString("key",placeKey);
+        imageViewMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MapFragment mapFragment = new MapFragment(true, PlaceInfoRepository.ZOOM_CITY,
+                        PlaceInfoRepository.getPlaceInfo(PlaceInfoRepository.ARMENIA));
+                mapFragment.setArguments(bundle);
+                ((FragmentActivity)view.getContext()).getSupportFragmentManager()
+                        .beginTransaction().addToBackStack("map")
+                        .add(R.id.fragment_container, mapFragment)
+                        .commit();
+            }
+        });
+
+
+        textViewViewTours.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textViewViewMore.setTextSize(18);
+                ToursByCategoryFragment toursByCategoryFragment = new ToursByCategoryFragment();
+                toursByCategoryFragment.setArguments(bundle);
+                ((FragmentActivity)view.getContext()).getSupportFragmentManager().beginTransaction()
+                        .addToBackStack("places").replace(R.id.fragment_container,
+                                toursByCategoryFragment).commit();
+
+            }
+        });
+
+        
+        if (state == UserState.COMPANY)
+            checkBoxSubscribe.setVisibility(View.GONE);
+        else {
+            checkBoxSubscribe.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (state == UserState.NO_REGISTRATED) {
+                        Toast.makeText(view.getContext(), "Not registrated", Toast.LENGTH_SHORT).show();
+                        checkBoxSubscribe.setActivated(false);
+                    } else
+                        Toast.makeText(view.getContext(), "registered", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        textViewViewMore.setTextSize(15);
+        textViewViewTours.setTextSize(15);
+
+        Log.d("MyLog", "BlankFragment - onResume" + placeKey);
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("MyLog", "BlankFragment - onStart" + placeKey);
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("MyLog", "BlankFragment - onPause" + placeKey);
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("MyLog", "BlankFragment - onStop" + placeKey);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("MyLog", "BlankFragment - onDestroy" + placeKey);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d("MyLog", "BlankFragment - onCreate" + placeKey);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        Log.d("MyLog", "BlankFragment - onDestroyView" + placeKey);
     }
 }
 
