@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //FAB
     private FloatingActionButton fab;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -420,7 +419,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else{
             super.onBackPressed();}
     }
-
 
     private void showHomeFragment(){
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,

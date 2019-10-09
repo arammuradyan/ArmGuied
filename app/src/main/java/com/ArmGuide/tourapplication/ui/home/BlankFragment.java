@@ -2,32 +2,41 @@ package com.ArmGuide.tourapplication.ui.home;
 
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.ArmGuide.tourapplication.R;
-import com.ArmGuide.tourapplication.ViewModels.ViewModelBlankFragment;
 import com.ArmGuide.tourapplication.WebActivity;
+import com.ArmGuide.tourapplication.models.Company;
 import com.ArmGuide.tourapplication.models.Place;
-import com.ArmGuide.tourapplication.models.PlacesNames;
+import com.ArmGuide.tourapplication.models.PlaceKEY;
+import com.ArmGuide.tourapplication.models.Tourist;
+import com.ArmGuide.tourapplication.models.UserState;
 import com.ArmGuide.tourapplication.ui.Images.ImagesFragment;
 
+import com.ArmGuide.tourapplication.ui.map.MapFragment;
+import com.ArmGuide.tourapplication.ui.map.PlaceInfoRepository;
+import com.ArmGuide.tourapplication.ui.tours.by.category.ToursByCategoryFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 
@@ -43,15 +52,25 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class BlankFragment extends Fragment {
 
     private Place place;
+    private String placeKey;
+    private UserState state;
+
 
     public BlankFragment(Place place) {
         this.place = place;
     }
 
+    public BlankFragment(Place place, String placeKey, UserState state) {
+        this.place = place;
+        this.placeKey = placeKey;
+        this.state = state;
+    }
+
     private Animation animationBackForward, animationPress;
-    private TextView textViewViewMore, textViewDescription, textViewPlaceName;
+    private TextView textViewViewMore, textViewDescription, textViewPlaceName, textViewViewTours;
     private ImageView imageViewBack, imageViewForward, imageViewMap, imageViewPressHand;
     private CircleImageView circleImageView;
+    private CheckBox checkBoxSubscribe;
     private Intent intentWeb;
 
 
@@ -59,12 +78,16 @@ public class BlankFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Log.d("MyLog", "BlankFragment - onCreateView" + placeKey);
+
         return inflater.inflate(R.layout.fragment_blank, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Log.d("MyLog", "BlankFragment - onViewCreated" + placeKey);
 
         animationBackForward = AnimationUtils.loadAnimation(view.getContext(), R.anim.forward_back_anim);
         animationPress = AnimationUtils.loadAnimation(view.getContext(), R.anim.press_anim);
@@ -77,12 +100,19 @@ public class BlankFragment extends Fragment {
         textViewViewMore = view.findViewById(R.id.tv_ViewMore);
         textViewPlaceName = view.findViewById(R.id.tv_LandscapeName);
         textViewDescription = view.findViewById(R.id.tv_LandscapeDescription);
+        textViewViewTours = view.findViewById(R.id.tv_viewTours);
+        checkBoxSubscribe = view.findViewById(R.id.checkBox_Subscribe);
 
         //<- and -> animation
         imageViewBack.startAnimation(animationBackForward);
         imageViewForward.startAnimation(animationBackForward);
         imageViewPressHand.startAnimation(animationPress);
         //
+        List<String> keys = PlaceKEY.getInstance().getKeyList();
+        if (placeKey.equals(keys.get(0)))
+            imageViewBack.setVisibility(View.GONE);
+        else if (placeKey.equals(keys.get(keys.size() - 1)))
+            imageViewForward.setVisibility(View.GONE);
 
         textViewPlaceName.setText(place.getName());
         textViewDescription.setText(place.getDescription());
@@ -96,8 +126,8 @@ public class BlankFragment extends Fragment {
                 bundle.putStringArrayList("imageUrls", (ArrayList<String>) place.getImageUrls());
                 ImagesFragment imagesFragment = new ImagesFragment();
                 imagesFragment.setArguments(bundle);
-                ((FragmentActivity)view.getContext()).getSupportFragmentManager()
-                        .beginTransaction().add(R.id.fragment_container,imagesFragment).addToBackStack(null).commit();
+                ((FragmentActivity) view.getContext()).getSupportFragmentManager()
+                        .beginTransaction().add(R.id.fragment_container, imagesFragment).addToBackStack(null).commit();
             }
         });
 
@@ -111,13 +141,94 @@ public class BlankFragment extends Fragment {
             }
         });
 
+        imageViewMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .addToBackStack("map")
+                        .add(R.id.fragment_container, new MapFragment(true, PlaceInfoRepository.ZOOM_CITY,
+                                PlaceInfoRepository.getPlaceInfo(PlaceInfoRepository.ARMENIA)))
+                        .commit();
+            }
+        });
+
+        textViewViewTours.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textViewViewMore.setTextSize(18);
+                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack("placies")
+                        .replace(R.id.fragment_container,
+                                new ToursByCategoryFragment()).commit();
+
+            }
+        });
+
+        if (state == UserState.COMPANY)
+            checkBoxSubscribe.setVisibility(View.GONE);
+        else {
+            checkBoxSubscribe.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (state == UserState.NO_REGISTRATED) {
+                        Toast.makeText(view.getContext(), "Not registrated", Toast.LENGTH_SHORT).show();
+                        checkBoxSubscribe.setActivated(false);
+                    } else
+                        Toast.makeText(view.getContext(), "registered", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
-        textViewViewMore.setTextSize(13);
+        textViewViewMore.setTextSize(15);
+        textViewViewTours.setTextSize(15);
+
+        Log.d("MyLog", "BlankFragment - onResume" + placeKey);
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("MyLog", "BlankFragment - onStart" + placeKey);
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("MyLog", "BlankFragment - onPause" + placeKey);
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("MyLog", "BlankFragment - onStop" + placeKey);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("MyLog", "BlankFragment - onDestroy" + placeKey);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d("MyLog", "BlankFragment - onCreate" + placeKey);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        Log.d("MyLog", "BlankFragment - onDestroyView" + placeKey);
     }
 }
 
