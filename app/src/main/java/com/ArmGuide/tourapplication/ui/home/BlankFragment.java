@@ -118,10 +118,10 @@ public class BlankFragment extends Fragment {
         textViewDescription.setText(place.getDescription());
         Picasso.get().load(place.getImageUrls().get(0)).placeholder(R.drawable.loading_placeholder).into(circleImageView);
 
+
         circleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Bundle bundle = new Bundle();
                 bundle.putStringArrayList("imageUrls", (ArrayList<String>) place.getImageUrls());
                 ImagesFragment imagesFragment = new ImagesFragment();
@@ -141,29 +141,38 @@ public class BlankFragment extends Fragment {
             }
         });
 
+
+
+        final Bundle bundle = new Bundle();
+        bundle.putString("key",placeKey);
         imageViewMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .addToBackStack("map")
-                        .add(R.id.fragment_container, new MapFragment(true, PlaceInfoRepository.ZOOM_CITY,
-                                PlaceInfoRepository.getPlaceInfo(PlaceInfoRepository.ARMENIA)))
+                MapFragment mapFragment = new MapFragment(true, PlaceInfoRepository.ZOOM_CITY,
+                        PlaceInfoRepository.getPlaceInfo(PlaceInfoRepository.ARMENIA));
+                mapFragment.setArguments(bundle);
+                ((FragmentActivity)view.getContext()).getSupportFragmentManager()
+                        .beginTransaction().addToBackStack("map")
+                        .add(R.id.fragment_container, mapFragment)
                         .commit();
             }
         });
+
 
         textViewViewTours.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 textViewViewMore.setTextSize(18);
-                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack("placies")
-                        .replace(R.id.fragment_container,
-                                new ToursByCategoryFragment()).commit();
+                ToursByCategoryFragment toursByCategoryFragment = new ToursByCategoryFragment();
+                toursByCategoryFragment.setArguments(bundle);
+                ((FragmentActivity)view.getContext()).getSupportFragmentManager().beginTransaction()
+                        .addToBackStack("places").replace(R.id.fragment_container,
+                                toursByCategoryFragment).commit();
 
             }
         });
 
+        
         if (state == UserState.COMPANY)
             checkBoxSubscribe.setVisibility(View.GONE);
         else {

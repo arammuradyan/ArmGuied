@@ -41,29 +41,26 @@ public class HomeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getUserState();
+        homeViewModel = ViewModelProviders.of(HomeFragment.this).get(HomeViewModel.class);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        homeViewModel = ViewModelProviders.of(HomeFragment.this).get(HomeViewModel.class);
 
         Log.d("MyLog", "HomeFragment - onCreateView");
-
         return view;
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         Log.d("MyLog", "HomeFragment - onViewCreated");
-
         viewPagerLand = view.findViewById(R.id.viewPagerLand);
         adapterViewPager = new AdapterViewPager(getActivity().getSupportFragmentManager(), places, userState);
         viewPagerLand.setAdapter(adapterViewPager);
         test();
-
     }
 
 
