@@ -49,7 +49,7 @@ public class RepositoryForPlaces {
                     placeList.add(d.getValue(Place.class));
                 }
                 Log.d("MyLog","placeList "+placeList.get(11).getName());
-                listMutableLiveData.postValue(placeList);
+                listMutableLiveData.setValue(placeList);
             }
 
             @Override

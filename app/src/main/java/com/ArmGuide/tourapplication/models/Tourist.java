@@ -11,6 +11,7 @@ public class Tourist {
    private String avatarUrl;
    private boolean IsCompany;
    private List<Tour> tours;
+   private List<String> subscribedPlacesIds;
 
     public Tourist() {
     }
@@ -27,6 +28,8 @@ public class Tourist {
         IsCompany = isCompany;
         this.tours = tours;
     }
+
+
 
     public String getId() {
         return id;
@@ -90,6 +93,14 @@ public class Tourist {
 
     public void setTours(List<Tour> tours) {
         this.tours = tours;
+    }
+
+    public List<String> getSubscribedPlacesIds() {
+        return subscribedPlacesIds;
+    }
+
+    public void setSubscribedPlacesIds(List<String> subscribedPlacesIds) {
+        this.subscribedPlacesIds = subscribedPlacesIds;
     }
 
     @Override

@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +16,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.ArmGuide.tourapplication.MainActivity;
 import com.ArmGuide.tourapplication.R;
+import com.ArmGuide.tourapplication.ui.home.HomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -32,6 +36,7 @@ public class LoginFragment extends Fragment {
     //Authentication
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private SharedPreferences sharedPreferences;
 
 
     @Nullable
@@ -42,6 +47,7 @@ public class LoginFragment extends Fragment {
         viewInit(view);
         initFirebaseAuth();
         setButtonListeners();
+        sharedPreferences = getActivity().getSharedPreferences("statePref",0);
 
         return view;
     }
@@ -76,6 +82,9 @@ private void setButtonListeners(){
         @Override
         public void onClick(View v) {
             login();
+            sharedPreferences.edit().putString("newState","newState").apply();
+            Log.d("MyLog","LoginFragment "+ sharedPreferences.getString("newState","lll"));
+
         }
     });
 
