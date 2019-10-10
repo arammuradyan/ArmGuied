@@ -16,6 +16,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:visibility="gone"/>
+    <TextView
+        android:id="@+id/tours_by_category_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="THERE ARE NO TOURS FOR THIS PLACE"
+       android:textSize="15sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tours_by_category_fr_rv"
         android:layout_width="match_parent"

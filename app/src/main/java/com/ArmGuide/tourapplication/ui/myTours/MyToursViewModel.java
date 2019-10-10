@@ -4,16 +4,20 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.ArmGuide.tourapplication.Repositories.MyToursRepository;
+import com.ArmGuide.tourapplication.models.Tour;
+
+import java.util.List;
+
 public class MyToursViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private MyToursRepository myToursRepository;
 
     public MyToursViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is share fragment");
+       myToursRepository=new MyToursRepository();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<List<Tour>> getToursList(){
+        return myToursRepository.getMyTours();
     }
 }

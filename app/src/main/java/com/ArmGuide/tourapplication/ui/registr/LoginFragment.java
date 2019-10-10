@@ -53,6 +53,7 @@ public class LoginFragment extends Fragment {
        @Override
        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
           if(firebaseAuth.getCurrentUser()!=null && getActivity()!=null){
+
              //Intent intent=new Intent(getActivity(), MainActivity.class);
              // startActivity(intent);
               getActivity().finish();

@@ -5,20 +5,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.createTour.CreateTour"
+
     android:background="#1AF820"
-    android:orientation="vertical"
-    tools:ignore="RtlHardcoded">
+    android:orientation="vertical">
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:orientation="horizontal">
+
+
+
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image"
@@ -28,7 +31,9 @@
                 app:civ_border_width="1.8dp"
                 app:civ_border_color="#03375F"
                 android:layout_marginTop="16dp"
-                android:layout_marginLeft="10dp" />
+                android:layout_marginLeft="10dp"/>
+
+
 
             <LinearLayout
                 android:layout_width="238dp"
@@ -74,6 +79,9 @@
                     android:inputType="date"
                     android:gravity="center"
                     android:background="@drawable/shape"/>
+
+
+
                 <TextView
                     android:id="@+id/price_TV"
                     android:layout_width="220dp"
@@ -112,17 +120,30 @@
                         android:layout_marginTop="4dp"/>
 
                 </LinearLayout>
+
+
             </LinearLayout>
+
         </LinearLayout>
+
+
+
+
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+
+
             <LinearLayout
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
 
                 <TextView
                     android:id="@+id/includingTransport_TV"
@@ -154,6 +175,8 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginLeft="16dp"/>
 
+
+
                 <TextView
                     android:id="@+id/vineDegustation_TV"
                     android:layout_width="wrap_content"
@@ -164,6 +187,9 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginLeft="16dp"/>
 
+
+
+
                 <TextView
                     android:id="@+id/freeWifiDuringTour_TV"
                     android:layout_width="wrap_content"
@@ -172,10 +198,12 @@
                     android:textSize="20sp"
                     android:textColor="#F7F2F2"
                     android:layout_marginTop="24dp"
-                    android:layout_marginLeft="16dp"/>
-            </LinearLayout>
+                    android:layout_marginLeft="16dp"/></LinearLayout>
+
+
 
             <LinearLayout
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -186,36 +214,61 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="2dp"
                     android:layout_marginLeft="40dp"/>
+
+
                 <CheckBox
                     android:id="@+id/indudingFood_CB"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginTop="22dp"
                     android:layout_marginLeft="40dp"/>
+
+
+
                 <CheckBox
                     android:id="@+id/threeLanguageGuiding_CB"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginTop="22dp"
                     android:layout_marginLeft="40dp"/>
+
+
+
+
                 <CheckBox
                     android:id="@+id/vineDegustation_CB"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="40dp"/>
+
+
+
                 <CheckBox
                     android:id="@+id/freeWifiDuringTour_CB"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginTop="18dp"
-                    android:layout_marginLeft="40dp"/>
-            </LinearLayout>
+                    android:layout_marginLeft="40dp"/></LinearLayout>
+
+
+
+
+
+
         </LinearLayout>
+
+
+
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+
+
             <TextView
                 android:id="@+id/moreInformation_TV"
                 android:layout_width="wrap_content"
@@ -225,6 +278,9 @@
                 android:textSize="34sp"
                 android:layout_marginLeft="46dp"
                 android:layout_marginTop="18dp"/>
+
+
+
             <EditText
                 android:id="@+id/moreInformation_ET"
                 android:layout_width="400dp"
@@ -233,7 +289,41 @@
                 android:textColor="#F7F2F2"
                 android:background="@drawable/shape"
                 android:layout_marginLeft="6dp"/>
+
+
+
+            <Button
+                android:id="@+id/save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SAVE"
+                android:textSize="24sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="300dp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </LinearLayout>
+
+
+
+
+
+
+
     </LinearLayout>
+
+
 </ScrollView>
 

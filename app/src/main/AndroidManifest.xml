@@ -30,7 +30,7 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity android:name=".ui.createTour.ChooseATravelPackage"/>
-        <activity android:name=".ui.createTour.CreateTour"/>
+        <activity android:name=".ui.createTour.CreateTourActivity"/>
         <activity android:name=".ui.registr.LoginActivity"/>
 
         <activity
