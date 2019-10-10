@@ -62,7 +62,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private boolean locationPermissionsGranted=false;
     private static final int PLACEPICKER_REQUEST_CODE=789;
 
-
+    // latlng for place picker intent
+    private double lat;
+    private double lng;
 
     private PlaceInfo placeInfo;
     private Marker placeMarker;
@@ -86,6 +88,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     this.locationPermissionsGranted=locationPermissionsGranted;
     this.zoom=zoom;
     this.placeInfoFromActivity=placeInfoFromActivity;
+    lat=placeInfoFromActivity.getLatLng().latitude;
+    lng=placeInfoFromActivity.getLatLng().longitude;
     }
 
     @Override
@@ -113,6 +117,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 placeInfoFromActivity=null;
             }
         });
+
         info_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,6 +126,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         placeMarker.hideInfoWindow();
                     }else{
                         placeMarker.showInfoWindow();
+
                         Toast.makeText(getActivity(),"PLACIES show info show info",Toast.LENGTH_SHORT).show();
                     }
                 }catch (NullPointerException e){
@@ -128,30 +134,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         });
+
         place_picker_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              /*  if(placeInfoFromActivity!=null){
+              if(placeInfoFromActivity!=null){
                     startNearByPlacesForChoosenPlace();
                }
                 else{
-                   Intent intent=new Intent(Intent.ACTION_VIEW);
+                  /* Intent intent=new Intent(Intent.ACTION_VIEW);
                    Uri gmmIntentUri = Uri.parse("geo:0,0");
                    intent.setData(gmmIntentUri);
-                   startActivity(intent);
+                   startActivity(intent);*/
 
                    startNearByPlacesForLocation();
-                }*/
-                placePicker();
+                }
+               // placePicker();
             }
         });
 
     }
     private void startNearByPlacesForChoosenPlace(){
         Intent intent=new Intent(Intent.ACTION_VIEW);
-        double latitude= placeInfoFromActivity.getLatLng().latitude;
-        double longitude= placeInfoFromActivity.getLatLng().longitude;
-        String uri="geo:"+latitude+","+longitude;
+      //  double latitude= placeInfoFromActivity.getLatLng().latitude;
+       // double longitude= placeInfoFromActivity.getLatLng().longitude;
+       // String uri="geo:"+lat+","+lng;
+                String uri="geo:"+placeMarker.getPosition().latitude+","+placeMarker.getPosition().longitude;
 
 
         intent.setData(Uri.parse(uri));
@@ -224,7 +232,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             mGoogleMap.clear();
             // showing cuurent location by blue dot and adds back to location button
             mGoogleMap.setMyLocationEnabled(true);
-            mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
+            mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
         }else{
 
             final com.google.android.libraries.maps.model.LatLng
@@ -243,7 +251,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                moveCamera(placeLatlng,zoom,placeInfoFromActivity);
+                                moveCameraPlaceFromActivity(placeLatlng,zoom,placeInfoFromActivity);
 
                             }
                         });
@@ -272,12 +280,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                   currentLocation.getLongitude()),
                                   PlaceInfoRepository.ZOOM_STREETS,
                                   "My location");
-                               if(optionsMylocation==null){
+
                                optionsMylocation=new MarkerOptions()
                                        .position(new LatLng(currentLocation.getLatitude(),
                                                currentLocation.getLongitude()))
                                        .title("My location");
-                               mGoogleMap.addMarker(optionsMylocation);}
+                               mGoogleMap.clear();
+                               mGoogleMap.addMarker(optionsMylocation);
 
 
                            }else{
@@ -301,7 +310,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // moving camera to latlng
         Toast.makeText(getActivity(),"moveCamera"+latlng.toString(),Toast.LENGTH_SHORT).show();
 
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng,zoom),3000,null);
+        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng,zoom),1500,null);
 
         /*MarkerOptions options=new MarkerOptions()
                 .position(latlng)
@@ -353,6 +362,15 @@ private void initPlacies(){
             placeInfo.setWebsiteUri(place.getWebsiteUri());
             placeInfo.setLatLng(place.getLatLng());
 
+             // vor place pick aneluc null chlini jisht intent ashxati
+            placeInfoFromActivity=placeInfo;
+
+            // latlng for place picker intent
+            if (place.getLatLng()!=null)
+            { lat=place.getLatLng().latitude;
+            lng=place.getLatLng().longitude;
+            }
+
             Toast.makeText(getActivity(),"onPlaceSelected"+placeInfo.toString(),Toast.LENGTH_SHORT).show();
             }
             catch (NullPointerException e){
@@ -384,7 +402,7 @@ private void initPlacies(){
 
         mGoogleMap.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(latlng,zoom),
-                3000,
+                1500,
                 null);
         mGoogleMap.setInfoWindowAdapter(new PlaceInfoWindowAdapter(getActivity()));
 
@@ -397,23 +415,82 @@ private void initPlacies(){
                         "Total Users Rating: "+placeInfo.getUserReitingsTotal()+"\n"+
                         "Website: "+placeInfo.getWebsiteUri()+"\n" +
                         "Latlng: "+placeInfo.getLatLng()+"\n" ;
+
+
+                StringBuilder sbDescription=new StringBuilder();
+
+                if(placeInfo.getAddress()!=null){
+                    sbDescription.append("Address: ").append(placeInfo.getAddress()).append("\n");
+                }
+               if(placeInfo.getPhoneNumber()!=null){
+                   sbDescription.append("Phonenumber: ").append(placeInfo.getPhoneNumber()).append("\n");
+               }
+               if(placeInfo.getReiting()!=null){
+                   sbDescription.append("Rating: ").append(placeInfo.getReiting()).append("\n");
+               }
+               if(placeInfo.getUserReitingsTotal()!=null){
+                   sbDescription.append("Total Users Rating: ").append(placeInfo.getUserReitingsTotal()).append("\n");
+               }
+               if(placeInfo.getWebsiteUri()!=null){
+                   sbDescription.append("Website: ").append(placeInfo.getWebsiteUri()).append("\n");
+               }
                 MarkerOptions markerOptions= new MarkerOptions()
                         .position(latlng)
                         .title(placeInfo.getName())
-                        .snippet(description);
+                        .snippet(sbDescription.toString());
 
+              mGoogleMap.clear();
              placeMarker=mGoogleMap.addMarker(markerOptions);
+
             }catch (NullPointerException e){
                // Toast.makeText(getActivity(),"PLACIES moveCamera "+e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         }else{
             mGoogleMap.addMarker(new MarkerOptions().position(latlng));
         }
-        MarkerOptions options=new MarkerOptions()
+        /*MarkerOptions options=new MarkerOptions()
                 .position(latlng)
                 .title(placeInfo.getName()+"/n"+placeInfo.getAddress());
-        mGoogleMap.addMarker(options);
+        mGoogleMap.addMarker(options);*/
     }
+
+    private void moveCameraPlaceFromActivity(LatLng latlng, float zoom, PlaceInfo placeInfo){
+
+    mGoogleMap.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(latlng,zoom),
+                1500,
+                null);
+        mGoogleMap.setInfoWindowAdapter(new PlaceInfoWindowAdapter(getActivity()));
+
+        StringBuilder sbDescription=new StringBuilder();
+
+                if(placeInfo.getAddress()!=null){
+                    sbDescription.append("Address: ").append(placeInfo.getAddress()).append("\n");
+                }
+                if(placeInfo.getPhoneNumber()!=null){
+                    sbDescription.append("Phonenumber: ").append(placeInfo.getPhoneNumber()).append("\n");
+                }
+                if(placeInfo.getReiting()!=null){
+                    sbDescription.append("Rating: ").append(placeInfo.getReiting()).append("\n");
+                }
+                if(placeInfo.getUserReitingsTotal()!=null){
+                    sbDescription.append("Total Users Rating: ").append(placeInfo.getUserReitingsTotal()).append("\n");
+                }
+                if(placeInfo.getWebsiteUri()!=null){
+                    sbDescription.append("Website: ").append(placeInfo.getWebsiteUri()).append("\n");
+                }
+
+                MarkerOptions markerOptions= new MarkerOptions()
+                        .position(latlng)
+                        .title(placeInfo.getName())
+                        ;
+                   mGoogleMap.clear();
+                placeMarker=mGoogleMap.addMarker(markerOptions);
+
+}
+
+
+
 
 
    /*

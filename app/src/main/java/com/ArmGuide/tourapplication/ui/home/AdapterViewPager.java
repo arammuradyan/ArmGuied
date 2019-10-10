@@ -29,6 +29,8 @@ public class AdapterViewPager extends FragmentPagerAdapter {
         blackFragments = new ArrayList<>();
         placeKeys = PlaceKEY.getInstance().getKeyList();
         this.state = state;
+        Log.d("MyLog",  " Adapter constructor");
+
     }
 
     @NonNull
