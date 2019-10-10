@@ -145,43 +145,38 @@ public class BlankFragment extends Fragment {
                 startActivity(intentWeb);
             }
         });
-
-
-        final Bundle bundle = new Bundle();
-        bundle.putString("key", placeKey);
-        imageViewMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MapFragment mapFragment = new MapFragment(true, PlaceInfoRepository.ZOOM_CITY,
-                        PlaceInfoRepository.getPlaceInfo(PlaceInfoRepository.ARMENIA));
-                mapFragment.setArguments(bundle);
-                ((FragmentActivity) view.getContext()).getSupportFragmentManager()
-                        .beginTransaction().addToBackStack("map")
-                        .add(R.id.fragment_container, mapFragment)
-                        .commit();
-            }
-        });
-
-
         textViewViewTours.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(getActivity()!=null){
+                    getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null)
+                            .add(R.id.fragment_container,
+                                    new ToursByCategoryFragment(place.getName())).commit();
+                }
                 textViewViewMore.setTextSize(18);
-                ToursByCategoryFragment toursByCategoryFragment = new ToursByCategoryFragment();
-                toursByCategoryFragment.setArguments(bundle);
-                ((FragmentActivity) view.getContext()).getSupportFragmentManager().beginTransaction()
-                        .addToBackStack("places").replace(R.id.fragment_container,
-                        toursByCategoryFragment).commit();
-
             }
         });
 
+        final PlaceInfo currentPlace=new PlaceInfo();
+        com.google.android.gms.maps.model.LatLng currentLatLng= new LatLng(place.getCoord_X(),
+                place.getCoord_Y());
+        currentPlace.setName(place.getName());
+        currentPlace.setId(place.getDescription());
+        currentPlace.setLatLng(currentLatLng);
 
-        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Tourists").
-                child(userId).child("getSubscribedPlacesIds");
-        reference.addValueEventListener(new ValueEventListener() {
+        imageViewMap.setOnClickListener(new View.OnClickListener() {
             @Override
+            public void onClick(View v) {
+                if(getActivity()!=null)
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .addToBackStack(null)
+                            .add(R.id.fragment_container,
+                                    new MapFragment(true,PlaceInfoRepository.ZOOM_CITY,
+                                    currentPlace))
+                            .commit();
+
+
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()
                      ) {
