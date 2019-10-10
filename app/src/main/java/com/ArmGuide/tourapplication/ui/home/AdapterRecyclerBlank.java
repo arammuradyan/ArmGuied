@@ -3,11 +3,13 @@ package com.ArmGuide.tourapplication.ui.home;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.WebActivity;
 import com.ArmGuide.tourapplication.models.Place;
+import com.ArmGuide.tourapplication.models.UserState;
 import com.ArmGuide.tourapplication.ui.Images.ImagesFragment;
 import com.squareup.picasso.Picasso;
 
@@ -28,22 +31,50 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdapterRecyclerBlank extends RecyclerView.Adapter<AdapterRecyclerBlank.BlankViewHolder> {
 
-    private List<Place> places;
-
+    private List<Place> places, placeList;
+    private UserState state, userState;
     private String url_Wiki;
     private List<String> url_Images;
     private Animation animationBackForward, animationPress;
 
-    public AdapterRecyclerBlank(List<Place> places) {
+    public AdapterRecyclerBlank(List<Place> places, UserState state) {
         this.places = places;
+        this.state = state;
+        placeList = new ArrayList<>();
+        init();
+        Log.d("rec","constructor() / placeList - "+placeList.size()+" / userState - "+userState);
+    }
+
+    public void setPlaces(List<Place> places) {
+        this.places.clear();
+        this.places.addAll(places);
+        init();
+        Log.d("rec","setPlaces() / placeList - "+placeList.size()+" / userState - "+userState);
+    }
+
+    public void init() {
+        if (places != null && state != null) {
+            placeList.clear();
+            placeList.addAll(places);
+            userState = state;
+            notifyDataSetChanged();
+        }
+    }
+
+    public void setUserState(UserState state) {
+        this.state = state;
+        init();
+        Log.d("rec","setUserState() / placeList - "+placeList.size()+" / userState - "+userState);
+
     }
 
     class BlankViewHolder extends RecyclerView.ViewHolder {
 
 
-        private TextView textViewViewMore, textViewDescription, textViewPlaceName;
+        private TextView textViewViewMore, textViewDescription, textViewPlaceName,textViewViewTours;
         private ImageView imageViewBack, imageViewForward, imageViewMap, imageViewPressHand;
         private CircleImageView circleImageView;
+        private CheckBox checkBoxSubscribe;
 
         public BlankViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -56,6 +87,10 @@ public class AdapterRecyclerBlank extends RecyclerView.Adapter<AdapterRecyclerBl
             imageViewMap = itemView.findViewById(R.id.ivMapLandScape);
             imageViewPressHand = itemView.findViewById(R.id.iv_pressIcon);
             circleImageView = itemView.findViewById(R.id.circleImageLand);
+            textViewViewTours = itemView.findViewById(R.id.tv_viewTours);
+            checkBoxSubscribe = itemView.findViewById(R.id.checkBox_Subscribe);
+
+
 
             textViewViewMore.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -84,10 +119,9 @@ public class AdapterRecyclerBlank extends RecyclerView.Adapter<AdapterRecyclerBl
             animationBackForward = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.forward_back_anim);
             animationPress = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.press_anim);
 
-            imageViewBack.startAnimation(animationBackForward);
-            imageViewForward.startAnimation(animationBackForward);
-            imageViewPressHand.startAnimation(animationPress);
-            //
+            if(userState==UserState.COMPANY)
+                checkBoxSubscribe.setVisibility(View.GONE);
+
         }
     }
 
@@ -99,13 +133,18 @@ public class AdapterRecyclerBlank extends RecyclerView.Adapter<AdapterRecyclerBl
 
     @Override
     public void onBindViewHolder(@NonNull BlankViewHolder holder, int position) {
-        Place currentPlace = places.get(position);
+        Place currentPlace = placeList.get(position);
 
         holder.textViewPlaceName.setText(currentPlace.getName());
         holder.textViewDescription.setText(currentPlace.getDescription());
         Picasso.get().load(currentPlace.getImageUrls().get(0)).placeholder(R.drawable.loading_placeholder).into(holder.circleImageView);
+
         url_Wiki = currentPlace.getUrl_Wiki();
+        Log.d("wiki",""+url_Wiki  + currentPlace.getName() + position);
         url_Images = currentPlace.getImageUrls();
+        holder.imageViewBack.startAnimation(animationBackForward);
+        holder.imageViewForward.startAnimation(animationBackForward);
+        holder.imageViewPressHand.startAnimation(animationPress);
 
     }
 

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -32,9 +33,13 @@ import com.ArmGuide.tourapplication.ui.Images.ImagesFragment;
 import com.ArmGuide.tourapplication.ui.map.MapFragment;
 import com.ArmGuide.tourapplication.ui.map.PlaceInfoRepository;
 import com.ArmGuide.tourapplication.ui.tours.by.category.ToursByCategoryFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
@@ -142,16 +147,15 @@ public class BlankFragment extends Fragment {
         });
 
 
-
         final Bundle bundle = new Bundle();
-        bundle.putString("key",placeKey);
+        bundle.putString("key", placeKey);
         imageViewMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MapFragment mapFragment = new MapFragment(true, PlaceInfoRepository.ZOOM_CITY,
                         PlaceInfoRepository.getPlaceInfo(PlaceInfoRepository.ARMENIA));
                 mapFragment.setArguments(bundle);
-                ((FragmentActivity)view.getContext()).getSupportFragmentManager()
+                ((FragmentActivity) view.getContext()).getSupportFragmentManager()
                         .beginTransaction().addToBackStack("map")
                         .add(R.id.fragment_container, mapFragment)
                         .commit();
@@ -165,25 +169,62 @@ public class BlankFragment extends Fragment {
                 textViewViewMore.setTextSize(18);
                 ToursByCategoryFragment toursByCategoryFragment = new ToursByCategoryFragment();
                 toursByCategoryFragment.setArguments(bundle);
-                ((FragmentActivity)view.getContext()).getSupportFragmentManager().beginTransaction()
+                ((FragmentActivity) view.getContext()).getSupportFragmentManager().beginTransaction()
                         .addToBackStack("places").replace(R.id.fragment_container,
-                                toursByCategoryFragment).commit();
+                        toursByCategoryFragment).commit();
 
             }
         });
 
-        
+
+        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Tourists").
+                child(userId).child("getSubscribedPlacesIds");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()
+                     ) {
+                    if(snapshot.getKey().equals(placeKey)){
+                        checkBoxSubscribe.setChecked(true);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         if (state == UserState.COMPANY)
             checkBoxSubscribe.setVisibility(View.GONE);
         else {
-            checkBoxSubscribe.setOnClickListener(new View.OnClickListener() {
+            checkBoxSubscribe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View v) {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (state == UserState.NO_REGISTRATED) {
-                        Toast.makeText(view.getContext(), "Not registrated", Toast.LENGTH_SHORT).show();
-                        checkBoxSubscribe.setActivated(false);
-                    } else
-                        Toast.makeText(view.getContext(), "registered", Toast.LENGTH_SHORT).show();
+                        checkBoxSubscribe.setChecked(false);
+                    } else {
+                        Log.d("reg", "onCheckedChangeListener = " + isChecked);
+                        if(isChecked) {
+                            reference.child(placeKey).setValue(placeKey).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Log.d("reg", "subscribed succeeded");
+                                }
+                            });
+                        }
+                        else {
+                            reference.child(placeKey).removeValue(new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                    Log.d("reg", "subscribed removing succeeded");
+                                }
+                            });
+                        }
+                    }
                 }
             });
         }
@@ -196,7 +237,7 @@ public class BlankFragment extends Fragment {
         textViewViewMore.setTextSize(15);
         textViewViewTours.setTextSize(15);
 
-        Log.d("MyLog", "BlankFragment - onResume" + placeKey);
+        Log.d("MyLog", "BlankFragment - onResume" + state);
 
     }
 
@@ -239,6 +280,11 @@ public class BlankFragment extends Fragment {
 
         Log.d("MyLog", "BlankFragment - onDestroyView" + placeKey);
     }
+
+
+
+
+
 }
 
 
