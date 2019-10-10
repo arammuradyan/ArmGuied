@@ -92,7 +92,7 @@ public class HomeFragment extends Fragment {
                 places = data;
                 adapterViewPager.setPlaces(places);
 
-               // adapterRecyclerBlank.setPlaces(data);
+                // adapterRecyclerBlank.setPlaces(data);
             }
         });
 
@@ -125,19 +125,19 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-      /*  getUserState();
+        getUserState();
+        /*
         Log.d("MyLog", "HomeFragment - onResume");
-        String newState = sharedPreferences.getString("newState","def");
+        String newState = sharedPreferences.getString("newState", "def");
         Log.d("MyLog", newState);
-        if (newState.equals("newState"))
-        {
-                getFragmentManager()
-                        .beginTransaction()
-                        .detach(HomeFragment.this)
-                        .attach(HomeFragment.this)
-                        .commit();
-                sharedPreferences.edit().clear().apply();
-                Log.d("MyLog","shared pref recreated fragment and cleared.");
+        if (newState.equals("newState")) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .detach(HomeFragment.this)
+                    .attach(HomeFragment.this)
+                    .commit();
+            sharedPreferences.edit().clear().apply();
+            Log.d("MyLog", "shared pref recreated fragment and cleared.");
         }*/
     }
 
@@ -185,7 +185,7 @@ public class HomeFragment extends Fragment {
                         if (company.getId().equals(uId)) {
                             userState = UserState.COMPANY;
                             adapterViewPager.setState(userState);
-                           // adapterRecyclerBlank.setUserState(userState);
+                            // adapterRecyclerBlank.setUserState(userState);
                             break;
                         }
                     }

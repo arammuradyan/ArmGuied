@@ -31,8 +31,10 @@ import com.ArmGuide.tourapplication.models.UserState;
 import com.ArmGuide.tourapplication.ui.Images.ImagesFragment;
 
 import com.ArmGuide.tourapplication.ui.map.MapFragment;
+import com.ArmGuide.tourapplication.ui.map.PlaceInfo;
 import com.ArmGuide.tourapplication.ui.map.PlaceInfoRepository;
 import com.ArmGuide.tourapplication.ui.tours.by.category.ToursByCategoryFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -148,7 +150,7 @@ public class BlankFragment extends Fragment {
         textViewViewTours.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getActivity()!=null){
+                if (getActivity() != null) {
                     getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null)
                             .add(R.id.fragment_container,
                                     new ToursByCategoryFragment(place.getName())).commit();
@@ -157,8 +159,8 @@ public class BlankFragment extends Fragment {
             }
         });
 
-        final PlaceInfo currentPlace=new PlaceInfo();
-        com.google.android.gms.maps.model.LatLng currentLatLng= new LatLng(place.getCoord_X(),
+        final PlaceInfo currentPlace = new PlaceInfo();
+        com.google.android.gms.maps.model.LatLng currentLatLng = new LatLng(place.getCoord_X(),
                 place.getCoord_Y());
         currentPlace.setName(place.getName());
         currentPlace.setId(place.getDescription());
@@ -167,20 +169,27 @@ public class BlankFragment extends Fragment {
         imageViewMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getActivity()!=null)
+                if (getActivity() != null)
                     getActivity().getSupportFragmentManager()
                             .beginTransaction()
                             .addToBackStack(null)
                             .add(R.id.fragment_container,
-                                    new MapFragment(true,PlaceInfoRepository.ZOOM_CITY,
-                                    currentPlace))
+                                    new MapFragment(true, PlaceInfoRepository.ZOOM_CITY,
+                                            currentPlace))
                             .commit();
+            }
+        });
 
+        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Tourists").
+                child(userId).child("getSubscribedPlacesIds");
 
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot: dataSnapshot.getChildren()
-                     ) {
-                    if(snapshot.getKey().equals(placeKey)){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()
+                ) {
+                    if (snapshot.getKey().equals(placeKey)) {
                         checkBoxSubscribe.setChecked(true);
                         break;
                     }
@@ -203,15 +212,14 @@ public class BlankFragment extends Fragment {
                         checkBoxSubscribe.setChecked(false);
                     } else {
                         Log.d("reg", "onCheckedChangeListener = " + isChecked);
-                        if(isChecked) {
+                        if (isChecked) {
                             reference.child(placeKey).setValue(placeKey).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     Log.d("reg", "subscribed succeeded");
                                 }
                             });
-                        }
-                        else {
+                        } else {
                             reference.child(placeKey).removeValue(new DatabaseReference.CompletionListener() {
                                 @Override
                                 public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
@@ -277,9 +285,4 @@ public class BlankFragment extends Fragment {
     }
 
 
-
-
-
 }
-
-
