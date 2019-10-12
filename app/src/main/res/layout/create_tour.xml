@@ -5,10 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    android:background="#1AF820"
+    android:background="#0C0974"
     android:orientation="vertical">
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,20 +18,15 @@
             android:layout_height="250dp"
             android:orientation="horizontal">
 
-
-
-
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image"
-                android:layout_width="146dp"
-                android:layout_height="146dp"
+                android:layout_width="126dp"
+                android:layout_height="126dp"
                 android:src="#7EB3C4"
                 app:civ_border_width="1.8dp"
                 app:civ_border_color="#03375F"
                 android:layout_marginTop="16dp"
                 android:layout_marginLeft="10dp"/>
-
-
 
             <LinearLayout
                 android:layout_width="238dp"
@@ -63,20 +56,21 @@
                     android:layout_width="220dp"
                     android:layout_height="25dp"
                     android:text="TOUR DATA"
+
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="8dp"
                     android:textSize="20sp"
                     android:gravity="center"
                     android:textColor="#F7F2F2" />
 
-                <EditText
+                <TextView
                     android:id="@+id/tourData_ET"
                     android:layout_width="220dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="8dp"
+                    android:padding="4dp"
                     android:textColor="#F7F2F2"
-                    android:inputType="date"
                     android:gravity="center"
                     android:background="@drawable/shape"/>
 
@@ -106,6 +100,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_marginRight="10dp"
                         android:textColor="#F7F2F2"
+                        android:padding="4dp"
                         android:inputType="number"
                         android:gravity="center"
                         android:background="@drawable/shape"/>
@@ -126,31 +121,23 @@
 
         </LinearLayout>
 
-
-
-
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-
-
             <LinearLayout
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
+                android:orientation="vertical"
+                >
 
                 <TextView
                     android:id="@+id/includingTransport_TV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="INCLUDING TRANSPORT"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="#F7F2F2"
                     android:layout_marginTop="4dp"
                     android:layout_marginLeft="16dp"/>
@@ -160,7 +147,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="INDUDING FOOD"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="#F7F2F2"
                     android:layout_marginTop="24dp"
                     android:layout_marginLeft="16dp"/>
@@ -170,11 +157,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="THREE LANGUAGE GUIDING"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="#F7F2F2"
                     android:layout_marginTop="24dp"
                     android:layout_marginLeft="16dp"/>
-
 
 
                 <TextView
@@ -182,28 +168,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="VINE DEGUSTATION"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="#F7F2F2"
                     android:layout_marginTop="24dp"
                     android:layout_marginLeft="16dp"/>
-
-
-
 
                 <TextView
                     android:id="@+id/freeWifiDuringTour_TV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="FREE WIFI DURING TOUR"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="#F7F2F2"
                     android:layout_marginTop="24dp"
                     android:layout_marginLeft="16dp"/></LinearLayout>
 
-
-
             <LinearLayout
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -212,37 +192,28 @@
                     android:id="@+id/includingTransport_CB"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="2dp"
                     android:layout_marginLeft="40dp"/>
-
 
                 <CheckBox
                     android:id="@+id/indudingFood_CB"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="22dp"
+                    android:layout_marginTop="18dp"
                     android:layout_marginLeft="40dp"/>
-
-
 
                 <CheckBox
                     android:id="@+id/threeLanguageGuiding_CB"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="22dp"
+                    android:layout_marginTop="18dp"
                     android:layout_marginLeft="40dp"/>
-
-
-
 
                 <CheckBox
                     android:id="@+id/vineDegustation_CB"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="18dp"
                     android:layout_marginLeft="40dp"/>
-
-
 
                 <CheckBox
                     android:id="@+id/freeWifiDuringTour_CB"
@@ -250,47 +221,32 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="18dp"
                     android:layout_marginLeft="40dp"/></LinearLayout>
-
-
-
-
-
-
         </LinearLayout>
-
-
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
-
             <TextView
                 android:id="@+id/moreInformation_TV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="MORE INFORMATION"
-                android:textColor="#7A7676"
+                android:textColor="#A5A2A2"
                 android:textSize="34sp"
                 android:layout_marginLeft="46dp"
                 android:layout_marginTop="18dp"/>
-
-
 
             <EditText
                 android:id="@+id/moreInformation_ET"
                 android:layout_width="400dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
                 android:layout_marginTop="6dp"
-                android:textColor="#F7F2F2"
                 android:background="@drawable/shape"
-                android:layout_marginLeft="6dp"/>
-
-
+                android:padding="8dp"
+                android:textColor="#F7F2F2" />
 
             <Button
                 android:id="@+id/save"
@@ -299,31 +255,11 @@
                 android:text="SAVE"
                 android:textSize="24sp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="300dp" />
-
-
-
-
-
-
-
-
-
-
-
-
-
+                android:layout_marginLeft="300dp"
+                />
 
         </LinearLayout>
-
-
-
-
-
-
-
     </LinearLayout>
-
 
 </ScrollView>
 

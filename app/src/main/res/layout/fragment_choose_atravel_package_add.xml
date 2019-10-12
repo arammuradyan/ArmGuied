@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="#1AF820"
+    android:background="#0C0974"
     android:orientation="vertical">
 
 
@@ -63,8 +63,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image2"
-                android:layout_width="98dp"
-                android:layout_height="98dp"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
                 android:layout_marginLeft="38dp"
                 android:layout_marginTop="14dp"
                 android:src="#7EB3C4"
@@ -90,12 +90,12 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image"
-                android:layout_width="146dp"
-                android:layout_height="146dp"
+                android:layout_width="126dp"
+                android:layout_height="126dp"
                 android:src="#7EB3C4"
                 app:civ_border_width="1.8dp"
                 app:civ_border_color="#03375F"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginLeft="10dp"/>
 
 
@@ -217,7 +217,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="INCLUDING TRANSPORT"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="#F7F2F2"
                     android:layout_marginTop="4dp"
                     android:layout_marginLeft="16dp"/>
@@ -227,7 +227,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="INDUDING FOOD"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="#F7F2F2"
                     android:layout_marginTop="24dp"
                     android:layout_marginLeft="16dp"/>
@@ -237,7 +237,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="THREE LANGUAGE GUIDING"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="#F7F2F2"
                     android:layout_marginTop="24dp"
                     android:layout_marginLeft="16dp"/>
@@ -249,7 +249,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="VINE DEGUSTATION"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="#F7F2F2"
                     android:layout_marginTop="24dp"
                     android:layout_marginLeft="16dp"/>
@@ -262,7 +262,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="FREE WIFI DURING TOUR"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="#F7F2F2"
                     android:layout_marginTop="24dp"
                     android:layout_marginLeft="16dp"/></LinearLayout>
@@ -279,7 +279,7 @@
                     android:id="@+id/includingTransport_CB"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="2dp"
+
                     android:layout_marginLeft="40dp"/>
 
 
@@ -287,7 +287,7 @@
                     android:id="@+id/indudingFood_CB"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="22dp"
+                    android:layout_marginTop="18dp"
                     android:layout_marginLeft="40dp"/>
 
 
@@ -296,7 +296,7 @@
                     android:id="@+id/threeLanguageGuiding_CB"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="22dp"
+                    android:layout_marginTop="18dp"
                     android:layout_marginLeft="40dp"/>
 
 
@@ -306,7 +306,7 @@
                     android:id="@+id/vineDegustation_CB"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="18dp"
                     android:layout_marginLeft="40dp"/>
 
 
@@ -341,9 +341,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="MORE INFORMATION"
-                android:textColor="#7A7676"
+                android:textColor="#A5A2A2"
                 android:textSize="34sp"
                 android:layout_marginLeft="46dp"
+                android:layout_marginTop="18dp"
 
                 />
 
