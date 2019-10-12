@@ -1,19 +1,22 @@
 package com.ArmGuide.tourapplication.ui.companies;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.ArmGuide.tourapplication.Repositories.AllCompaniesRepository;
+import com.ArmGuide.tourapplication.models.Company;
+
+import java.util.List;
 
 public class TourCompaniesViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private AllCompaniesRepository allCompaniesRepository;
 
     public TourCompaniesViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is gallery fragment");
+        allCompaniesRepository=new AllCompaniesRepository();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<List<Company>> getAllCompaniesList(){
+        return allCompaniesRepository.getAllCompanies();
     }
 }

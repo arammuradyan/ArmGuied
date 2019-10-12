@@ -81,8 +81,8 @@ public class AdapterViewPager extends FragmentPagerAdapter {
         blackFragments.clear();
 
         for (int i = 0; i < places.size(); i++) {
-            BlankFragment blankFragment = new BlankFragment(places.get(i), placeKeys.get(i), state);
-            blackFragments.add(blankFragment);
+           // BlankFragment blankFragment = new BlankFragment(places.get(i), placeKeys.get(i), state);
+          //  blackFragments.add(blankFragment);
         }
         notifyDataSetChanged();
     }

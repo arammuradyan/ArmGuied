@@ -17,7 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ArmGuide.tourapplication.R;
+import com.ArmGuide.tourapplication.StateViewModel;
 import com.ArmGuide.tourapplication.models.Tour;
+import com.ArmGuide.tourapplication.ui.createTour.ChooseATravelPackageAdd;
 import com.ArmGuide.tourapplication.ui.createTour.CreateTourActivity;
 
 import java.util.ArrayList;
@@ -29,10 +31,13 @@ public class ToursByCategoryFragment extends Fragment implements ToursRecyclerVi
     private RecyclerView recyclerView;
     private ToursRecyclerViewAdapter adapter;
     private List<Tour> toursList;
-    private ToursByCategoryViewModel viewModel;
     private ProgressBar progressBar;
     private TextView noTours_tv;
     private String placeName;
+
+    private ToursByCategoryViewModel viewModel;
+
+
 
     public ToursByCategoryFragment(String placeName) {
         this.placeName = placeName;
@@ -80,10 +85,19 @@ public class ToursByCategoryFragment extends Fragment implements ToursRecyclerVi
     @Override
     public void onToursViewHolderClick(int position) {
         Tour tour=adapter.getTour(position);
-        Intent intent = new Intent(getActivity(), CreateTourActivity.class);
+       /* Intent intent = new Intent(getActivity(), CreateTourActivity.class);
         intent.putExtra("id",tour.getId());
         intent.putExtra("placeName",tour.getPlaceName());
         intent.putExtra("price",tour.getPrice());
-        startActivity(intent);
+        startActivity(intent);*/
+        if (getActivity() != null) {
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .addToBackStack(null)
+                    .add(R.id.fragment_container, new ToursByCategoryChooseATravelPackageAadd(tour))
+                    .addToBackStack(null)
+                    .commit();}
     }
+
+
 }

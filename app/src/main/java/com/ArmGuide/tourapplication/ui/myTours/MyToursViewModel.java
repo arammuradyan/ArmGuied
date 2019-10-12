@@ -17,7 +17,16 @@ public class MyToursViewModel extends ViewModel {
        myToursRepository=new MyToursRepository();
     }
 
-    public LiveData<List<Tour>> getToursList(){
+   /* public LiveData<List<Tour>> getToursList(){
         return myToursRepository.getMyTours();
+    }*/
+
+    public LiveData<List<Tour>> getCompanyToursList(){
+        return myToursRepository.getCompanyTours();
     }
+
+    public LiveData<List<Tour>> getTouristsToursList(){
+        return myToursRepository.getTouristsTours();
+    }
+
 }

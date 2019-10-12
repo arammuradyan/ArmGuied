@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         initFireBase();
         initViews(savedInstanceState);
-       getLocationPermission();
+        getLocationPermission();
         isServicesOK();
     }
 
@@ -117,11 +117,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(this,R.color.colorWhite));
 
-        if (savedInstanceState == null) {
+      //  if (savedInstanceState == null) {
             // ARAJIN@ BACVOX FRAGMENT
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragment_container, new HomeFragment(),"home")
+                    .commit();
             navigationView.setCheckedItem(R.id.nav_home);
-        }
+            getSupportActionBar().setTitle("Tour diractions");
+       // }
         avatar_img=hView.findViewById(R.id.header_avatar_img);
         name_tv= hView.findViewById(R.id.header_username_tv);
         email_tv=hView.findViewById(R.id.header_email_tv);
@@ -161,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         TOUR_AGENCY=touristfromDB.getIsCompany();
 
-                        reloadMenu(TOUR_AGENCY);
+                        //reloadMenu(TOUR_AGENCY);
                         StateViewModel stateViewModel= ViewModelProviders.of(MainActivity.this).get(StateViewModel.class);
 
                         stateViewModel.setState(TOUR_AGENCY);
@@ -262,11 +266,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(!TOUR_AGENCY){
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.activity_main_drawer);
+            navigationView.setCheckedItem(R.id.nav_home);
+
         }
         //Tour company sign in
         if(TOUR_AGENCY){
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.activity_main_tour_agency_drawer);
+            navigationView.setCheckedItem(R.id.nav_home);
+
         }
         invalidateOptionsMenu();
     }
@@ -401,51 +409,93 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+//    @Override
+//    public void onBackPressed() {
+//        if(drawer.isDrawerOpen(GravityCompat.START)){
+//            drawer.closeDrawer(GravityCompat.START);
+//        } else if( navigationView.getCheckedItem().getItemId()!=R.id.nav_home){
+//            navigationView.setCheckedItem(R.id.nav_home);
+//            showHomeFragment();
+//        }
+//        else{
+//            super.onBackPressed();}
+//    }
+
     @Override
     public void onBackPressed() {
         if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
-        } else if( navigationView.getCheckedItem().getItemId()!=R.id.nav_home){
+        } else if( getSupportFragmentManager().getBackStackEntryCount()>1){
+            getSupportFragmentManager().popBackStack();
+            Toast.makeText(MainActivity.this,"arajin else",Toast.LENGTH_SHORT).show();
+
+        }/* else if( navigationView.getCheckedItem().getItemId()!=R.id.nav_home){
             navigationView.setCheckedItem(R.id.nav_home);
             showHomeFragment();
-        }
+        }*/
         else{
-            super.onBackPressed();}
+            if(getSupportFragmentManager().getBackStackEntryCount()==1){
+                navigationView.setCheckedItem(R.id.nav_home);
+                getSupportActionBar().setTitle("Tour diractions");
+                Toast.makeText(MainActivity.this,"superi if ",Toast.LENGTH_SHORT).show();
+            }
+            super.onBackPressed();
+        }
     }
 
     private void showHomeFragment(){
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new HomeFragment()).commit();
+        getSupportFragmentManager().popBackStack();
+        HomeFragment homeFragment=(HomeFragment) getSupportFragmentManager().findFragmentByTag("home");
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container,homeFragment)
+              //  .addToBackStack(null)
+                .commit();
+        //getSupportFragmentManager().beginTransaction().remove(homeFragment);
+
         if(getSupportActionBar()!=null)
             getSupportActionBar().setTitle("Tour diractions");
     }
     private void showTourCompaniesFragment(){
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new TourCompaniesFragment()).commit();
+       getSupportFragmentManager().popBackStack();
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragment_container, new TourCompaniesFragment())
+                .addToBackStack(null)
+                .commit();
         if(getSupportActionBar()!=null)
             getSupportActionBar().setTitle("Tour companies");
     }
     private void showAllToursFragment(){
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new AllToursFragment()).commit();
+        getSupportFragmentManager().popBackStack();
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragment_container, new AllToursFragment())
+                .addToBackStack(null)
+                .commit();
         if(getSupportActionBar()!=null)
             getSupportActionBar().setTitle("All tours");
     }
 
     private void showMyToursFragment(){
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new MyToursFragment(TOUR_AGENCY)).commit();
+        getSupportFragmentManager().popBackStack();
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, new MyToursFragment(TOUR_AGENCY))
+                .addToBackStack(null).commit();
         if(getSupportActionBar()!=null)
             getSupportActionBar().setTitle("My tours");
     }
 
     private void showMapofArmenia(){
+        getSupportFragmentManager().popBackStack();
+
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container,
-                        new MapFragment(locationPermissionsGrabted,
-                                PlaceInfoRepository.ZOOM_COUTRY,
-                                PlaceInfoRepository.getPlaceInfo(PlaceInfoRepository.ARMENIA)))
+                .add(R.id.fragment_container, new MapFragment(locationPermissionsGrabted, PlaceInfoRepository.ZOOM_COUTRY,PlaceInfoRepository.getPlaceInfo(PlaceInfoRepository.ARMENIA)))
+                .addToBackStack(null)
                 .commit();
         if(getSupportActionBar()!=null)
             getSupportActionBar().setTitle("Map of Armenia");
@@ -453,10 +503,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private void showCurrentLocation(){
+        getSupportFragmentManager().popBackStack();
+
         getLocationPermission();
         if(locationPermissionsGrabted){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapFragment(
-                    locationPermissionsGrabted)).commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragment_container, new MapFragment(locationPermissionsGrabted))
+                    .addToBackStack(null)
+                    .commit();
         }
         else{
             Toast.makeText(this, " Cant show curent location permissions denied", Toast.LENGTH_SHORT).show();

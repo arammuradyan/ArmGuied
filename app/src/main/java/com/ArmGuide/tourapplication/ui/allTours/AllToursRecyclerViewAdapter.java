@@ -1,4 +1,4 @@
-package com.ArmGuide.tourapplication.ui.tours.by.category;
+package com.ArmGuide.tourapplication.ui.allTours;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +16,11 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ToursRecyclerViewAdapter extends RecyclerView.Adapter<ToursRecyclerViewAdapter.ToursViewHolder> {
+public class AllToursRecyclerViewAdapter extends RecyclerView.Adapter<AllToursRecyclerViewAdapter.ToursViewHolder> {
     private List<Tour> tours;
     private OnToursViewHolderCLickListener onToursViewHolderCLickListener;
 
-    public ToursRecyclerViewAdapter() {
+    public AllToursRecyclerViewAdapter() {
         tours = new ArrayList<>();
     }
 

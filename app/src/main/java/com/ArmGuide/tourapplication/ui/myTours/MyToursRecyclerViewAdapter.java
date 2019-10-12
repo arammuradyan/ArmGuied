@@ -77,10 +77,10 @@ public class MyToursRecyclerViewAdapter extends RecyclerView.Adapter<MyToursRecy
         }
 
         private void bind(Tour tour){
-            agency_name_tv.setText(tour.getTourCompanyId());
+            agency_name_tv.setText(tour.getTourCompany().getCompanyName());
             price_tv.setText(String.valueOf(tour.getPrice()));
             tours_tv.setText(tour.getPlaceName());
-            duration_tv.setText(tour.getDate());
+           duration_tv.setText(tour.getDate());
             if(tour.getImgUrl()!=null){
                 if(!tour.getImgUrl().isEmpty())
                 { Picasso.get().load(tour.getImgUrl())
@@ -88,6 +88,14 @@ public class MyToursRecyclerViewAdapter extends RecyclerView.Adapter<MyToursRecy
                         .fit()
                         .centerCrop()
                         .into(tour_category_img);}
+            }
+           if(tour.getTourCompany().getAvatarUrl()!=null){
+                if(!tour.getTourCompany().getAvatarUrl().isEmpty())
+                { Picasso.get().load(tour.getTourCompany().getAvatarUrl())
+                        .placeholder(R.mipmap.ic_launcher)
+                        .fit()
+                        .centerCrop()
+                        .into(agency_img);}
             }
         }
 
