@@ -31,8 +31,10 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.ArmGuide.tourapplication.Repositories.RepositoryForUserState;
 import com.ArmGuide.tourapplication.models.Company;
 import com.ArmGuide.tourapplication.models.Tourist;
+import com.ArmGuide.tourapplication.models.UserState;
 import com.ArmGuide.tourapplication.ui.allTours.AllToursFragment;
 import com.ArmGuide.tourapplication.ui.companies.TourCompaniesFragment;
 import com.ArmGuide.tourapplication.ui.home.HomeFragment;
@@ -127,13 +129,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // ARAJIN@ BACVOX FRAGMENT
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragment_container, new HomeFragment(),"home")
+                    .add(R.id.fragment_container, new HomeFragment(), "home")
                     .commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }
-        avatar_img=hView.findViewById(R.id.header_avatar_img);
-        name_tv= hView.findViewById(R.id.header_username_tv);
-        email_tv=hView.findViewById(R.id.header_email_tv);
+        avatar_img = hView.findViewById(R.id.header_avatar_img);
+        name_tv = hView.findViewById(R.id.header_username_tv);
+        email_tv = hView.findViewById(R.id.header_email_tv);
 
     }
 
@@ -173,8 +175,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                             TOUR_AGENCY = touristfromDB.getIsCompany();
 
-                        //reloadMenu(TOUR_AGENCY);
-                        StateViewModel stateViewModel= ViewModelProviders.of(MainActivity.this).get(StateViewModel.class);
+                            //reloadMenu(TOUR_AGENCY);
+                            StateViewModel stateViewModel = ViewModelProviders.of(MainActivity.this).get(StateViewModel.class);
 
                             stateViewModel.setState(TOUR_AGENCY);
 
@@ -235,6 +237,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                     Toast.makeText(MainActivity.this, "Company onDataChange", Toast.LENGTH_SHORT).show();
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                     Toast.makeText(MainActivity.this, "Company onCancelled: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
@@ -292,7 +295,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         invalidateOptionsMenu();
     }
-
 
 
     @Override
@@ -433,49 +435,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if( getSupportFragmentManager().getBackStackEntryCount()>1){
+        } else if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             getSupportFragmentManager().popBackStack();
-            Toast.makeText(MainActivity.this,"arajin else",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "arajin else", Toast.LENGTH_SHORT).show();
 
         }/* else if( navigationView.getCheckedItem().getItemId()!=R.id.nav_home){
             navigationView.setCheckedItem(R.id.nav_home);
             showHomeFragment();
-        }*/
-        else{
-            if(getSupportFragmentManager().getBackStackEntryCount()==1){
+        }*/ else {
+            if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
                 navigationView.setCheckedItem(R.id.nav_home);
                 getSupportActionBar().setTitle("Tour diractions");
-                Toast.makeText(MainActivity.this,"superi if ",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "superi if ", Toast.LENGTH_SHORT).show();
             }
             super.onBackPressed();
         }
     }
 
-    private void showHomeFragment(){
+    private void showHomeFragment() {
         getSupportFragmentManager().popBackStack();
-        HomeFragment homeFragment=(HomeFragment) getSupportFragmentManager().findFragmentByTag("home");
+        HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("home");
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container,homeFragment)
-              //  .addToBackStack(null)
+                .replace(R.id.fragment_container, homeFragment)
+                //  .addToBackStack(null)
                 .commit();
         //getSupportFragmentManager().beginTransaction().remove(homeFragment);
 
-        if(getSupportActionBar()!=null)
+        if (getSupportActionBar() != null)
             getSupportActionBar().setTitle("Tour diractions");
     }
-    private void showTourCompaniesFragment(){
-       getSupportFragmentManager().popBackStack();
+
+    private void showTourCompaniesFragment() {
+        getSupportFragmentManager().popBackStack();
 
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.fragment_container, new TourCompaniesFragment())
                 .addToBackStack(null)
                 .commit();
-        if(getSupportActionBar()!=null)
+        if (getSupportActionBar() != null)
             getSupportActionBar().setTitle("Tour companies");
     }
-    private void showAllToursFragment(){
+
+    private void showAllToursFragment() {
         getSupportFragmentManager().popBackStack();
 
         getSupportFragmentManager()
@@ -483,45 +486,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .add(R.id.fragment_container, new AllToursFragment())
                 .addToBackStack(null)
                 .commit();
-        if(getSupportActionBar()!=null)
+        if (getSupportActionBar() != null)
             getSupportActionBar().setTitle("All tours");
     }
 
-    private void showMyToursFragment(){
+    private void showMyToursFragment() {
         getSupportFragmentManager().popBackStack();
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, new MyToursFragment(TOUR_AGENCY))
                 .addToBackStack(null).commit();
-        if(getSupportActionBar()!=null)
+        if (getSupportActionBar() != null)
             getSupportActionBar().setTitle("My tours");
     }
 
-    private void showMapofArmenia(){
+    private void showMapofArmenia() {
         getSupportFragmentManager().popBackStack();
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment_container, new MapFragment(locationPermissionsGrabted, PlaceInfoRepository.ZOOM_COUTRY,PlaceInfoRepository.getPlaceInfo(PlaceInfoRepository.ARMENIA)))
+                .add(R.id.fragment_container, new MapFragment(locationPermissionsGrabted, PlaceInfoRepository.ZOOM_COUTRY, PlaceInfoRepository.getPlaceInfo(PlaceInfoRepository.ARMENIA)))
                 .addToBackStack(null)
                 .commit();
-        if(getSupportActionBar()!=null)
+        if (getSupportActionBar() != null)
             getSupportActionBar().setTitle("Map of Armenia");
     }
 
 
-    private void showCurrentLocation(){
+    private void showCurrentLocation() {
         getSupportFragmentManager().popBackStack();
 
         getLocationPermission();
-        if(locationPermissionsGrabted){
+        if (locationPermissionsGrabted) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.fragment_container, new MapFragment(locationPermissionsGrabted))
                     .addToBackStack(null)
                     .commit();
-        }
-        else{
+        } else {
             Toast.makeText(this, " Cant show curent location permissions denied", Toast.LENGTH_SHORT).show();
 
         }
@@ -531,17 +533,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private void showSignOutDialog(){
-        String title="";
-        if(mAuth.getCurrentUser()!=null){
-        title=mAuth.getCurrentUser().getEmail();}
-        if(title.isEmpty()){
-            title="Signing out";
+    private void showSignOutDialog() {
+        String title = "";
+        if (mAuth.getCurrentUser() != null) {
+            title = mAuth.getCurrentUser().getEmail();
         }
-        AlertDialog.Builder builder=new AlertDialog.Builder(this)
-                                           .setTitle(title)
-                                           .setMessage(R.string.sign_out_dialog_message)
-                                           .setIcon(R.drawable.ic_application)
+        if (title.isEmpty()) {
+            title = "Signing out";
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(R.string.sign_out_dialog_message)
+                .setIcon(R.drawable.ic_application)
                 .setPositiveButton(R.string.action_sign_out, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -554,10 +557,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         dialog.dismiss();
                     }
                 });
-       AlertDialog signOutDialog=builder.create();
-       signOutDialog.show();
+        AlertDialog signOutDialog = builder.create();
+        signOutDialog.show();
     }
-
 
 
     @SuppressLint("RestrictedApi")
@@ -576,133 +578,128 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             invalidateOptionsMenu();
 
             repositoryForUserState.setIntoRep(UserState.NO_REGISTRATED);
-
-
-
-    /*
-     * ------------------------------MAP PERMISSIONS END GOOGLE MAP SERVICE CHECK----------------------------------------------------
-     * */
-    public boolean isServicesOK() {
-        Log.d(TAG, "isServiceOk: checking google services version");
-
-        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
-
-        if (available == ConnectionResult.SUCCESS) {
-            // evriting ok can use map
-            Log.d(TAG, "isServiceOk: Googgle play service working");
-            return true;
-        } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
-            // ann eror that we can resolve it
-            Log.d(TAG, "isServiceOk: ann eror but we can solve it");
-            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(this, available, ERROR_DIALOG_REQUEST);
-            dialog.show();
-        } else {
-            Toast.makeText(this, "You cant use maps", Toast.LENGTH_SHORT).show();
         }
-        return false;
     }
 
-    private void getLocationPermission() {
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION};
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+        /*
+         * ------------------------------MAP PERMISSIONS END GOOGLE MAP SERVICE CHECK----------------------------------------------------
+         * */
+        public boolean isServicesOK () {
+            Log.d(TAG, "isServiceOk: checking google services version");
+
+            int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
+
+            if (available == ConnectionResult.SUCCESS) {
+                // evriting ok can use map
+                Log.d(TAG, "isServiceOk: Googgle play service working");
+                return true;
+            } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
+                // ann eror that we can resolve it
+                Log.d(TAG, "isServiceOk: ann eror but we can solve it");
+                Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(this, available, ERROR_DIALOG_REQUEST);
+                dialog.show();
+            } else {
+                Toast.makeText(this, "You cant use maps", Toast.LENGTH_SHORT).show();
+            }
+            return false;
+        }
+
+        private void getLocationPermission () {
+            String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION};
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
-                locationPermissionsGrabted = true;
+                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    locationPermissionsGrabted = true;
+                } else {
+                    ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_COD);
+                }
             } else {
                 ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_COD);
             }
-        } else {
-            ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_COD);
         }
-    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        locationPermissionsGrabted=false;
-        switch(requestCode){
-            case PERMISSION_REQUEST_COD:{
-                if(grantResults.length>0){
-                    for (int i = 0; i <grantResults.length ; i++) {
-                        if(grantResults[i]!=PackageManager.PERMISSION_GRANTED){
-                            locationPermissionsGrabted=false;
-                            return;
+        @Override
+        public void onRequestPermissionsResult ( int requestCode, @NonNull String[] permissions,
+        @NonNull int[] grantResults){
+            locationPermissionsGrabted = false;
+            switch (requestCode) {
+                case PERMISSION_REQUEST_COD: {
+                    if (grantResults.length > 0) {
+                        for (int i = 0; i < grantResults.length; i++) {
+                            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                                locationPermissionsGrabted = false;
+                                return;
+                            }
                         }
+                        locationPermissionsGrabted = true;
                     }
-                    locationPermissionsGrabted=true;
                 }
             }
         }
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d("myMain", "onDestroy");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d("myMain", "onPause");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getUserState();
-        Log.d("myMain", "onResume");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d("myMain", "onRestart");
-    }
-
-
-
-    private void getUserState() {
-        final String key;
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            repositoryForUserState.setIntoRep(UserState.NO_REGISTRATED);
-            Log.d("state","inside getUserState method, not reg");
-
+        @Override
+        protected void onActivityResult ( int requestCode, int resultCode, @Nullable Intent data)
+        {
+            super.onActivityResult(requestCode, resultCode, data);
         }
-        else {
-            key = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            FirebaseDatabase.getInstance().getReference().child("Companies").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    boolean isCompany = false;
-                    for (DataSnapshot data: dataSnapshot.getChildren()
-                         ) {
-                        if(data.getKey().equals(key)){
-                            isCompany = true;
-                            Log.d("state","inside getUserState method, iscompany"+ isCompany);
-                            repositoryForUserState.setIntoRep(UserState.COMPANY);
-                            break;
+
+        @Override
+        protected void onDestroy () {
+            super.onDestroy();
+            Log.d("myMain", "onDestroy");
+        }
+
+        @Override
+        protected void onPause () {
+            super.onPause();
+            Log.d("myMain", "onPause");
+        }
+
+        @Override
+        protected void onResume () {
+            super.onResume();
+            getUserState();
+            Log.d("myMain", "onResume");
+        }
+
+
+        private void getUserState () {
+            final String key;
+            if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                repositoryForUserState.setIntoRep(UserState.NO_REGISTRATED);
+                Log.d("state", "inside getUserState method, not reg");
+
+            } else {
+                key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                FirebaseDatabase.getInstance().getReference().child("Companies").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        boolean isCompany = false;
+                        for (DataSnapshot data : dataSnapshot.getChildren()
+                        ) {
+                            if (data.getKey().equals(key)) {
+                                isCompany = true;
+                                Log.d("state", "inside getUserState method, iscompany" + isCompany);
+                                repositoryForUserState.setIntoRep(UserState.COMPANY);
+                                break;
+                            }
+                        }
+                        if (!isCompany) {
+                            Log.d("state", "inside getUserState method, iscompany" + isCompany);
+                            repositoryForUserState.setIntoRep(UserState.TOURIST);
                         }
                     }
-                    if(!isCompany){
-                        Log.d("state","inside getUserState method, iscompany"+ isCompany);
-                        repositoryForUserState.setIntoRep(UserState.TOURIST);
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
                     }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
+                });
+            }
         }
-    }
 
 }
+
 
