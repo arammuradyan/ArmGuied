@@ -28,6 +28,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.ArmGuide.tourapplication.models.Company;
 import com.ArmGuide.tourapplication.models.Tourist;
@@ -125,19 +126,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         name_tv= hView.findViewById(R.id.header_username_tv);
         email_tv=hView.findViewById(R.id.header_email_tv);
 
-       // fab=findViewById(R.id.fab);
-
-      /*  fab.setVisibility(View.GONE);
-        if(mAuth.getCurrentUser()==null){
-            fab.setVisibility(View.VISIBLE);
-        }*/
-       /* fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });*/
-
     }
 
     private void initFireBase(){
@@ -172,17 +160,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                      Toast.makeText(MainActivity.this, touristfromDB.toString(), Toast.LENGTH_LONG).show();
 
                         TOUR_AGENCY=touristfromDB.getIsCompany();
+
+                        reloadMenu(TOUR_AGENCY);
+                        StateViewModel stateViewModel= ViewModelProviders.of(MainActivity.this).get(StateViewModel.class);
+
+                        stateViewModel.setState(TOUR_AGENCY);
+
                  name_tv.setText(touristfromDB.getFullName());
                  email_tv.setText(touristfromDB.getEmail());
+                 if(!touristfromDB.getAvatarUrl().isEmpty()){
                    Picasso.get().load(touristfromDB.getAvatarUrl())
                            .placeholder(R.mipmap.ic_launcher)
                              .fit()
                              .centerCrop()
-                             .into(avatar_img);
+                             .into(avatar_img);}
 
-                      /*  if(!TOUR_AGENCY){
-                            fab.setVisibility(View.GONE);
-                        }*/
                    reloadMenu(TOUR_AGENCY);
 
                     }else{
@@ -210,18 +202,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if(company!=null){
                                 TOUR_AGENCY=company.isCompany();
 
-                             /*   if(TOUR_AGENCY){
-                                    fab.setVisibility(View.VISIBLE);
-                                }*/
+                                StateViewModel stateViewModel= ViewModelProviders.of(MainActivity.this).get(StateViewModel.class);
+                                stateViewModel.setState(TOUR_AGENCY);
+
                                 reloadMenu(TOUR_AGENCY);
 
                                 name_tv.setText(company.getCompanyName());
                                 email_tv.setText(company.getEmail());
+                                if(!company.getAvatarUrl().isEmpty()){
                                 Picasso.get().load(company.getAvatarUrl())
                                         .placeholder(R.mipmap.ic_launcher)
                                         .fit()
                                         .centerCrop()
-                                        .into(avatar_img);
+                                        .into(avatar_img);}
                             }else{
                                 Toast.makeText(MainActivity.this, "Company onDataChange COMPANIN NULLA", Toast.LENGTH_SHORT).show();
                             }
@@ -334,31 +327,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint("RestrictedApi")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-       if(mAuth.getCurrentUser()==null){
-          // DEFOULT items
-           switch (menuItem.getItemId()) {
-
-               case R.id.nav_home:
-                   showHomeFragment();
-                   break;
-               case R.id.nav_tour_companies:
-                   showTourCompaniesFragment();
-                   break;
-               case R.id.nav_all_tours:
-                  showAllToursFragment();
-                   break;
-               case R.id.nav_my_tours:
-                  // fab.setVisibility(View.VISIBLE);
-                   showMyToursFragment();
-                   break;
-               case R.id.nav_map_of_armenia:
-               showMapofArmenia();
-                   break;
-               case R.id.nav_current_location:
-                  showCurrentLocation();
-                   break;
-           }
-       }else if(TOUR_AGENCY) {
+        if (mAuth.getCurrentUser() == null) {
+            // DEFOULT items
+            switch (menuItem.getItemId()) {
+                case R.id.nav_home:
+                    showHomeFragment();
+                    break;
+                case R.id.nav_tour_companies:
+                    showTourCompaniesFragment();
+                    break;
+                case R.id.nav_all_tours:
+                    showAllToursFragment();
+                    break;
+                case R.id.nav_my_tours:
+                    // fab.setVisibility(View.VISIBLE);
+                    showMyToursFragment();
+                    break;
+                case R.id.nav_map_of_armenia:
+                    showMapofArmenia();
+                    break;
+                case R.id.nav_current_location:
+                    showCurrentLocation();
+                    break;
+            }
+        } else if (TOUR_AGENCY) {
             // COMPANY items
             switch (menuItem.getItemId()) {
                 case R.id.nav_home:

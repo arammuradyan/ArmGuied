@@ -8,6 +8,7 @@ public class Constants {
     public static final String PLACES="Places";
 
     public static final String TOURS_DATABASE_REFERENCE="Tours";
+    //public static final String PLACES="Places";
 
 
 }

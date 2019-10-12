@@ -90,6 +90,10 @@ public class ImagesFragment extends Fragment {
         recyclerViewImageZoomed.getLayoutManager().scrollToPosition(500);
         PagerSnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(recyclerViewImageZoomed);
+
+
+
+        recyclerViewImageZoomed.setItemViewCacheSize(0);
         recyclerViewImageZoomed.setRecyclerListener(new RecyclerView.RecyclerListener() {
             @Override
             public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {

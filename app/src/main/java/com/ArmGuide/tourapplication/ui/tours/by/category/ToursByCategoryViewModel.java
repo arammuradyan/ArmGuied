@@ -9,23 +9,16 @@ import com.ArmGuide.tourapplication.models.Tour;
 
 import java.util.List;
 
-public class ToursByCategoryViewModel extends ViewModel implements ToursByCategoryRepository.OnResponceListener {
+public class ToursByCategoryViewModel extends ViewModel{
 
-    private MutableLiveData<List<Tour>> tours;
     private ToursByCategoryRepository toursByCategoryRepository;
 
     public ToursByCategoryViewModel() {
-        tours = new MutableLiveData<>();
-        toursByCategoryRepository=new ToursByCategoryRepository(this);
+        toursByCategoryRepository=new ToursByCategoryRepository();
     }
 
-    public LiveData<List<Tour>> getToursList(String id) {
-        toursByCategoryRepository.getToursByCategory(id);
-        return tours;
+    public LiveData<List<Tour>> getToursList(String placeName){
+        return toursByCategoryRepository.getToursByCategory(placeName);
     }
 
-    @Override
-    public void onResponceListening(List<Tour> toursList) {
-        tours.setValue(toursList);
-    }
 }

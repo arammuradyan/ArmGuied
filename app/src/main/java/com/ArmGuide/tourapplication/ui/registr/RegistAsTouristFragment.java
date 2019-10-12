@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -86,6 +87,9 @@ public class RegistAsTouristFragment extends Fragment {
     private String phone;
     private String confirm_password;
 
+    private SharedPreferences sharedPreferences;
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -94,6 +98,7 @@ public class RegistAsTouristFragment extends Fragment {
         initAuth();
         vieiwInit(view);
         setOnClickListeners();
+        sharedPreferences = getActivity().getSharedPreferences("statePref",0);
         return view;
     }
 
@@ -148,6 +153,7 @@ public class RegistAsTouristFragment extends Fragment {
             @Override
             public void onClick(View v) {
              register();
+                sharedPreferences.edit().putString("newState","newState").apply();
             }
         });
 
@@ -370,40 +376,16 @@ public class RegistAsTouristFragment extends Fragment {
 
             }
         });
-
-        /*touristsDatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot tourist: dataSnapshot.getChildren()) {
-                    Tourist tourist1=tourist.getValue(Tourist.class);
-                    Toast.makeText(getContext(), "onDataChange: "+tourist1.toString(), Toast.LENGTH_SHORT).show();
-
-                    Log.d("TAG", "onDataChange: "+tourist1.toString());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "onCancelled: "+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-
-                Log.d("TAG", "onCancelled: "+ databaseError.getMessage());
-            }
-        });*/
     }
 
     private Tourist getCurrentTourist(String id, String uri){
 
         Tourist currentTourist= new Tourist();
-        Tour tour1=new Tour("tour1","caxkadzor",15000);
-        Tour tour2=new Tour("tour2","dilijan",25000);
-        Tour tour3=new Tour("tour3","tatev",30000);
-        Tour tour4=new Tour("tour4","arcax",115000);
+        Tour tour1=new Tour();
+
 
         ArrayList<Tour> tours=new ArrayList<>();
         tours.add(tour1);
-        tours.add(tour2);
-        tours.add(tour3);
-        tours.add(tour4);
 
         currentTourist.setId(id);
         currentTourist.setEmail(email);
