@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //FAB
     private FloatingActionButton fab;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -336,30 +335,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint("RestrictedApi")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-       if(mAuth.getCurrentUser()==null){
-          // DEFOULT items
-           switch (menuItem.getItemId()) {
-               case R.id.nav_home:
-                   showHomeFragment();
-                   break;
-               case R.id.nav_tour_companies:
-                   showTourCompaniesFragment();
-                   break;
-               case R.id.nav_all_tours:
-                  showAllToursFragment();
-                   break;
-               case R.id.nav_my_tours:
-                  // fab.setVisibility(View.VISIBLE);
-                   showMyToursFragment();
-                   break;
-               case R.id.nav_map_of_armenia:
-               showMapofArmenia();
-                   break;
-               case R.id.nav_current_location:
-                  showCurrentLocation();
-                   break;
-           }
-       }else if(TOUR_AGENCY) {
+        if (mAuth.getCurrentUser() == null) {
+            // DEFOULT items
+            switch (menuItem.getItemId()) {
+                case R.id.nav_home:
+                    showHomeFragment();
+                    break;
+                case R.id.nav_tour_companies:
+                    showTourCompaniesFragment();
+                    break;
+                case R.id.nav_all_tours:
+                    showAllToursFragment();
+                    break;
+                case R.id.nav_my_tours:
+                    // fab.setVisibility(View.VISIBLE);
+                    showMyToursFragment();
+                    break;
+                case R.id.nav_map_of_armenia:
+                    showMapofArmenia();
+                    break;
+                case R.id.nav_current_location:
+                    showCurrentLocation();
+                    break;
+            }
+        } else if (TOUR_AGENCY) {
             // COMPANY items
             switch (menuItem.getItemId()) {
                 case R.id.nav_home:
@@ -443,7 +442,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
-
 
     private void showHomeFragment(){
         getSupportFragmentManager().popBackStack();

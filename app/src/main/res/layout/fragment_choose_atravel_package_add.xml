@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@color/colorBlack"
+    android:background="#0C0974"
     android:orientation="vertical">
 
 
@@ -32,21 +32,21 @@
                     android:id="@+id/title_company_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="COMPANY INFO"
-                    android:textColor="#F7F2F2"                    android:textSize="30sp"
+                    android:text="COMPANY NAME"
+                    android:textColor="#7A7676"
+                    android:textSize="30sp"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="12dp" />
 
                 <TextView
                     android:id="@+id/company_name"
-                    android:layout_width="200dp"
+                    android:layout_width="240dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
                     android:layout_marginTop="10dp"
-                    android:textSize="20sp"
-                    android:maxLines="5"
                     android:background="@drawable/shape"
                     android:gravity="center"
+                    android:inputType="date"
                     android:textColor="#F7F2F2" />
 
 
@@ -63,8 +63,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image2"
-                android:layout_width="98dp"
-                android:layout_height="98dp"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
                 android:layout_marginLeft="38dp"
                 android:layout_marginTop="14dp"
                 android:src="#7EB3C4"
@@ -81,20 +81,21 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="250dp"
+            android:orientation="horizontal"
+            >
 
 
 
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="126dp"
+                android:layout_height="126dp"
                 android:src="#7EB3C4"
                 app:civ_border_width="1.8dp"
                 app:civ_border_color="#03375F"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginLeft="10dp"/>
 
 
@@ -109,7 +110,7 @@
                     android:id="@+id/thePackageYouSelected_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TOUR PACKAGE"
+                    android:text="THE PACKAGE YOU SELECTED"
                     android:gravity="center"
                     android:textSize="20sp"
                     android:textColor="#F7F2F2"
@@ -118,21 +119,18 @@
                     />
                 <TextView
                     android:id="@+id/thePackageYouSelected"
-                    android:layout_width="150dp"
+                    android:layout_width="204dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="14dp"
                     android:layout_marginTop="6dp"
-                    android:textColor="#F7F2F2"
-
-                    android:textSize="20sp"
                     android:background="@drawable/shape"
                     />
 
                 <TextView
                     android:id="@+id/title_tourData_TV"
-                    android:layout_width="150dp"
+                    android:layout_width="220dp"
                     android:layout_height="25dp"
-                    android:text="DATE"
+                    android:text="TOUR DATA"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="8dp"
                     android:textSize="20sp"
@@ -142,19 +140,18 @@
 
                 <TextView
                     android:id="@+id/tourData_TV"
-                    android:layout_width="150dp"
+                    android:layout_width="220dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/shape"
-                    android:textSize="20sp"
                     android:gravity="center"
                     android:inputType="date"
                     android:textColor="#F7F2F2" />
 
                 <TextView
                     android:id="@+id/title_price_TV"
-                    android:layout_width="150dp"
+                    android:layout_width="220dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="8dp"
@@ -171,12 +168,11 @@
 
                     <TextView
                         android:id="@+id/price_TV"
-                        android:layout_width="150dp"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:layout_marginRight="10dp"
                         android:textColor="#F7F2F2"
-                        android:textSize="20sp"
                         android:inputType="number"
                         android:gravity="center"
                         android:background="@drawable/shape"/>
@@ -221,7 +217,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="INCLUDING TRANSPORT"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="#F7F2F2"
                     android:layout_marginTop="4dp"
                     android:layout_marginLeft="16dp"/>
@@ -231,7 +227,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="INDUDING FOOD"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="#F7F2F2"
                     android:layout_marginTop="24dp"
                     android:layout_marginLeft="16dp"/>
@@ -241,7 +237,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="THREE LANGUAGE GUIDING"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="#F7F2F2"
                     android:layout_marginTop="24dp"
                     android:layout_marginLeft="16dp"/>
@@ -253,7 +249,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="VINE DEGUSTATION"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="#F7F2F2"
                     android:layout_marginTop="24dp"
                     android:layout_marginLeft="16dp"/>
@@ -266,7 +262,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="FREE WIFI DURING TOUR"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="#F7F2F2"
                     android:layout_marginTop="24dp"
                     android:layout_marginLeft="16dp"/></LinearLayout>
@@ -283,8 +279,7 @@
                     android:id="@+id/includingTransport_CB"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@color/design_default_color_primary"
-                    android:layout_marginTop="2dp"
+
                     android:layout_marginLeft="40dp"/>
 
 
@@ -292,8 +287,7 @@
                     android:id="@+id/indudingFood_CB"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@color/design_default_color_primary"
-                    android:layout_marginTop="22dp"
+                    android:layout_marginTop="18dp"
                     android:layout_marginLeft="40dp"/>
 
 
@@ -302,8 +296,7 @@
                     android:id="@+id/threeLanguageGuiding_CB"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@color/design_default_color_primary"
-                    android:layout_marginTop="22dp"
+                    android:layout_marginTop="18dp"
                     android:layout_marginLeft="40dp"/>
 
 
@@ -313,8 +306,7 @@
                     android:id="@+id/vineDegustation_CB"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@color/design_default_color_primary"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="18dp"
                     android:layout_marginLeft="40dp"/>
 
 
@@ -323,10 +315,8 @@
                     android:id="@+id/freeWifiDuringTour_CB"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@color/design_default_color_primary"
                     android:layout_marginTop="18dp"
-                    android:layout_marginLeft="40dp"/>
-            </LinearLayout>
+                    android:layout_marginLeft="40dp"/></LinearLayout>
 
 
 
@@ -351,9 +341,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="MORE INFORMATION"
-                android:textColor="#F7F2F2"
+                android:textColor="#A5A2A2"
                 android:textSize="34sp"
-                android:layout_marginLeft="46dp"/>
+                android:layout_marginLeft="46dp"
+                android:layout_marginTop="18dp"
+
+                />
 
 
 
@@ -363,7 +356,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:textColor="#F7F2F2"
-                android:textSize="20sp"
                 android:background="@drawable/shape"
                 android:layout_marginLeft="6dp"
                 android:layout_marginBottom="12dp"/>
@@ -382,7 +374,7 @@
                 android:id="@+id/add_to_my_tours_TV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#F7F2F2"
+                android:textColor="#7A7676"
                 android:text="ADD TO MY TOURS"
                 android:textSize="18dp"
                 android:layout_marginLeft="244dp"/>

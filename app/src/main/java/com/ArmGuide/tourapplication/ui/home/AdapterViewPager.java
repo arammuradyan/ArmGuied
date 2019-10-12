@@ -1,80 +1,89 @@
 package com.ArmGuide.tourapplication.ui.home;
 
+import android.util.Log;
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.ArmGuide.tourapplication.models.Place;
-import com.ArmGuide.tourapplication.models.PlacesNames;
+import com.ArmGuide.tourapplication.models.PlaceKEY;
+import com.ArmGuide.tourapplication.models.UserState;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class AdapterViewPager extends FragmentPagerAdapter {
 
     private List<Place> places;
-    public AdapterViewPager(@NonNull FragmentManager fm) {
+    private List<BlankFragment> blackFragments;
+    private List<String> placeKeys;
+    private UserState state;
+
+    public AdapterViewPager(@NonNull FragmentManager fm, UserState state) {
         super(fm);
+        this.places = new ArrayList<>();
+        blackFragments = new ArrayList<>();
+        placeKeys = PlaceKEY.getInstance().getKeyList();
+        this.state = state;
+        Log.d("MyLog",  " Adapter constructor");
+
     }
 
-    public AdapterViewPager(@NonNull FragmentManager fm, List<Place> places){
-        super(fm);
-        this.places = places;
+    @NonNull
+    @Override
+    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+        Log.d("MyLog", position + " Adapter place " + places.get(position).getName());
+        return super.instantiateItem(container, position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
     }
 
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        BlankFragment landFragment  = new BlankFragment(places.get(position));
+        String key = placeKeys.get(position);
+        Log.d("MyLog", position + " Adapter place " + places.get(position).getName());
 
+        return blackFragments.get(position);
+    }
 
-        /*switch (position) {
-            case 0:
-                landFragment = new BlankFragment(PlacesNames.CARAHUNGE);
-                break;
-            case 1:
-                landFragment = new BlankFragment(PlacesNames.GARNI);
-                break;
-            case 2:
-                landFragment = new BlankFragment(PlacesNames.ASHTARAK);
-                break;
-            case 3:
-                landFragment = new BlankFragment(PlacesNames.SEVAN);
-                break;
-            case 4:
-                landFragment = new BlankFragment(PlacesNames.DILIJAN);
-                break;
-            case 5:
-                landFragment = new BlankFragment(PlacesNames.ARAGATS);
-                break;
-            case 6:
-                landFragment = new BlankFragment(PlacesNames.TATEV);
-                break;
-            case 7:
-                landFragment = new BlankFragment(PlacesNames.SHIKAHOGH);
-                break;
-            case 8:
-                landFragment = new BlankFragment(PlacesNames.JERMUK);
-                break;
-            case 9:
-                landFragment = new BlankFragment(PlacesNames.KHORVIRAP);
-                break;
-            case 10:
-                landFragment = new BlankFragment(PlacesNames.WATERFALLUMBRELLA);
-                break;
-            case 11:
-                landFragment = new BlankFragment(PlacesNames.TSAGHKADZOR);
-                break;
-            default:
-                break;
-        }*/
-        return landFragment;
+    public BlankFragment getFragment(int positon) {
+        return blackFragments.get(positon);
     }
 
     @Override
     public int getCount() {
-        return places.size();
+        return blackFragments.size();
+//        return places != null ? places.size() : 0;
+    }
+
+    public void setPlaces(List<Place> places) {
+        this.places.clear();
+        this.places.addAll(places);
+        init();
+    }
+
+    public void setState(UserState state) {
+        this.state = state;
+        init();
+    }
+
+    private void init() {
+        if (state == null)
+            return;
+        blackFragments.clear();
+
+        for (int i = 0; i < places.size(); i++) {
+            BlankFragment blankFragment = new BlankFragment(places.get(i), placeKeys.get(i), state);
+            blackFragments.add(blankFragment);
+        }
+        notifyDataSetChanged();
     }
 }

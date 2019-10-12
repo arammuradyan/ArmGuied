@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.ArmGuide.tourapplication.MainActivity;
 import com.ArmGuide.tourapplication.R;
+import com.ArmGuide.tourapplication.ui.createTour.CreateTourActivity;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 

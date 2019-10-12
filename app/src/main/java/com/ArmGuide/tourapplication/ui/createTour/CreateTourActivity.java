@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -46,7 +48,7 @@ public class CreateTourActivity extends AppCompatActivity {
     private TextView selectTheDirection;
     private Spinner tourPackageSpinner;
     private TextView tourData_TV;
-    private EditText tourData_ET;
+    private TextView tourData_ET;
     private TextView price_TV;
     private EditText price_ET;
     private TextView dram;
@@ -146,8 +148,6 @@ public class CreateTourActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 boolean transport=includingTransport_CB.isChecked();
                 boolean food=indudingFood_CB.isChecked();
                 boolean threeLangGuid=threeLanguageGuiding_CB.isChecked();
@@ -265,6 +265,24 @@ public class CreateTourActivity extends AppCompatActivity {
         });
 
         initPlacesFirebase();
+
+        tourData_ET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                Dialog dialog = new DatePickerDialog(CreateTourActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                        tourData_ET.setText(String.format("%s / %s / %s", day, month, year));
+                    }
+                }, year, month, day);
+
+                dialog.show();
+            }
+        });
 
     }
 

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -86,6 +87,9 @@ public class RegistAsTouristFragment extends Fragment {
     private String phone;
     private String confirm_password;
 
+    private SharedPreferences sharedPreferences;
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -94,6 +98,7 @@ public class RegistAsTouristFragment extends Fragment {
         initAuth();
         vieiwInit(view);
         setOnClickListeners();
+        sharedPreferences = getActivity().getSharedPreferences("statePref",0);
         return view;
     }
 
@@ -148,6 +153,7 @@ public class RegistAsTouristFragment extends Fragment {
             @Override
             public void onClick(View v) {
              register();
+                sharedPreferences.edit().putString("newState","newState").apply();
             }
         });
 

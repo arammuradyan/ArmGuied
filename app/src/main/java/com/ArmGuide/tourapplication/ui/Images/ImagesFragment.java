@@ -92,12 +92,6 @@ public class ImagesFragment extends Fragment {
         snapHelper.attachToRecyclerView(recyclerViewImageZoomed);
 
 
-        recyclerViewImageZoomed.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
 
         recyclerViewImageZoomed.setItemViewCacheSize(0);
         recyclerViewImageZoomed.setRecyclerListener(new RecyclerView.RecyclerListener() {
@@ -114,8 +108,6 @@ public class ImagesFragment extends Fragment {
                 Picasso.get().load(imageUrls.get(positionRight)).into(circleImageRight);
             }
         });
-
-
         Picasso.get().load(imageUrls.get(imageUrls.size() - 1)).into(circleImageLeft);
         Picasso.get().load(imageUrls.get(0)).into(circleImageMiddle);
         Picasso.get().load(imageUrls.get(1)).into(circleImageRight);
