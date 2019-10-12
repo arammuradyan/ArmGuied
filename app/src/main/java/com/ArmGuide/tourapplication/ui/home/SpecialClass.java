@@ -25,7 +25,8 @@ public class SpecialClass {
 
     public Tour getTourUnderCondition() {
         Tour tourUnderCondition = null;
-        if (tour != null && placeNames.size() > 0) {
+        if(placeNames!=null)
+        if (tour != null &&  placeNames.size() > 0) {
             for (String placeName : placeNames
             ) {
                 if (placeName.equals(tour.getPlaceName())) {
