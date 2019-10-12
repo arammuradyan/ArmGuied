@@ -1,6 +1,6 @@
 package com.ArmGuide.tourapplication.Repositories;
 
-import android.util.Log;
+
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -19,19 +19,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyToursRepository {
+
    private List<Tour> toursList =new ArrayList<>();
    private MutableLiveData<List<Tour>> tours= new MutableLiveData<>();
-   private final String TAG="myLogs";
 
 
    private DatabaseReference toursDatabaseReference= FirebaseDatabase.getInstance()
                                                      .getReference(Constants.TOURS_DATABASE_REFERENCE);
+   private DatabaseReference touristsDatabaseReference= FirebaseDatabase.getInstance()
+                                                     .getReference(Constants.TOURISTS_DATABASE_REFERENCE);
 
 
     public MyToursRepository() {
     }
 
-    public LiveData<List<Tour>> getMyTours(){
+   /* public LiveData<List<Tour>> getMyTours(){
        if(FirebaseAuth.getInstance().getCurrentUser()==null){
            return null;
        }
@@ -83,7 +85,58 @@ public class MyToursRepository {
            }
        });
 return tours;
+    }*/
+
+
+    public LiveData<List<Tour>> getCompanyTours(){
+        if(FirebaseAuth.getInstance().getCurrentUser()==null){
+            return null;
+        }
+        final String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        toursDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                toursList.clear();
+                if(dataSnapshot.exists()){
+                    for (DataSnapshot toursData:dataSnapshot.getChildren()) {
+                        Tour tour=toursData.getValue(Tour.class);
+                        if(tour.getTourCompany().getId().equals(userId)){
+                        toursList.add(tour);}
+                    }
+                    tours.postValue(toursList);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+return tours;
     }
 
+    public LiveData<List<Tour>> getTouristsTours(){
+        if(FirebaseAuth.getInstance().getCurrentUser()==null){
+            return null;
+        }
+        final String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        touristsDatabaseReference.child(userId).child("tours").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                toursList.clear();
+                if(dataSnapshot.exists()){
+                    for (DataSnapshot toursData:dataSnapshot.getChildren()) {
+                        Tour tour=toursData.getValue(Tour.class);
+                        toursList.add(tour);
+                    }
+                    tours.postValue(toursList);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+        return tours;
+    }
 
 }

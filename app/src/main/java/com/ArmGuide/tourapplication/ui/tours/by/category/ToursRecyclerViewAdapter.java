@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.models.Tour;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,9 +76,27 @@ public class ToursRecyclerViewAdapter extends RecyclerView.Adapter<ToursRecycler
         }
 
         private void bind(Tour tour){
-            agency_name_tv.setText(tour.getId());
+            agency_name_tv.setText(tour.getTourCompany().getCompanyName());
             price_tv.setText(String.valueOf(tour.getPrice()));
             tours_tv.setText(tour.getPlaceName());
+            duration_tv.setText(tour.getDate());
+
+            if(tour.getImgUrl()!=null){
+                if(!tour.getImgUrl().isEmpty())
+                { Picasso.get().load(tour.getImgUrl())
+                        .placeholder(R.drawable.ic_avatar)
+                        .fit()
+                        .centerCrop()
+                        .into(tour_category_img);}
+            }
+            if(tour.getTourCompany().getAvatarUrl()!=null){
+                if(!tour.getTourCompany().getAvatarUrl().isEmpty())
+                { Picasso.get().load(tour.getTourCompany().getAvatarUrl())
+                        .placeholder(R.drawable.ic_avatar)
+                        .fit()
+                        .centerCrop()
+                        .into(agency_img);}
+            }
         }
 
    private void viewInit(@NonNull View itemView){

@@ -1,5 +1,6 @@
 package com.ArmGuide.tourapplication.ui.createTour;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,9 +15,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.ArmGuide.tourapplication.Constants;
+import com.ArmGuide.tourapplication.MainActivity;
 import com.ArmGuide.tourapplication.R;
+import com.ArmGuide.tourapplication.StateViewModel;
+import com.ArmGuide.tourapplication.models.Company;
 import com.ArmGuide.tourapplication.models.Tour;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -26,6 +31,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -63,12 +70,18 @@ public class CreateTourActivity extends AppCompatActivity {
     private ChildEventListener placeChildEventListener;
     final List<String> packages = new ArrayList<>();
 
+    private ValueEventListener companyValueListener;
+    private Company company;
+    private DatabaseReference companyReference;
+
+
     private DatabaseReference databaseVisitors;
     private DatabaseReference databaseReference;
 
     //Spineric data vercnelu hamar
-    int position;
-    String imageUrl;
+  private int position;
+  private String imageUrl;
+  private String placeName;
 
 
     @Override
@@ -100,48 +113,78 @@ public class CreateTourActivity extends AppCompatActivity {
         moreInformation_ET = findViewById(R.id.moreInformation_ET);
         save=findViewById(R.id.save);
 
+        String Uid=FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        companyReference=FirebaseDatabase.getInstance()
+                .getReference(Constants.COMPANIES_DATABASE_REFERENCE);
+
+        Query companyQueryByUid=companyReference
+                .orderByChild("id")
+                .equalTo(Uid);
+
+      companyValueListener=companyQueryByUid.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("RestrictedApi")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    Company companyFromFB=dataSnapshot.getChildren().iterator().next().getValue(Company.class);
+                    if(companyFromFB!=null){
+                       company=companyFromFB;
+                    }else{
+                        Toast.makeText(CreateTourActivity.this, "Company onDataChange COMPANIN NULLA", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                Toast.makeText(CreateTourActivity.this, "Company onDataChange", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(CreateTourActivity.this, "Company onCancelled: "+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 boolean transport=includingTransport_CB.isChecked();
                 boolean food=indudingFood_CB.isChecked();
                 boolean threeLangGuid=threeLanguageGuiding_CB.isChecked();
                 boolean vine=vineDegustation_CB.isChecked();
                 boolean wifi=freeWifiDuringTour_CB.isChecked();
 
-                String tourCompanyId= FirebaseAuth.getInstance().getCurrentUser().getUid();
-                String placeName=packages.get(position);
+               // String tourCompanyId= FirebaseAuth.getInstance().getCurrentUser().getUid();
+               // String placeName=packages.get(position);
                 String date=tourData_ET.getText().toString().trim();
                 String moreInformation=moreInformation_ET.getText().toString().trim();
 
                 List<String> touristsIds=new ArrayList<>();
                 touristsIds.add("id 1");
 
-                int price=Integer.parseInt(price_ET.getText().toString().trim());
+
 
                 if(TextUtils.isEmpty(price_ET.getText().toString().trim())){
-                    price_ET.setError("name is required");
+                    price_ET.setError("price is required");
                     price_ET.requestFocus();
                     return ;
                 }
                 if(TextUtils.isEmpty(date)){
-                    tourData_ET.setError("email is required");
+                    tourData_ET.setError("date is required");
                     tourData_ET.requestFocus();
                     return ;
                 }
-
+                int price=Integer.parseInt(price_ET.getText().toString().trim());
 
 
 
                 DatabaseReference toursReference=FirebaseDatabase.getInstance()
-                                                                 .getReference(Constants.TOURS_DATABASE_REFERENCE)
-                                                                 .child(tourCompanyId);
+                                                                 .getReference(Constants.TOURS_DATABASE_REFERENCE);
                 String tourId=toursReference.push().getKey();
 
                 Tour tour=new Tour();
                 tour.setId(tourId);
-                tour.setTourCompanyId(tourCompanyId);
+                tour.setTourCompany(company);
                 tour.setTouristsIds(touristsIds);
                 tour.setPlaceName(placeName);
                 tour.setDate(date);
@@ -176,6 +219,7 @@ public class CreateTourActivity extends AppCompatActivity {
         adapter = new TourPackageSpinerAdapter(this, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tourPackageSpinner.setAdapter(adapter);
+
         tourPackageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, final int i, long l) {
@@ -187,6 +231,7 @@ public class CreateTourActivity extends AppCompatActivity {
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         if(dataSnapshot.getKey().equals(packages.get(i))){
                             imageUrl =  dataSnapshot.child("imageUrls").child("0").getValue(String.class);
+                            placeName=dataSnapshot.child("name").getValue(String.class);
                             Picasso.get().load(imageUrl).into(image);
                         }
                     }
@@ -228,6 +273,7 @@ public class CreateTourActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         placesDatabaseReference.removeEventListener(placeChildEventListener);
+        companyReference.removeEventListener(companyValueListener);
     }
 
     private void initPlacesFirebase() {

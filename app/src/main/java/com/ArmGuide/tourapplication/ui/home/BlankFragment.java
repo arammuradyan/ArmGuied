@@ -153,7 +153,60 @@ public class BlankFragment extends Fragment {
 
             }
         });
+
+      //  final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Tourists").
+//                child(userId).child("getSubscribedPlacesIds");
+//
+//        reference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for (DataSnapshot snapshot : dataSnapshot.getChildren()
+//                ) {
+//                    if (snapshot.getKey().equals(placeKey)) {
+//                        checkBoxSubscribe.setChecked(true);
+//                        break;
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+
+//        if (state == UserState.COMPANY)
+//            checkBoxSubscribe.setVisibility(View.GONE);
+//        else {
+//            checkBoxSubscribe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                @Override
+//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                    if (state == UserState.NO_REGISTRATED) {
+//                        checkBoxSubscribe.setChecked(false);
+//                    } else {
+//                        Log.d("reg", "onCheckedChangeListener = " + isChecked);
+//                        if (isChecked) {
+//                            reference.child(placeKey).setValue(placeKey).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<Void> task) {
+//                                    Log.d("reg", "subscribed succeeded");
+//                                }
+//                            });
+//                        } else {
+//                            reference.child(placeKey).removeValue(new DatabaseReference.CompletionListener() {
+//                                @Override
+//                                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+//                                    Log.d("reg", "subscribed removing succeeded");
+//                                }
+//                            });
+//                        }
+//                    }
+//                }
+//            });
+//        }
     }
+
 
     @Override
     public void onResume() {

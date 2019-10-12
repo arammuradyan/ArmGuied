@@ -3,7 +3,8 @@ package com.ArmGuide.tourapplication.models;
 import java.util.List;
 
 public class Tour {
-    private String id, tourCompanyId, placeName, imgUrl, date, moreInfo;
+    private String id,placeName, imgUrl, date, moreInfo;
+    private Company tourCompany;
     private int price;
     private boolean transport, food, threeLangGuide, vineDegustation, wifi;
     private List<String> touristsIds;
@@ -11,15 +12,15 @@ public class Tour {
     public Tour() {
     }
 
-    public Tour(String id, String tourCompanyId, String placeName, String imgUrl, String date, String moreInfo,
-                int price, boolean transport,
-                boolean food, boolean threeLangGuide, boolean vineDegustation, boolean wifi, List<String> touristsIds) {
+    public Tour(String id, String placeName, String imgUrl, String date, String moreInfo, Company tourCompany, int price,
+                boolean transport, boolean food, boolean threeLangGuide, boolean vineDegustation, boolean wifi,
+                List<String> touristsIds) {
         this.id = id;
-        this.tourCompanyId = tourCompanyId;
         this.placeName = placeName;
         this.imgUrl = imgUrl;
         this.date = date;
         this.moreInfo = moreInfo;
+        this.tourCompany = tourCompany;
         this.price = price;
         this.transport = transport;
         this.food = food;
@@ -35,14 +36,6 @@ public class Tour {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getTourCompanyId() {
-        return tourCompanyId;
-    }
-
-    public void setTourCompanyId(String tourCompanyId) {
-        this.tourCompanyId = tourCompanyId;
     }
 
     public String getPlaceName() {
@@ -75,6 +68,14 @@ public class Tour {
 
     public void setMoreInfo(String moreInfo) {
         this.moreInfo = moreInfo;
+    }
+
+    public Company getTourCompany() {
+        return tourCompany;
+    }
+
+    public void setTourCompany(Company tourCompany) {
+        this.tourCompany = tourCompany;
     }
 
     public int getPrice() {

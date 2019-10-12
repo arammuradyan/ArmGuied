@@ -19,12 +19,16 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ArmGuide.tourapplication.Constants;
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.StateViewModel;
 import com.ArmGuide.tourapplication.models.Tour;
+import com.ArmGuide.tourapplication.ui.createTour.ChooseATravelPackageAdd;
 import com.ArmGuide.tourapplication.ui.createTour.CreateTourActivity;
+import com.ArmGuide.tourapplication.ui.tours.by.category.ToursByCategoryFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,42 +106,63 @@ public class MyToursFragment extends Fragment implements MyToursRecyclerViewAdap
     @Override
     public void onStart() {
         super.onStart();
-        if(getActivity()!=null)
+
+        if(FirebaseAuth.getInstance().getCurrentUser()==null){
+            noTours_tv.setVisibility(VISIBLE);
+            noTours_tv.setText("you aren't sign in");
+            fab.setVisibility(VISIBLE);
+        }
+
+        if(getActivity()!=null&&FirebaseAuth.getInstance().getCurrentUser()!=null)
         stateViewModel.getState().observe(this, new Observer<Boolean>() {
             @SuppressLint("RestrictedApi")
             @Override
             public void onChanged(Boolean aBoolean) {
                 if(aBoolean ){
                     fab.setVisibility(VISIBLE);
+                    getCompanyTours();
                 }else{
                     fab.setVisibility(View.GONE);
+                    getTouristsTours();
                 }
             }
         });
 
+    }
+
+    private void getCompanyTours(){
         progressBar.setVisibility(View.VISIBLE);
-        if( myToursViewModel.getToursList()==null){
-            progressBar.setVisibility(View.GONE);
-            noTours_tv.setVisibility(VISIBLE);
-            noTours_tv.setText("you aren't sign in");
-        }else{
-            noTours_tv.setVisibility(View.GONE);
-            myToursViewModel.getToursList().observe(this, new Observer<List<Tour>>() {
-                @Override
-                public void onChanged(List<Tour> tours) {
+        myToursViewModel.getCompanyToursList().observe(this, new Observer<List<Tour>>() {
+            @Override
+            public void onChanged(List<Tour> tours) {
+                progressBar.setVisibility(View.GONE);
+                if (tours.size() == 0) {
+                    noTours_tv.setVisibility(VISIBLE);
+                } else {
+                    noTours_tv.setVisibility(View.GONE);
                     toursList.clear();
                     toursList.addAll(tours);
                     adapter.setTours(toursList);
-                    progressBar.setVisibility(View.GONE);
-
-                    if(toursList.size()==0){
-                        noTours_tv.setVisibility(View.VISIBLE);
-                    }else{
-                        noTours_tv.setVisibility(View.GONE);
-                    }
                 }
-            });
-        }
+            }
+        });
+    }
+    private void getTouristsTours(){
+        progressBar.setVisibility(View.VISIBLE);
+        myToursViewModel.getTouristsToursList().observe(this, new Observer<List<Tour>>() {
+            @Override
+            public void onChanged(List<Tour> tours) {
+                progressBar.setVisibility(View.GONE);
+                if(tours.size()==0){
+                    noTours_tv.setVisibility(VISIBLE);
+                }else{
+                    noTours_tv.setVisibility(View.GONE);
+                    toursList.clear();
+                    toursList.addAll(tours);
+                    adapter.setTours(toursList);
+                }
+            }
+        });
     }
 
     @SuppressLint("RestrictedApi")
@@ -152,7 +177,12 @@ public class MyToursFragment extends Fragment implements MyToursRecyclerViewAdap
     @Override
     public void onToursViewHolderClick(int position) {
         Tour tour=adapter.getTour(position);
-
-        // START CHOOSEA TRAVEL PACKAGE ACTIVITY with Tour Bundle
+        if (getActivity() != null) {
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .addToBackStack(null)
+                    .add(R.id.fragment_container,
+                            new ChooseATravelPackageAdd(tour)).addToBackStack(null).commit();
+        }
     }
 }
