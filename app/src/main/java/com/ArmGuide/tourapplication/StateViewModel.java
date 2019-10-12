@@ -11,17 +11,17 @@ import java.util.List;
 
 public class StateViewModel extends ViewModel {
 
-    private MutableLiveData<Boolean> userState=new MutableLiveData<>();
+    private MutableLiveData<Boolean> userState = new MutableLiveData<>();
 
     public StateViewModel() {
     }
 
 
-    public void setState(boolean TOUR_AGENCY){
+    public void setState(boolean TOUR_AGENCY) {
         userState.postValue(TOUR_AGENCY);
     }
 
-    public LiveData<Boolean> getState(){
+    public LiveData<Boolean> getState() {
         return userState;
     }
 }

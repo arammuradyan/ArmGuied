@@ -23,14 +23,12 @@ public class AdapterViewPager extends FragmentPagerAdapter {
     private List<String> placeKeys;
     private UserState state;
 
-    public AdapterViewPager(@NonNull FragmentManager fm, UserState state) {
+    public AdapterViewPager(@NonNull FragmentManager fm) {
         super(fm);
         this.places = new ArrayList<>();
         blackFragments = new ArrayList<>();
         placeKeys = PlaceKEY.getInstance().getKeyList();
-        this.state = state;
-        Log.d("MyLog",  " Adapter constructor");
-
+        Log.d("MyLog", " Adapter constructor");
     }
 
     @NonNull
@@ -60,29 +58,24 @@ public class AdapterViewPager extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return blackFragments.size();
-//        return places != null ? places.size() : 0;
+        return blackFragments != null ? blackFragments.size() : 0;
     }
 
     public void setPlaces(List<Place> places) {
-        this.places.clear();
-        this.places.addAll(places);
+        if (this.places != null) {
+            this.places.clear();
+        }
+        Log.d("stt", "in init method places income: " + places);
+        this.places = places;
         init();
-    }
 
-    public void setState(UserState state) {
-        this.state = state;
-        init();
     }
 
     private void init() {
-        if (state == null)
-            return;
         blackFragments.clear();
-
         for (int i = 0; i < places.size(); i++) {
-           // BlankFragment blankFragment = new BlankFragment(places.get(i), placeKeys.get(i), state);
-          //  blackFragments.add(blankFragment);
+            BlankFragment blankFragment = new BlankFragment(places.get(i), placeKeys.get(i));
+            blackFragments.add(blankFragment);
         }
         notifyDataSetChanged();
     }
