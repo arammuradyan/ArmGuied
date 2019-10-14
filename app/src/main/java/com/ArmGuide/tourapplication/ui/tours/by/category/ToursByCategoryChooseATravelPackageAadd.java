@@ -43,8 +43,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ToursByCategoryChooseATravelPackageAadd extends Fragment {
 
 
-    private CircleImageView image,companyImage;
-    private TextView thePackageYouSelected_title,companiInfo_tv;
+    private CircleImageView image, companyImage;
+    private TextView thePackageYouSelected_title, companiInfo_tv;
     private TextView thePackageYouSelected;
     private TextView title_tourData_TV;
     private TextView tourData_TV;
@@ -67,6 +67,7 @@ public class ToursByCategoryChooseATravelPackageAadd extends Fragment {
 
     private Tour tour;
     private StateViewModel stateViewModel;
+
     public ToursByCategoryChooseATravelPackageAadd(Tour tour) {
         this.tour = tour;
     }
@@ -75,8 +76,9 @@ public class ToursByCategoryChooseATravelPackageAadd extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_choose_atravel_package_add, container, false);
 
-        if(getActivity()!=null){
-        stateViewModel= ViewModelProviders.of(getActivity()).get(StateViewModel.class);}
+        if (getActivity() != null) {
+            stateViewModel = ViewModelProviders.of(getActivity()).get(StateViewModel.class);
+        }
 
         return view;
 
@@ -88,7 +90,6 @@ public class ToursByCategoryChooseATravelPackageAadd extends Fragment {
 
         initViews(view);
         setTourInformation();
-
 
 
         addToMyTours.setOnClickListener(new View.OnClickListener() {
@@ -105,17 +106,17 @@ public class ToursByCategoryChooseATravelPackageAadd extends Fragment {
                                 }).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                if( FirebaseAuth.getInstance().getCurrentUser()==null){
-                                    Toast.makeText(getActivity(), "You must sign in as tourist to add ",Toast.LENGTH_SHORT).show();
-                                    Intent intent =new Intent(getActivity(), LoginActivity.class);
+                                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                                    Toast.makeText(getActivity(), "You must sign in as tourist to add ", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
                                     startActivity(intent);
-                                }else{
+                                } else {
                                     stateViewModel.getState().observe(ToursByCategoryChooseATravelPackageAadd.this, new Observer<Boolean>() {
                                         @Override
                                         public void onChanged(Boolean aBoolean) {
                                             if (aBoolean) {
                                                 Toast.makeText(getActivity(), "only tourists can add", Toast.LENGTH_SHORT).show();
-                                            }else{
+                                            } else {
                                                 saveTour();
                                             }
                                         }
@@ -132,13 +133,12 @@ public class ToursByCategoryChooseATravelPackageAadd extends Fragment {
     }
 
 
+    private void initViews(View view) {
 
-    private void initViews(View view){
-
-        companyImage=view.findViewById(R.id.image2);
+        companyImage = view.findViewById(R.id.image2);
         image = view.findViewById(R.id.image);
 
-        companiInfo_tv=view.findViewById(R.id.company_name);
+        companiInfo_tv = view.findViewById(R.id.company_name);
 
         thePackageYouSelected_title = view.findViewById(R.id.thePackageYouSelected_title);
         thePackageYouSelected = view.findViewById(R.id.thePackageYouSelected);
@@ -166,134 +166,135 @@ public class ToursByCategoryChooseATravelPackageAadd extends Fragment {
     }
 
 
-private void setTourInformation(){
-    if(tour.getTourCompany().getAvatarUrl()!=null){
-        if(!tour.getTourCompany().getAvatarUrl().isEmpty())
-        { Picasso.get().load(tour.getTourCompany().getAvatarUrl())
-                .placeholder(R.drawable.ic_avatar)
-                .fit()
-                .centerCrop()
-                .into(companyImage);
+    private void setTourInformation() {
+        if (tour.getTourCompany().getAvatarUrl() != null) {
+            if (!tour.getTourCompany().getAvatarUrl().isEmpty()) {
+                Picasso.get().load(tour.getTourCompany().getAvatarUrl())
+                        .placeholder(R.drawable.ic_avatar)
+                        .fit()
+                        .centerCrop()
+                        .into(companyImage);
+            }
         }
-    }
 
-        if(tour.getImgUrl()!=null){
-        if(!tour.getImgUrl().isEmpty())
-        { Picasso.get().load(tour.getImgUrl())
-                .placeholder(R.drawable.ic_avatar)
-                .fit()
-                .centerCrop()
-                .into(image);}
+        if (tour.getImgUrl() != null) {
+            if (!tour.getImgUrl().isEmpty()) {
+                Picasso.get().load(tour.getImgUrl())
+                        .placeholder(R.drawable.ic_avatar)
+                        .fit()
+                        .centerCrop()
+                        .into(image);
+            }
         }
-String companyInfo=tour.getTourCompany().getCompanyName()+"\n"
-                   +tour.getTourCompany().getPhoneNumber()+"\n"
-                   +tour.getTourCompany().getAddress()+"\n"
-                   +tour.getTourCompany().getEmail()+"\n"
-                   +tour.getTourCompany().getWebUrl();
+        String companyInfo = tour.getTourCompany().getCompanyName() + "\n"
+                + tour.getTourCompany().getPhoneNumber() + "\n"
+                + tour.getTourCompany().getAddress() + "\n"
+                + tour.getTourCompany().getEmail() + "\n"
+                + tour.getTourCompany().getWebUrl();
         companiInfo_tv.setText(companyInfo);
 
-    thePackageYouSelected.setText(tour.getPlaceName());
-    tourData_TV.setText(tour.getDate());
-    price_TV.setText(String.valueOf(tour.getPrice()));
-    moreInformation_TV.setText(tour.getMoreInfo());
-    includingTransport_CB.setChecked(tour.isTransport());
-    indudingFood_CB.setChecked(tour.isFood());
-    threeLanguageGuiding_CB.setChecked(tour.isThreeLangGuide());
-    vineDegustation_CB.setChecked(tour.isVineDegustation());
-    freeWifiDuringTour_CB.setChecked(tour.isWifi());
+        thePackageYouSelected.setText(tour.getPlaceName());
+        tourData_TV.setText(String.format("%s - %s", tour.getDate(), tour.getEndDate()));
+        price_TV.setText(String.valueOf(tour.getPrice()));
+        moreInformation_TV.setText(tour.getMoreInfo());
+        includingTransport_CB.setChecked(tour.isTransport());
+        indudingFood_CB.setChecked(tour.isFood());
+        threeLanguageGuiding_CB.setChecked(tour.isThreeLangGuide());
+        vineDegustation_CB.setChecked(tour.isVineDegustation());
+        freeWifiDuringTour_CB.setChecked(tour.isWifi());
 
-    includingTransport_CB.setClickable(false);
-    indudingFood_CB.setClickable(false);
-    threeLanguageGuiding_CB.setClickable(false);
-    vineDegustation_CB.setClickable(false);
-    freeWifiDuringTour_CB.setClickable(false);
-}
-private void saveTour(){
-  String touristId="";
+        includingTransport_CB.setClickable(false);
+        indudingFood_CB.setClickable(false);
+        threeLanguageGuiding_CB.setClickable(false);
+        vineDegustation_CB.setClickable(false);
+        freeWifiDuringTour_CB.setClickable(false);
+    }
 
-    if(FirebaseAuth.getInstance().getCurrentUser()!=null){
-            touristId= FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Toast.makeText(getActivity(), "touristId "+touristId,Toast.LENGTH_SHORT).show();
+    private void saveTour() {
+        String touristId = "";
 
-    }else{
-            Toast.makeText(getActivity(), "You must sign in as tourist to add ",Toast.LENGTH_SHORT).show();
-            Intent intent =new Intent(getActivity(), LoginActivity.class);
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            touristId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            Toast.makeText(getActivity(), "touristId " + touristId, Toast.LENGTH_SHORT).show();
+
+        } else {
+            Toast.makeText(getActivity(), "You must sign in as tourist to add ", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
         }
 
-  final DatabaseReference touristReferance= FirebaseDatabase.getInstance().getReference(Constants.TOURISTS_DATABASE_REFERENCE);
+        final DatabaseReference touristReferance = FirebaseDatabase.getInstance().getReference(Constants.TOURISTS_DATABASE_REFERENCE);
 
-    touristReferance.child(touristId).child("tours").addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            Toast.makeText(getActivity(), "on DATA CHANGE",Toast.LENGTH_SHORT).show();
+        touristReferance.child(touristId).child("tours").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Toast.makeText(getActivity(), "on DATA CHANGE", Toast.LENGTH_SHORT).show();
 
-            List<Tour> toursfromFB=new ArrayList<>();
-            if (dataSnapshot.exists()){
-                for (DataSnapshot toursFB:dataSnapshot.getChildren()) {
-                    Tour tourFB=toursFB.getValue(Tour.class);
-                    toursfromFB.add(tourFB);
-                }
-             for (int i = 0; i <toursfromFB.size() ; i++) {
-                    if(tour.getId().equals(toursfromFB.get(i).getId())){
-                        Toast.makeText(getActivity(), "ID _"+toursfromFB.get(i).getId()+
-                        " Cant add, you allready added "+tour.getId(),Toast.LENGTH_SHORT).show();
-                        return;
-                    }/*else{
+                List<Tour> toursfromFB = new ArrayList<>();
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot toursFB : dataSnapshot.getChildren()) {
+                        Tour tourFB = toursFB.getValue(Tour.class);
+                        toursfromFB.add(tourFB);
+                    }
+                    for (int i = 0; i < toursfromFB.size(); i++) {
+                        if (tour.getId().equals(toursfromFB.get(i).getId())) {
+                            Toast.makeText(getActivity(), "ID _" + toursfromFB.get(i).getId() +
+                                    " Cant add, you allready added " + tour.getId(), Toast.LENGTH_SHORT).show();
+                            return;
+                        }/*else{
                         toursfromFB.add(tour);
                     }*/
-                }
-                toursfromFB.add(tour);
-
-                String touristId= FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                touristReferance.child(touristId)
-                        .child("tours")
-                       // .child(tour.getId())
-                        .setValue(toursfromFB).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(getActivity(), "Added",Toast.LENGTH_SHORT).show();
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), "Failed "+e.getMessage(),Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    toursfromFB.add(tour);
 
-            }
-            else{
-                toursfromFB.add(tour);
-                String touristId= FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    String touristId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                touristReferance.child(touristId)
-                        .child("tours")
-                        // .child(tour.getId())
-                        .setValue(toursfromFB).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(getActivity(), "Added",Toast.LENGTH_SHORT).show();
+                    touristReferance.child(touristId)
+                            .child("tours")
+                            // .child(tour.getId())
+                            .setValue(toursfromFB).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getActivity(), "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                } else {
+                    toursfromFB.add(tour);
+                    String touristId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                    touristReferance.child(touristId)
+                            .child("tours")
+                            // .child(tour.getId())
+                            .setValue(toursfromFB).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getActivity(), "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     return;
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), "Failed "+e.getMessage(),Toast.LENGTH_SHORT).show();
-                    }
-                });
+                }
                 return;
             }
-       return;
-        }
 
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-        }
-    });
+            }
+        });
 
-}
+    }
 }
 
 

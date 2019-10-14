@@ -49,8 +49,9 @@ public class CreateTourActivity extends AppCompatActivity {
     private CircleImageView image;
     private TextView selectTheDirection;
     private Spinner tourPackageSpinner;
-    private TextView tourData_TV;
-    private TextView tourData_ET;
+    private TextView title_tourData_TV;
+    private TextView tourData_TV_1;
+    private TextView tourData_TV_2;
     private TextView price_TV;
     private EditText price_ET;
     private TextView dram;
@@ -86,6 +87,9 @@ public class CreateTourActivity extends AppCompatActivity {
   private int position;
   private String imageUrl;
   private String placeName;
+  private String date;
+  private String endDate;
+
 
 
     @Override
@@ -98,8 +102,9 @@ public class CreateTourActivity extends AppCompatActivity {
         selectTheDirection = findViewById(R.id.selectTheDirection);
         tourPackageSpinner = findViewById(R.id.touristDestinations);
 
-        tourData_TV = findViewById(R.id.tourData_TV);
-        tourData_ET = findViewById(R.id.tourData_ET);
+        title_tourData_TV = findViewById(R.id.title_tourData_TV);
+        tourData_TV_1 = findViewById(R.id.tourData_TV_1);
+        tourData_TV_2 = findViewById(R.id.tourData_TV_2);
         price_TV = findViewById(R.id.price_TV);
         price_ET = findViewById(R.id.price_ET);
         dram = findViewById(R.id.dram);
@@ -158,7 +163,7 @@ public class CreateTourActivity extends AppCompatActivity {
 
                // String tourCompanyId= FirebaseAuth.getInstance().getCurrentUser().getUid();
                // String placeName=packages.get(position);
-                String date=tourData_ET.getText().toString().trim();
+            //    String date=tourData_ET.getText().toString().trim();
                 String moreInformation=moreInformation_ET.getText().toString().trim();
 
                 List<String> touristsIds=new ArrayList<>();
@@ -171,13 +176,18 @@ public class CreateTourActivity extends AppCompatActivity {
                     price_ET.requestFocus();
                     return ;
                 }
+
                 if(TextUtils.isEmpty(date)){
-                    tourData_ET.setError("date is required");
-                    tourData_ET.requestFocus();
+                    tourData_TV_1.setError("date is required");
                     return ;
                 }
-                int price=Integer.parseInt(price_ET.getText().toString().trim());
 
+                if(TextUtils.isEmpty(endDate)){
+                    tourData_TV_2.setError("date is required");
+                    return ;
+                }
+
+                int price=Integer.parseInt(price_ET.getText().toString().trim());
 
 
                 DatabaseReference toursReference=FirebaseDatabase.getInstance()
@@ -190,6 +200,7 @@ public class CreateTourActivity extends AppCompatActivity {
                 tour.setTouristsIds(touristsIds);
                 tour.setPlaceName(placeName);
                 tour.setDate(date);
+                tour.setEndDate(endDate);
                 tour.setMoreInfo(moreInformation);
                 tour.setPrice(price);
                 tour.setTransport(transport);
@@ -268,7 +279,7 @@ public class CreateTourActivity extends AppCompatActivity {
 
         initPlacesFirebase();
 
-        tourData_ET.setOnClickListener(new View.OnClickListener() {
+        tourData_TV_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Calendar calendar = Calendar.getInstance();
@@ -278,7 +289,27 @@ public class CreateTourActivity extends AppCompatActivity {
                 Dialog dialog = new DatePickerDialog(CreateTourActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        tourData_ET.setText(String.format("%s / %s / %s", day, month, year));
+                        date = String.format("%s / %s / %s", day, month, year);
+                        tourData_TV_1.setText(date);
+                    }
+                }, year, month, day);
+
+                dialog.show();
+            }
+        });
+
+        tourData_TV_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                Dialog dialog = new DatePickerDialog(CreateTourActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                        endDate = String.format("%s / %s / %s", day, month, year);
+                        tourData_TV_2.setText(endDate);
                     }
                 }, year, month, day);
 
