@@ -25,8 +25,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ChooseATravelPackageAdd extends Fragment {
 
 
-    private CircleImageView image,companyImage;
-    private TextView thePackageYouSelected_title,companiInfo_tv;
+    private CircleImageView image, companyImage;
+    private TextView thePackageYouSelected_title, companiInfo_tv;
     private TextView thePackageYouSelected;
     private TextView title_tourData_TV;
     private TextView tourData_TV;
@@ -66,10 +66,10 @@ public class ChooseATravelPackageAdd extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        companyImage=view.findViewById(R.id.image2);
+        companyImage = view.findViewById(R.id.image2);
         image = view.findViewById(R.id.image);
 
-        companiInfo_tv=view.findViewById(R.id.company_name);
+        companiInfo_tv = view.findViewById(R.id.company_name);
 
         thePackageYouSelected_title = view.findViewById(R.id.thePackageYouSelected_title);
         thePackageYouSelected = view.findViewById(R.id.thePackageYouSelected);
@@ -120,49 +120,49 @@ public class ChooseATravelPackageAdd extends Fragment {
     }
 
 
-
-private void setTourInformation(){
-    if(tour.getTourCompany().getAvatarUrl()!=null){
-        if(!tour.getTourCompany().getAvatarUrl().isEmpty())
-        { Picasso.get().load(tour.getTourCompany().getAvatarUrl())
-                .placeholder(R.drawable.ic_avatar)
-                .fit()
-                .centerCrop()
-                .into(companyImage);
+    private void setTourInformation() {
+        if (tour.getTourCompany().getAvatarUrl() != null) {
+            if (!tour.getTourCompany().getAvatarUrl().isEmpty()) {
+                Picasso.get().load(tour.getTourCompany().getAvatarUrl())
+                        .placeholder(R.drawable.ic_avatar)
+                        .fit()
+                        .centerCrop()
+                        .into(companyImage);
+            }
         }
-    }
 
-        if(tour.getImgUrl()!=null){
-        if(!tour.getImgUrl().isEmpty())
-        { Picasso.get().load(tour.getImgUrl())
-                .placeholder(R.drawable.ic_avatar)
-                .fit()
-                .centerCrop()
-                .into(image);}
+        if (tour.getImgUrl() != null) {
+            if (!tour.getImgUrl().isEmpty()) {
+                Picasso.get().load(tour.getImgUrl())
+                        .placeholder(R.drawable.ic_avatar)
+                        .fit()
+                        .centerCrop()
+                        .into(image);
+            }
         }
-String companyInfo=tour.getTourCompany().getCompanyName()+"\n"
-                   +tour.getTourCompany().getPhoneNumber()+"\n"
-                   +tour.getTourCompany().getAddress()+"\n"
-                   +tour.getTourCompany().getEmail()+"\n"
-                   +tour.getTourCompany().getWebUrl();
+        String companyInfo = tour.getTourCompany().getCompanyName() + "\n"
+                + tour.getTourCompany().getPhoneNumber() + "\n"
+                + tour.getTourCompany().getAddress() + "\n"
+                + tour.getTourCompany().getEmail() + "\n"
+                + tour.getTourCompany().getWebUrl();
         companiInfo_tv.setText(companyInfo);
 
-    thePackageYouSelected.setText(tour.getPlaceName());
-    tourData_TV.setText(tour.getDate());
-    price_TV.setText(String.valueOf(tour.getPrice()));
-    moreInformation_TV.setText(tour.getMoreInfo());
-    includingTransport_CB.setChecked(tour.isTransport());
-    indudingFood_CB.setChecked(tour.isFood());
-    threeLanguageGuiding_CB.setChecked(tour.isThreeLangGuide());
-    vineDegustation_CB.setChecked(tour.isVineDegustation());
-    freeWifiDuringTour_CB.setChecked(tour.isWifi());
+        thePackageYouSelected.setText(tour.getPlaceName());
+        tourData_TV.setText(String.format("%s - %s", tour.getDate(), tour.getEndDate()));
+        price_TV.setText(String.valueOf(tour.getPrice()));
+        moreInformation_TV.setText(tour.getMoreInfo());
+        includingTransport_CB.setChecked(tour.isTransport());
+        indudingFood_CB.setChecked(tour.isFood());
+        threeLanguageGuiding_CB.setChecked(tour.isThreeLangGuide());
+        vineDegustation_CB.setChecked(tour.isVineDegustation());
+        freeWifiDuringTour_CB.setChecked(tour.isWifi());
 
-    includingTransport_CB.setClickable(false);
-    indudingFood_CB.setClickable(false);
-    threeLanguageGuiding_CB.setClickable(false);
-    vineDegustation_CB.setClickable(false);
-    freeWifiDuringTour_CB.setClickable(false);
-}
+        includingTransport_CB.setClickable(false);
+        indudingFood_CB.setClickable(false);
+        threeLanguageGuiding_CB.setClickable(false);
+        vineDegustation_CB.setClickable(false);
+        freeWifiDuringTour_CB.setClickable(false);
+    }
 }
 
 

@@ -358,7 +358,8 @@
                 android:textColor="#F7F2F2"
                 android:background="@drawable/shape"
                 android:layout_marginLeft="6dp"
-                android:layout_marginBottom="12dp"/>
+                android:layout_marginBottom="12dp"
+                />
 
 
 
