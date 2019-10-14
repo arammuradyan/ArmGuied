@@ -40,15 +40,15 @@
 
                 <TextView
                     android:id="@+id/company_name"
-                    android:layout_width="240dp"
+                    android:layout_width="270dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/shape"
                     android:gravity="center"
                     android:inputType="date"
-                    android:textColor="#F7F2F2" />
-
+                    android:textColor="#F7F2F2"
+                    android:padding="6dp"/>
 
 
 
@@ -65,7 +65,7 @@
                 android:id="@+id/image2"
                 android:layout_width="88dp"
                 android:layout_height="88dp"
-                android:layout_marginLeft="38dp"
+                android:layout_marginLeft="32dp"
                 android:layout_marginTop="14dp"
                 android:src="#7EB3C4"
                 app:civ_border_color="#03375F"
@@ -81,7 +81,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             >
 
@@ -102,7 +102,7 @@
 
             <LinearLayout
                 android:layout_width="238dp"
-                android:layout_height="240dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="14dp"
                 android:orientation="vertical">
 
@@ -117,6 +117,7 @@
                     android:layout_marginTop="30dp"
                     android:layout_marginLeft="8dp"
                     />
+
                 <TextView
                     android:id="@+id/thePackageYouSelected"
                     android:layout_width="204dp"
@@ -124,7 +125,7 @@
                     android:layout_marginLeft="14dp"
                     android:layout_marginTop="6dp"
                     android:background="@drawable/shape"
-                    />
+                    android:padding="4dp"/>
 
                 <TextView
                     android:id="@+id/title_tourData_TV"
@@ -142,28 +143,28 @@
                     android:id="@+id/tourData_TV"
                     android:layout_width="220dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/shape"
                     android:gravity="center"
                     android:inputType="date"
-                    android:textColor="#F7F2F2" />
+                    android:textColor="#F7F2F2"
+                    android:padding="4dp"/>
 
                 <TextView
                     android:id="@+id/title_price_TV"
                     android:layout_width="220dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="8dp"
-                    android:text="PRICE"
-                    android:textSize="20sp"
-                    android:textColor="#F7F2F2"
+                    android:layout_marginTop="10dp"
                     android:gravity="center"
-                    />
+                    android:text="PRICE"
+                    android:textColor="#F7F2F2"
+                    android:textSize="20sp" />
 
                 <LinearLayout
                     android:layout_width="240dp"
-                    android:layout_height="38dp"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
@@ -172,10 +173,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:layout_marginRight="10dp"
+                        android:layout_marginLeft="8dp"
                         android:textColor="#F7F2F2"
                         android:inputType="number"
                         android:gravity="center"
-                        android:background="@drawable/shape"/>
+                        android:background="@drawable/shape"
+                        android:padding="3dp"/>
 
                     <TextView
                         android:id="@+id/dram"
@@ -201,7 +204,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="2dp">
 
 
 
@@ -209,7 +213,8 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                >
 
 
                 <TextView
@@ -358,7 +363,9 @@
                 android:textColor="#F7F2F2"
                 android:background="@drawable/shape"
                 android:layout_marginLeft="6dp"
-                android:layout_marginBottom="12dp"/>
+                android:layout_marginBottom="12dp"
+                android:padding="8dp"
+                />
 
 
 

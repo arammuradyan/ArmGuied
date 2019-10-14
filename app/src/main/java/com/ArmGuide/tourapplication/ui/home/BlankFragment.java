@@ -59,7 +59,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BlankFragment extends Fragment {
+public class BlankFragment extends Fragment  {
 
     private Place place;
     private String placeKey;
@@ -373,6 +373,7 @@ public class BlankFragment extends Fragment {
 
         Log.d("MyLog", "BlankFragment - onDestroyView" + placeKey);
     }
+
 
 
 }
