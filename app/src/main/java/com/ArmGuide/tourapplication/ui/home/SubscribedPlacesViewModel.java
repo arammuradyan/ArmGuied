@@ -9,10 +9,10 @@ import com.ArmGuide.tourapplication.Repositories.RepositoryForSubscribedPlacesNa
 import java.util.List;
 
 public class SubscribedPlacesViewModel extends ViewModel {
-    private MutableLiveData<List<String>> mutableLiveData;
+    private MutableLiveData<List<String>> mutableLiveData = new MutableLiveData<>();
+
     public LiveData<List<String>> getLiveData(){
-        if(mutableLiveData==null)
-            mutableLiveData = RepositoryForSubscribedPlacesNames.getInstance().getLiveData();
+        mutableLiveData = RepositoryForSubscribedPlacesNames.getInstance().getLiveData();
         return mutableLiveData;
     }
 }

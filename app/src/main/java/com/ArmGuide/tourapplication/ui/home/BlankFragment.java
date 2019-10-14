@@ -1,6 +1,8 @@
 package com.ArmGuide.tourapplication.ui.home;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,13 +15,16 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
+import com.ArmGuide.tourapplication.MainActivity;
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.WebActivity;
 import com.ArmGuide.tourapplication.models.Place;
@@ -31,6 +36,7 @@ import com.ArmGuide.tourapplication.ui.Images.ImagesFragment;
 import com.ArmGuide.tourapplication.ui.map.MapFragment;
 import com.ArmGuide.tourapplication.ui.map.PlaceInfo;
 import com.ArmGuide.tourapplication.ui.map.PlaceInfoRepository;
+import com.ArmGuide.tourapplication.ui.registr.LoginActivity;
 import com.ArmGuide.tourapplication.ui.tours.by.category.ToursByCategoryFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -58,6 +64,8 @@ public class BlankFragment extends Fragment {
     private Place place;
     private String placeKey;
     private UserStateViewModel userStateViewModel;
+    private SubscribedPlacesViewModel subscribedPlacesViewModel;
+    private UserState userState;
 
     BlankFragment(Place place, String placeKey) {
         this.place = place;
@@ -78,6 +86,7 @@ public class BlankFragment extends Fragment {
         Log.d("MyLog", "BlankFragment - onCreateView" + placeKey);
 
         userStateViewModel = new UserStateViewModel();
+        subscribedPlacesViewModel = ViewModelProviders.of(BlankFragment.this).get(SubscribedPlacesViewModel.class);
         return inflater.inflate(R.layout.fragment_blank, container, false);
     }
 
@@ -172,18 +181,90 @@ public class BlankFragment extends Fragment {
         });
 
 
+
+
+
         userStateViewModel.getState().observe(BlankFragment.this, new Observer<UserState>() {
             @Override
             public void onChanged(UserState state) {
 
+                BlankFragment.this.userState = state;
                 Log.d("MyLog", "BlankFragment real state:" + state);
                 if (state == UserState.COMPANY) {
                     checkBoxSubscribe.setVisibility(View.GONE);
                     checkBoxSubscribe.invalidate();
                 } else {
 
-                    if (state == UserState.TOURIST && getActivity() != null)
-                        getActivity().startService(new Intent(getActivity(), ServiceForNotification.class));
+
+                    // DIALOG
+                    if(state ==UserState.NO_REGISTRATED){
+                        checkBoxSubscribe.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AlertDialog.Builder ad = new AlertDialog.Builder(view.getContext());
+                                ad.setTitle("Project requirements.")
+                                        .setIcon(R.drawable.ic_info_black_24dp)
+                                        .setMessage("You are going to subscribe on new tours, but haven't " +
+                                                " logged in. Please enter your account to get notifications about new events!")
+                                        .setCancelable(true)
+                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent intent = new Intent(view.getContext(), LoginActivity.class);
+                                                intent.putExtra("fromHome","fromHome");
+                                                startActivity(intent);
+                                            }
+                                        })
+                                        .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Toast.makeText(view.getContext(), "You clicked Cancel", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                ad.show();
+                            }
+                        });
+                    }
+                    //
+
+                    if (state == UserState.TOURIST && getActivity() != null) {
+                        String userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        FirebaseDatabase.getInstance().getReference().child("Tourists").child(userKey).child("getSubscribedPlacesIds")
+                                .addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        List<String> placesNames = new ArrayList<>();
+
+                                        for (DataSnapshot data : dataSnapshot.getChildren()
+                                        ) {
+                                            placesNames.add(data.getValue(String.class));
+                                                Log.d("hoops", "" + placesNames);
+                                                if (data.getValue(String.class).equals(place.getName())) {
+                                                checkBoxSubscribe.setChecked(true);
+                                                checkBoxSubscribe.invalidate();
+                                                Log.d("hoops", "placeName: " + place.getName());
+                                                Log.d("hoops", "data.getval: " + data.getValue(String.class));
+                                                //break;
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+                        checkBoxSubscribe.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if(checkBoxSubscribe.isChecked()==true)
+                                ((FragmentActivity)view.getContext()).getSupportFragmentManager().beginTransaction()
+                                        .add(R.id.fragment_container,new FilterFragment()).addToBackStack(null).commit();
+                            }
+                        });
+                    }
+
 
                     checkBoxSubscribe.setVisibility(View.VISIBLE);
                     checkBoxSubscribe.invalidate();
@@ -247,6 +328,8 @@ public class BlankFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+
         textViewViewMore.setTextSize(15);
         textViewViewTours.setTextSize(15);
     }

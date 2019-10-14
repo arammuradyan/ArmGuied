@@ -21,7 +21,6 @@ public class AdapterViewPager extends FragmentPagerAdapter {
     private List<Place> places;
     private List<BlankFragment> blackFragments;
     private List<String> placeKeys;
-    private UserState state;
 
     public AdapterViewPager(@NonNull FragmentManager fm) {
         super(fm);
@@ -48,8 +47,10 @@ public class AdapterViewPager extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         String key = placeKeys.get(position);
         Log.d("MyLog", position + " Adapter place " + places.get(position).getName());
+        //BlankFragment blankFragment = new BlankFragment(places.get(position),placeKeys.get(position));
 
         return blackFragments.get(position);
+        //return blankFragment;
     }
 
     public BlankFragment getFragment(int positon) {
@@ -59,11 +60,13 @@ public class AdapterViewPager extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return blackFragments != null ? blackFragments.size() : 0;
+        //return places!=null?places.size():0;
     }
 
     public void setPlaces(List<Place> places) {
         if (this.places != null) {
             this.places.clear();
+            notifyDataSetChanged();
         }
         Log.d("stt", "in init method places income: " + places);
         this.places = places;

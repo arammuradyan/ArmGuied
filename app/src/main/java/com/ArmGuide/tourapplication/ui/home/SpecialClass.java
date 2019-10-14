@@ -35,10 +35,10 @@ public class SpecialClass {
                 }
             }
         }
-        Log.d("dobbi", "from special class result/" + tourUnderCondition);
+        Log.d("dobbi", "special class  -  tourUnderCondition/" + tourUnderCondition);
         if (tour != null)
-            Log.d("dobbi", "from specia class tourInput/" + tour.getPlaceName());
-        Log.d("dobbi", "from special class placesNames/" + placeNames);
+            Log.d("dobbi", "special class tourInput/" + tour.getPlaceName());
+        Log.d("dobbi", "special class placesNames/" + placeNames);
 
         return tourUnderCondition;
     }

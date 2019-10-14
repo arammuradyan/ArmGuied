@@ -1,5 +1,6 @@
 package com.ArmGuide.tourapplication.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.models.Place;
+import com.ArmGuide.tourapplication.models.ServiceForNotification;
+import com.ArmGuide.tourapplication.models.UserState;
 
 import java.util.List;
 
@@ -23,13 +26,24 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private AdapterViewPager adapterViewPager;
+    private UserStateViewModel userStateViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         Log.d("MyLog", "HomeFragment - onCreate");
         homeViewModel = ViewModelProviders.of(HomeFragment.this).get(HomeViewModel.class);
+        userStateViewModel = ViewModelProviders.of(HomeFragment.this).get(UserStateViewModel.class);
+        userStateViewModel.getState().observe(HomeFragment.this, new Observer<UserState>() {
+            @Override
+            public void onChanged(UserState userState) {
+                if (userState == UserState.TOURIST)
+                    if (getActivity() != null)
+                        getActivity().startService(new Intent(getActivity(), ServiceForNotification.class));
+            }
+        });
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,8 +66,10 @@ public class HomeFragment extends Fragment {
         homeViewModel.getLiveData().observe(HomeFragment.this, new Observer<List<Place>>() {
             @Override
             public void onChanged(List<Place> data) {
-                if (data != null)
+                if (data != null) {
                     adapterViewPager.setPlaces(data);
+                    adapterViewPager.notifyDataSetChanged();
+                }
             }
         });
 

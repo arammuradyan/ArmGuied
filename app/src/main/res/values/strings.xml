@@ -40,5 +40,7 @@
         rivers, and lush forests to enjoy along with remote regions, forts, and monasteries to discover,the country will never cease
         to impress. We explore the 12 most beautiful places to visit.</string>
     <string name="location">Go to location clicking\n on the map </string>
+
+    <string name="introFilterText">This section allows You to customize Your specific tours\n with some criteria introduced below.</string>
     //
 </resources>

@@ -12,4 +12,8 @@
 
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
+
+    <color name="lightGreen">#fffffb</color>
+    <color name="fonGreen">#dcedc8</color>
+    <color name="darkGreen">#aabb97</color>
 </resources>

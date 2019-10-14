@@ -2,11 +2,15 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
         <item>@font/aclonica</item>
+        <item>@font/acme</item>
         <item>@font/almendra_bold</item>
         <item>@font/amaranth_bold_italic</item>
         <item>@font/arya_bold</item>
+        <item>@font/berkshire_swash</item>
+        <item>@font/lemon</item>
         <item>@font/londrina_solid</item>
         <item>@font/oleo_script_bold</item>
+        <item>@font/ravi_prakash</item>
         <item>@font/trade_winds</item>
     </array>
 </resources>
