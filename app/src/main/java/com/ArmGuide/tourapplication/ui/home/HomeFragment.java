@@ -16,7 +16,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.models.Place;
-import com.ArmGuide.tourapplication.models.ServiceForNotification;
+import com.ArmGuide.tourapplication.models.ServiceForFilteredNotifications;
 import com.ArmGuide.tourapplication.models.UserState;
 
 import java.util.List;
@@ -34,14 +34,14 @@ public class HomeFragment extends Fragment {
 
 
         Log.d("MyLog", "HomeFragment - onCreate");
-        homeViewModel = ViewModelProviders.of(HomeFragment.this).get(HomeViewModel.class);
+        homeViewModel = ViewModelProviders.of(requireActivity()).get(HomeViewModel.class);
         userStateViewModel = ViewModelProviders.of(HomeFragment.this).get(UserStateViewModel.class);
         userStateViewModel.getState().observe(HomeFragment.this, new Observer<UserState>() {
             @Override
             public void onChanged(UserState userState) {
                 if (userState == UserState.TOURIST)
                     if (getActivity() != null)
-                        getActivity().startService(new Intent(getActivity(), ServiceForNotification.class));
+                        getActivity().startService(new Intent(getActivity(), ServiceForFilteredNotifications.class));
             }
         });
     }
@@ -63,16 +63,24 @@ public class HomeFragment extends Fragment {
             adapterViewPager = new AdapterViewPager(getActivity().getSupportFragmentManager());
         viewPagerLand.setAdapter(adapterViewPager);
 
-        homeViewModel.getLiveData().observe(HomeFragment.this, new Observer<List<Place>>() {
+        homeViewModel.getLiveData().observe(getViewLifecycleOwner(), new Observer<List<Place>>() {
             @Override
-            public void onChanged(List<Place> data) {
-                if (data != null) {
-                    adapterViewPager.setPlaces(data);
+            public void onChanged(List<Place> places) {
+                if (places != null) {
+                    Log.d("MyLog","Observer before adapter "+ places.size());
+
+                    adapterViewPager.setPlaces(places);
                     adapterViewPager.notifyDataSetChanged();
                 }
             }
         });
+    }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Log.d("MyLog", "HomeFragment - onActivityCreated");
     }
 
     @Override

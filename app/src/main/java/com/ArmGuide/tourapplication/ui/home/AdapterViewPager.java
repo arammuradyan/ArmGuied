@@ -48,7 +48,6 @@ public class AdapterViewPager extends FragmentPagerAdapter {
         String key = placeKeys.get(position);
         Log.d("MyLog", position + " Adapter place " + places.get(position).getName());
         //BlankFragment blankFragment = new BlankFragment(places.get(position),placeKeys.get(position));
-
         return blackFragments.get(position);
         //return blankFragment;
     }
@@ -64,14 +63,13 @@ public class AdapterViewPager extends FragmentPagerAdapter {
     }
 
     public void setPlaces(List<Place> places) {
-        if (this.places != null) {
+        if (places != null) {
+            Log.d("MyLog", "Adapter from obs RE " + places.size());
             this.places.clear();
+            this.places.addAll(places);
             notifyDataSetChanged();
+            init();
         }
-        Log.d("stt", "in init method places income: " + places);
-        this.places = places;
-        init();
-
     }
 
     private void init() {
@@ -80,6 +78,7 @@ public class AdapterViewPager extends FragmentPagerAdapter {
             BlankFragment blankFragment = new BlankFragment(places.get(i), placeKeys.get(i));
             blackFragments.add(blankFragment);
         }
+        Log.d("MyLog", "Adapter from init size of fragments " + blackFragments);
         notifyDataSetChanged();
     }
 }

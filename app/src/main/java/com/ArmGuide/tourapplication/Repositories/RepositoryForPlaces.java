@@ -40,10 +40,12 @@ public class RepositoryForPlaces {
 
 
      private void getPlacesListFromFirebase() {
-        placeList.clear();
          FirebaseDatabase.getInstance().getReference().child("Places").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                placeList.clear();
+
                 for (DataSnapshot d : dataSnapshot.getChildren()
                 ) {
                     placeList.add(d.getValue(Place.class));

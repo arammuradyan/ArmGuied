@@ -29,14 +29,17 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.ArmGuide.tourapplication.Repositories.RepositoryForUserState;
 import com.ArmGuide.tourapplication.models.Company;
+import com.ArmGuide.tourapplication.models.Filter;
 import com.ArmGuide.tourapplication.models.Tourist;
 import com.ArmGuide.tourapplication.models.UserState;
 import com.ArmGuide.tourapplication.ui.allTours.AllToursFragment;
 import com.ArmGuide.tourapplication.ui.companies.TourCompaniesFragment;
+import com.ArmGuide.tourapplication.ui.home.FilterFragment;
 import com.ArmGuide.tourapplication.ui.home.HomeFragment;
 import com.ArmGuide.tourapplication.ui.map.MapFragment;
 import com.ArmGuide.tourapplication.ui.map.PlaceInfoRepository;
@@ -54,6 +57,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -439,6 +444,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().popBackStack();
             Toast.makeText(MainActivity.this, "arajin else", Toast.LENGTH_SHORT).show();
 
+
+            //
+
+            //
+
         }/* else if( navigationView.getCheckedItem().getItemId()!=R.id.nav_home){
             navigationView.setCheckedItem(R.id.nav_home);
             showHomeFragment();
@@ -447,6 +457,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 navigationView.setCheckedItem(R.id.nav_home);
                 getSupportActionBar().setTitle("Tour diractions");
                 Toast.makeText(MainActivity.this, "superi if ", Toast.LENGTH_SHORT).show();
+                List<Fragment> fragments = getSupportFragmentManager().getFragments();
+                for (Fragment f: fragments
+                ) {
+                    if(f instanceof FilterFragment){
+                        ((FilterFragment) f).onBackPressed();
+                    }
+                }
             }
             super.onBackPressed();
         }

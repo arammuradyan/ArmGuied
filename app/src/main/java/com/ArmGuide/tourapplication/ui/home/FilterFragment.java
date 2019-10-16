@@ -8,33 +8,30 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.models.Filter;
-import com.ArmGuide.tourapplication.ui.createTour.CreateTourActivity;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,6 +46,7 @@ public class FilterFragment extends Fragment {
     private String dateStartFrom, dateEndTo;
     private int priceFrom, priceTo;
     private boolean transportMust, foodMust, guideMust, wineMust, wifiMust;
+    private FilterBackPressedViewModel filterBackPressedViewModel;
 
     private String userKey, placeName, placeKey;
 
@@ -58,13 +56,18 @@ public class FilterFragment extends Fragment {
 
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        filterBackPressedViewModel = ViewModelProviders.of(requireActivity()).get(FilterBackPressedViewModel.class);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         userKey = getArguments().getString("userKey");
         placeName = getArguments().getString("placeName");
         placeKey = getArguments().getString("placeKey");
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_filter, container, false);
     }
@@ -311,5 +314,11 @@ public class FilterFragment extends Fragment {
             }
         });
         dialog.show();
+    }
+
+
+    public void onBackPressed() {
+        Toast.makeText(getActivity(), "FilterFragment back pressed", Toast.LENGTH_SHORT).show();
+        filterBackPressedViewModel.setState(true);
     }
 }

@@ -28,12 +28,14 @@ import java.util.List;
 public class ServiceForFilteredNotifications extends Service {
 
     private SpecialFilteringClass specialFilteringClass;
+    private int idNotification;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
 
+        idNotification = 1;
         specialFilteringClass = new SpecialFilteringClass();
         Log.d("dobbi", "service created");
     }
@@ -71,11 +73,14 @@ public class ServiceForFilteredNotifications extends Service {
 
     private void checkBeforeSendingNot(final List<Tour> tours) {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-
+            Log.d("notg", "tours come " + tours.size());
             final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+            final List<Tour> finalList = tours;
 
             FirebaseDatabase.getInstance().getReference().child("Tourists").child(userId).child("ToursAlreadySeen").addValueEventListener(new ValueEventListener() {
                 boolean isAlreadySend = false;
+
 
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -85,18 +90,9 @@ public class ServiceForFilteredNotifications extends Service {
                         for (Tour tour : tours
                         ) {
                             if (tour.getId().equals(curTour.getId())) {
-                                isAlreadySend = true;
-                                tours.remove(tour);
+                                finalList.remove(tour);
                                 break;
                             }
-                        }
-                    }
-                    if (tours.size() > 0) {
-                        for (Tour tour: tours
-                             ) {
-                            sendNotification(tour);
-                            FirebaseDatabase.getInstance().getReference().child("Tourists").child(userId).child("ToursAlreadySeen")
-                                    .child(tour.getId()).setValue(tour);
                         }
                     }
                 }
@@ -106,6 +102,17 @@ public class ServiceForFilteredNotifications extends Service {
 
                 }
             });
+
+            Log.d("notg", "tours remain" + finalList.size());
+
+            if (finalList.size() > 0) {
+                for (Tour tour : finalList
+                ) {
+                    sendNotification(tour);
+                    FirebaseDatabase.getInstance().getReference().child("Tourists").child(userId).child("ToursAlreadySeen")
+                            .child(tour.getId()).setValue(tour);
+                }
+            }
 
         }
     }
@@ -132,7 +139,9 @@ public class ServiceForFilteredNotifications extends Service {
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
         Notification notification = builder.build();
-        notificationManager.notify(1, notification);
+        notificationManager.notify(idNotification, notification);
+        idNotification++;
+
 
     }
 
@@ -154,7 +163,7 @@ public class ServiceForFilteredNotifications extends Service {
                                 specialFilteringClass.setPlaceNames(tourCriteria);
                                 Log.d("dobbi", "placesSubscribed from onDataChange/" + tourCriteria.size());
                             }
-                            if (specialFilteringClass.getToursUnderCondition().size()>0) {
+                            if (specialFilteringClass.getToursUnderCondition().size() > 0) {
                                 checkBeforeSendingNot(specialFilteringClass.getToursUnderCondition());
                             }
                         }

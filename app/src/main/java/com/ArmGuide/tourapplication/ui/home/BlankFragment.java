@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,13 +23,11 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.ArmGuide.tourapplication.MainActivity;
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.WebActivity;
 import com.ArmGuide.tourapplication.models.Filter;
 import com.ArmGuide.tourapplication.models.Place;
 import com.ArmGuide.tourapplication.models.PlaceKEY;
-import com.ArmGuide.tourapplication.models.ServiceForNotification;
 import com.ArmGuide.tourapplication.models.UserState;
 import com.ArmGuide.tourapplication.ui.Images.ImagesFragment;
 
@@ -40,14 +37,10 @@ import com.ArmGuide.tourapplication.ui.map.PlaceInfoRepository;
 import com.ArmGuide.tourapplication.ui.registr.LoginActivity;
 import com.ArmGuide.tourapplication.ui.tours.by.category.ToursByCategoryFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 
@@ -63,6 +56,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class BlankFragment extends Fragment {
 
     private Place place;
+    private boolean backPressed;
     private String placeKey;
     private UserStateViewModel userStateViewModel;
     private SubscribedPlacesViewModel subscribedPlacesViewModel;
@@ -74,12 +68,21 @@ public class BlankFragment extends Fragment {
         this.placeKey = placeKey;
     }
 
+
     private TextView textViewViewMore, textViewDescription, textViewPlaceName, textViewViewTours;
     private ImageView imageViewBack, imageViewForward, imageViewMap, imageViewPressHand;
     private CircleImageView circleImageView;
     private CheckBox checkBoxSubscribe;
     private Intent intentWeb;
+    private FilterBackPressedViewModel filterBackPressedViewModel;
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        filterBackPressedViewModel = ViewModelProviders.of(requireActivity()).get(FilterBackPressedViewModel.class);
+        Log.d("MyLog", "BlankFragment - onCreate" + placeKey);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -187,7 +190,7 @@ public class BlankFragment extends Fragment {
         userStateViewModel.getState().observe(BlankFragment.this, new Observer<UserState>() {
             @Override
             public void onChanged(UserState state) {
-
+                Log.d("mystt", "from Blankfr, in observer " + state);
                 //checkBox GONE
                 if (state == UserState.COMPANY) {
                     checkBoxSubscribe.setVisibility(View.GONE);
@@ -230,6 +233,7 @@ public class BlankFragment extends Fragment {
                     checkBoxSubscribe.setVisibility(View.VISIBLE);
                     checkBoxSubscribe.invalidate();
 
+
                     filterViewModel.getLiveData().observe(BlankFragment.this, new Observer<List<Filter>>() {
                         @Override
                         public void onChanged(List<Filter> filters) {
@@ -245,7 +249,17 @@ public class BlankFragment extends Fragment {
                                         checkBoxSubscribe.invalidate();
                                     }
                                 }
+                                Log.d("kkkl", "" + backPressed);
+                                if (backPressed)
+                                    checkBoxSubscribe.setChecked(false);
                             }
+                        }
+                    });
+
+                    filterBackPressedViewModel.getLiveData().observe(requireActivity(), new Observer<Boolean>() {
+                        @Override
+                        public void onChanged(Boolean aBoolean) {
+                            checkBoxSubscribe.setChecked(false);
                         }
                     });
 
@@ -319,11 +333,6 @@ public class BlankFragment extends Fragment {
         Log.d("MyLog", "BlankFragment - onDestroy" + placeKey);
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d("MyLog", "BlankFragment - onCreate" + placeKey);
-    }
 
     @Override
     public void onDestroyView() {
@@ -332,5 +341,8 @@ public class BlankFragment extends Fragment {
         Log.d("MyLog", "BlankFragment - onDestroyView" + placeKey);
     }
 
+    public void getBackPressedState(boolean bool) {
+        backPressed = bool;
+    }
 
 }
