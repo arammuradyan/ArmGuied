@@ -52,8 +52,14 @@
 
         </activity>
 
-        <activity android:name=".WebActivity" android:theme="@style/Theme.AppCompat.Light.DarkActionBar"></activity>
+        <activity android:name=".WebActivity" android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+        </activity>
         <service android:name=".models.ServiceForNotification"
+            android:enabled="true"
+            android:exported="false">
+        </service>
+
+        <service android:name=".models.ServiceForFilteredNotifications"
             android:enabled="true"
             android:exported="false">
         </service>

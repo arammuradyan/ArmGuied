@@ -84,12 +84,11 @@ public class CreateTourActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
 
     //Spineric data vercnelu hamar
-  private int position;
-  private String imageUrl;
-  private String placeName;
-  private String date;
-  private String endDate;
-
+    private int position;
+    private String imageUrl;
+    private String placeName;
+    private String date;
+    private String endDate;
 
 
     @Override
@@ -120,34 +119,35 @@ public class CreateTourActivity extends AppCompatActivity {
         freeWifiDuringTour_CB = findViewById(R.id.freeWifiDuringTour_CB);
         moreInformation_TV = findViewById(R.id.moreInformation_TV);
         moreInformation_ET = findViewById(R.id.moreInformation_ET);
-        save=findViewById(R.id.save);
+        save = findViewById(R.id.save);
 
-        String Uid=FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        companyReference=FirebaseDatabase.getInstance()
+        companyReference = FirebaseDatabase.getInstance()
                 .getReference(Constants.COMPANIES_DATABASE_REFERENCE);
 
-        Query companyQueryByUid=companyReference
+        Query companyQueryByUid = companyReference
                 .orderByChild("id")
                 .equalTo(Uid);
 
-      companyValueListener=companyQueryByUid.addValueEventListener(new ValueEventListener() {
+        companyValueListener = companyQueryByUid.addValueEventListener(new ValueEventListener() {
             @SuppressLint("RestrictedApi")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    Company companyFromFB=dataSnapshot.getChildren().iterator().next().getValue(Company.class);
-                    if(companyFromFB!=null){
-                       company=companyFromFB;
-                    }else{
+                if (dataSnapshot.exists()) {
+                    Company companyFromFB = dataSnapshot.getChildren().iterator().next().getValue(Company.class);
+                    if (companyFromFB != null) {
+                        company = companyFromFB;
+                    } else {
                         Toast.makeText(CreateTourActivity.this, "Company onDataChange COMPANIN NULLA", Toast.LENGTH_SHORT).show();
                     }
                 }
                 Toast.makeText(CreateTourActivity.this, "Company onDataChange", Toast.LENGTH_SHORT).show();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(CreateTourActivity.this, "Company onCancelled: "+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateTourActivity.this, "Company onCancelled: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -155,46 +155,45 @@ public class CreateTourActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean transport=includingTransport_CB.isChecked();
-                boolean food=indudingFood_CB.isChecked();
-                boolean threeLangGuid=threeLanguageGuiding_CB.isChecked();
-                boolean vine=vineDegustation_CB.isChecked();
-                boolean wifi=freeWifiDuringTour_CB.isChecked();
+                boolean transport = includingTransport_CB.isChecked();
+                boolean food = indudingFood_CB.isChecked();
+                boolean threeLangGuid = threeLanguageGuiding_CB.isChecked();
+                boolean vine = vineDegustation_CB.isChecked();
+                boolean wifi = freeWifiDuringTour_CB.isChecked();
 
-               // String tourCompanyId= FirebaseAuth.getInstance().getCurrentUser().getUid();
-               // String placeName=packages.get(position);
-            //    String date=tourData_ET.getText().toString().trim();
-                String moreInformation=moreInformation_ET.getText().toString().trim();
+                // String tourCompanyId= FirebaseAuth.getInstance().getCurrentUser().getUid();
+                // String placeName=packages.get(position);
+                //    String date=tourData_ET.getText().toString().trim();
+                String moreInformation = moreInformation_ET.getText().toString().trim();
 
-                List<String> touristsIds=new ArrayList<>();
+                List<String> touristsIds = new ArrayList<>();
                 touristsIds.add("id 1");
 
 
-
-                if(TextUtils.isEmpty(price_ET.getText().toString().trim())){
+                if (TextUtils.isEmpty(price_ET.getText().toString().trim())) {
                     price_ET.setError("price is required");
                     price_ET.requestFocus();
-                    return ;
+                    return;
                 }
 
-                if(TextUtils.isEmpty(date)){
+                if (TextUtils.isEmpty(date)) {
                     tourData_TV_1.setError("date is required");
-                    return ;
+                    return;
                 }
 
-                if(TextUtils.isEmpty(endDate)){
+                if (TextUtils.isEmpty(endDate)) {
                     tourData_TV_2.setError("date is required");
-                    return ;
+                    return;
                 }
 
-                int price=Integer.parseInt(price_ET.getText().toString().trim());
+                int price = Integer.parseInt(price_ET.getText().toString().trim());
 
 
-                DatabaseReference toursReference=FirebaseDatabase.getInstance()
-                                                                 .getReference(Constants.TOURS_DATABASE_REFERENCE);
-                String tourId=toursReference.push().getKey();
+                DatabaseReference toursReference = FirebaseDatabase.getInstance()
+                        .getReference(Constants.TOURS_DATABASE_REFERENCE);
+                String tourId = toursReference.push().getKey();
 
-                Tour tour=new Tour();
+                Tour tour = new Tour();
                 tour.setId(tourId);
                 tour.setTourCompany(company);
                 tour.setTouristsIds(touristsIds);
@@ -211,20 +210,20 @@ public class CreateTourActivity extends AppCompatActivity {
 
                 tour.setImgUrl(imageUrl);
 
-                if(tourId!=null)
-                toursReference.child(tourId).setValue(tour).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(CreateTourActivity.this,"tour saved", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(CreateTourActivity.this,"something went wrong try again", Toast.LENGTH_SHORT).show();
+                if (tourId != null)
+                    toursReference.child(tourId).setValue(tour).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(CreateTourActivity.this, "tour saved", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(CreateTourActivity.this, "something went wrong try again", Toast.LENGTH_SHORT).show();
 
-                    }
-                });
+                        }
+                    });
             }
         });
 
@@ -237,14 +236,14 @@ public class CreateTourActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, final int i, long l) {
 
-                position=i;
+                position = i;
 
                 FirebaseDatabase.getInstance().getReference().child(Constants.PLACES).addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        if(dataSnapshot.getKey().equals(packages.get(i))){
-                            imageUrl =  dataSnapshot.child("imageUrls").child("0").getValue(String.class);
-                            placeName=dataSnapshot.child("name").getValue(String.class);
+                        if (dataSnapshot.getKey().equals(packages.get(i))) {
+                            imageUrl = dataSnapshot.child("imageUrls").child("0").getValue(String.class);
+                            placeName = dataSnapshot.child("name").getValue(String.class);
                             Picasso.get().load(imageUrl).into(image);
                         }
                     }
@@ -289,7 +288,7 @@ public class CreateTourActivity extends AppCompatActivity {
                 Dialog dialog = new DatePickerDialog(CreateTourActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        date = String.format("%s / %s / %s", day, month, year);
+                        date = day + "/" + (month + 1) + "/" + year;
                         tourData_TV_1.setText(date);
                     }
                 }, year, month, day);
@@ -308,7 +307,7 @@ public class CreateTourActivity extends AppCompatActivity {
                 Dialog dialog = new DatePickerDialog(CreateTourActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        endDate = String.format("%s / %s / %s", day, month, year);
+                        endDate = day + "/" + (month + 1) + "/" + year;
                         tourData_TV_2.setText(endDate);
                     }
                 }, year, month, day);

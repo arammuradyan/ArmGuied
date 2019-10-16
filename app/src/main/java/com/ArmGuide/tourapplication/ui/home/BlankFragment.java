@@ -27,6 +27,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.ArmGuide.tourapplication.MainActivity;
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.WebActivity;
+import com.ArmGuide.tourapplication.models.Filter;
 import com.ArmGuide.tourapplication.models.Place;
 import com.ArmGuide.tourapplication.models.PlaceKEY;
 import com.ArmGuide.tourapplication.models.ServiceForNotification;
@@ -59,12 +60,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BlankFragment extends Fragment  {
+public class BlankFragment extends Fragment {
 
     private Place place;
     private String placeKey;
     private UserStateViewModel userStateViewModel;
     private SubscribedPlacesViewModel subscribedPlacesViewModel;
+    private FilterViewModel filterViewModel;
     private UserState userState;
 
     BlankFragment(Place place, String placeKey) {
@@ -87,6 +89,7 @@ public class BlankFragment extends Fragment  {
 
         userStateViewModel = new UserStateViewModel();
         subscribedPlacesViewModel = ViewModelProviders.of(BlankFragment.this).get(SubscribedPlacesViewModel.class);
+        filterViewModel = ViewModelProviders.of(BlankFragment.this).get(FilterViewModel.class);
         return inflater.inflate(R.layout.fragment_blank, container, false);
     }
 
@@ -181,147 +184,102 @@ public class BlankFragment extends Fragment  {
         });
 
 
-
-
-
         userStateViewModel.getState().observe(BlankFragment.this, new Observer<UserState>() {
             @Override
             public void onChanged(UserState state) {
 
-                BlankFragment.this.userState = state;
-                Log.d("MyLog", "BlankFragment real state:" + state);
+                //checkBox GONE
                 if (state == UserState.COMPANY) {
                     checkBoxSubscribe.setVisibility(View.GONE);
                     checkBoxSubscribe.invalidate();
-                } else {
-
-
-                    // DIALOG
-                    if(state ==UserState.NO_REGISTRATED){
-                        checkBoxSubscribe.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                AlertDialog.Builder ad = new AlertDialog.Builder(view.getContext());
-                                ad.setTitle("Project requirements.")
-                                        .setIcon(R.drawable.ic_info_black_24dp)
-                                        .setMessage("You are going to subscribe on new tours, but haven't " +
-                                                " logged in. Please enter your account to get notifications about new events!")
-                                        .setCancelable(true)
-                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                Intent intent = new Intent(view.getContext(), LoginActivity.class);
-                                                intent.putExtra("fromHome","fromHome");
-                                                startActivity(intent);
-                                            }
-                                        })
-                                        .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                Toast.makeText(view.getContext(), "You clicked Cancel", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                ad.show();
-                            }
-                        });
-                    }
-                    //
-
-                    if (state == UserState.TOURIST && getActivity() != null) {
-                        String userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                        FirebaseDatabase.getInstance().getReference().child("Tourists").child(userKey).child("getSubscribedPlacesIds")
-                                .addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        List<String> placesNames = new ArrayList<>();
-
-                                        for (DataSnapshot data : dataSnapshot.getChildren()
-                                        ) {
-                                            placesNames.add(data.getValue(String.class));
-                                                Log.d("hoops", "" + placesNames);
-                                                if (data.getValue(String.class).equals(place.getName())) {
-                                                checkBoxSubscribe.setChecked(true);
-                                                checkBoxSubscribe.invalidate();
-                                                Log.d("hoops", "placeName: " + place.getName());
-                                                Log.d("hoops", "data.getval: " + data.getValue(String.class));
-                                                //break;
-                                            }
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
-
-                        checkBoxSubscribe.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if(checkBoxSubscribe.isChecked()==true)
-                                ((FragmentActivity)view.getContext()).getSupportFragmentManager().beginTransaction()
-                                        .add(R.id.fragment_container,new FilterFragment()).addToBackStack(null).commit();
-                            }
-                        });
-                    }
-
-
+                }
+                // DIALOG
+                else if (state == UserState.NO_REGISTRATED) {
                     checkBoxSubscribe.setVisibility(View.VISIBLE);
+                    checkBoxSubscribe.setChecked(false);
                     checkBoxSubscribe.invalidate();
-                    final UserState userState = state;
-                    checkBoxSubscribe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    checkBoxSubscribe.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            if (userState == UserState.NO_REGISTRATED) {
-                                checkBoxSubscribe.setChecked(false);
-                                checkBoxSubscribe.invalidate();
-                            } else if (userState == UserState.TOURIST) {
-                                final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Tourists").
-                                        child(userId).child("getSubscribedPlacesIds");
-
-                                Log.d("reg", "onCheckedChangeListener = " + isChecked);
-                                if (isChecked) {
-                                    reference.child(placeKey).setValue(place.getName()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        public void onClick(View v) {
+                            checkBoxSubscribe.setChecked(false);
+                            AlertDialog.Builder ad = new AlertDialog.Builder(view.getContext());
+                            ad.setTitle("Project requirements.")
+                                    .setIcon(R.drawable.ic_info_black_24dp)
+                                    .setMessage("You are going to subscribe on new tours, but haven't " +
+                                            " logged in. Please enter your account to get notifications about new events!")
+                                    .setCancelable(true)
+                                    .setPositiveButton("LogIn", new DialogInterface.OnClickListener() {
                                         @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            Log.d("reg", "subscribed succeeded");
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent intent = new Intent(view.getContext(), LoginActivity.class);
+                                            intent.putExtra("fromHome", "fromHome");
+                                            startActivity(intent);
+                                        }
+                                    })
+                                    .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
                                         }
                                     });
-                                } else {
-                                    reference.child(placeKey).removeValue(new DatabaseReference.CompletionListener() {
-                                        @Override
-                                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                            Log.d("reg", "subscribed removing succeeded");
-                                        }
-                                    });
-                                }
-
-                                reference.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()
-                                        ) {
-                                            if (snapshot.getKey().equals(placeKey)) {
-                                                checkBoxSubscribe.setChecked(true);
-                                                checkBoxSubscribe.invalidate();
-                                                break;
-                                            }
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    }
-                                });
-                            }
+                            ad.show();
                         }
                     });
                 }
+                // Tourist
+                else if (state == UserState.TOURIST) {
+                    checkBoxSubscribe.setVisibility(View.VISIBLE);
+                    checkBoxSubscribe.invalidate();
+
+                    filterViewModel.getLiveData().observe(BlankFragment.this, new Observer<List<Filter>>() {
+                        @Override
+                        public void onChanged(List<Filter> filters) {
+                            if (filters != null && filters.size() > 0) {
+                                for (Filter f : filters
+                                ) {
+                                    if (f.getPlaceName().equals(place.getName())) {
+                                        checkBoxSubscribe.setChecked(true);
+                                        checkBoxSubscribe.invalidate();
+                                        break;
+                                    } else {
+                                        checkBoxSubscribe.setChecked(false);
+                                        checkBoxSubscribe.invalidate();
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+
+                    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                        final String userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        checkBoxSubscribe.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (checkBoxSubscribe.isChecked()) {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("userKey", userKey);
+                                    bundle.putString("placeName", place.getName());
+                                    bundle.putString("placeKey", placeKey);
+                                    FilterFragment filterFragment = new FilterFragment();
+                                    filterFragment.setArguments(bundle);
+                                    ((FragmentActivity) view.getContext()).getSupportFragmentManager().beginTransaction()
+                                            .add(R.id.fragment_container, filterFragment).addToBackStack(null).commit();
+                                } else {
+                                    final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Tourists").
+                                            child(userKey).child("SubscribedToursCriteria");
+                                    reference.child(placeKey).removeValue(new DatabaseReference.CompletionListener() {
+                                        @Override
+                                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                            Toast.makeText(view.getContext(), "You have successfully removed the subscription!", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                }
             }
         });
-
-
     }
 
 
@@ -373,7 +331,6 @@ public class BlankFragment extends Fragment  {
 
         Log.d("MyLog", "BlankFragment - onDestroyView" + placeKey);
     }
-
 
 
 }
