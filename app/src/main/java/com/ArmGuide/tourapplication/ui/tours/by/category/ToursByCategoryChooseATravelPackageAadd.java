@@ -4,6 +4,7 @@ package com.ArmGuide.tourapplication.ui.tours.by.category;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -23,9 +25,14 @@ import com.ArmGuide.tourapplication.Constants;
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.StateViewModel;
 import com.ArmGuide.tourapplication.models.Tour;
+import com.ArmGuide.tourapplication.models.UserState;
+import com.ArmGuide.tourapplication.ui.createTour.ChooseATravelPackageAdd;
+import com.ArmGuide.tourapplication.ui.home.UserStateViewModel;
 import com.ArmGuide.tourapplication.ui.registr.LoginActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -64,6 +71,10 @@ public class ToursByCategoryChooseATravelPackageAadd extends Fragment {
     private TextView title_moreInfo_TV;
     private TextView moreInformation_TV;
     private Button addToMyTours;
+    private TextView add_to_my_tours_TV;
+    private UserStateViewModel userStateViewModel;
+
+
 
     private Tour tour;
     private StateViewModel stateViewModel;
@@ -80,6 +91,8 @@ public class ToursByCategoryChooseATravelPackageAadd extends Fragment {
             stateViewModel = ViewModelProviders.of(getActivity()).get(StateViewModel.class);
         }
 
+
+
         return view;
 
     }
@@ -88,6 +101,8 @@ public class ToursByCategoryChooseATravelPackageAadd extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        userStateViewModel = new UserStateViewModel();
+
         initViews(view);
         setTourInformation();
 
@@ -95,8 +110,13 @@ public class ToursByCategoryChooseATravelPackageAadd extends Fragment {
         addToMyTours.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                String title =" Do you want to add the selected package to your cart?";
+                if(add_to_my_tours_TV.getText().toString().equals("DELETE TRAVEL PACKAGE")){
+                    title = "Do you want to delete the travel package you selected?";
+                }
                 AlertDialog adb = new AlertDialog.Builder(getContext())
-                        .setMessage(" Do you want to add the selected package to your cart?")
+                        .setMessage(title)
                         .setIcon(R.drawable.ic_add_shopping_cart_black_24dp).
                                 setNegativeButton("No", new DialogInterface.OnClickListener() {
                                     @Override
@@ -115,7 +135,12 @@ public class ToursByCategoryChooseATravelPackageAadd extends Fragment {
                                         @Override
                                         public void onChanged(Boolean aBoolean) {
                                             if (aBoolean) {
-                                                Toast.makeText(getActivity(), "only tourists can add", Toast.LENGTH_SHORT).show();
+
+                                                if (add_to_my_tours_TV.getText().toString().equals("DELETE TRAVEL PACKAGE")) {
+                                                    deleteTour();
+                                                } else {
+                                                    Toast.makeText(getActivity(), "only tourists can add", Toast.LENGTH_SHORT).show();
+                                                }
                                             } else {
                                                 saveTour();
                                             }
@@ -130,7 +155,9 @@ public class ToursByCategoryChooseATravelPackageAadd extends Fragment {
             }
         });
 
+        changeAddButton();
     }
+
 
 
     private void initViews(View view) {
@@ -162,6 +189,7 @@ public class ToursByCategoryChooseATravelPackageAadd extends Fragment {
         title_moreInfo_TV = view.findViewById(R.id.title_moreInfo_TV);
         moreInformation_TV = view.findViewById(R.id.moreInformation_TV);
         addToMyTours = view.findViewById(R.id.add_to_my_tours_BTN);
+        add_to_my_tours_TV = view.findViewById(R.id.add_to_my_tours_TV);
 
     }
 
@@ -291,6 +319,40 @@ public class ToursByCategoryChooseATravelPackageAadd extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+
+    }
+
+
+    private void changeAddButton() {
+        userStateViewModel.getState().observe(ToursByCategoryChooseATravelPackageAadd.this, new Observer<UserState>() {
+            @Override
+            public void onChanged(UserState state) {
+                Log.d("MyLog", "BlankFragment real state:" + state);
+                if (state == UserState.COMPANY) {
+                    String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                    if (tour.getTourCompany().getId().equals(Uid)) {
+
+                        add_to_my_tours_TV.setText("DELETE TRAVEL PACKAGE");
+                        addToMyTours.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.ic_delete_forever_black_24dp));
+                    } else {
+                        //add_to_my_tours_TV.setVisibility(View.INVISIBLE);
+                        //addToMyTours.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+        });
+    }
+
+    private void deleteTour() {
+        Toast.makeText(getActivity(), "Tour deleted", Toast.LENGTH_SHORT).show();
+        FirebaseDatabase.getInstance().getReference(Constants.TOURS_DATABASE_REFERENCE)
+                .child(tour.getId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                getActivity().onBackPressed();
             }
         });
 

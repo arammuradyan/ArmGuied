@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.StateViewModel;
 import com.ArmGuide.tourapplication.models.Tour;
-import com.ArmGuide.tourapplication.ui.createTour.ChooseATravelPackageAdd;
 import com.ArmGuide.tourapplication.ui.createTour.CreateTourActivity;
 
 import java.util.ArrayList;

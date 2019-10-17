@@ -289,7 +289,7 @@ public class CreateTourActivity extends AppCompatActivity {
                 Dialog dialog = new DatePickerDialog(CreateTourActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        date = String.format("%s / %s / %s", day, month, year);
+                        date = String.format("%s / %s / %s", day, month+1, year);
                         tourData_TV_1.setText(date);
                     }
                 }, year, month, day);
@@ -308,7 +308,7 @@ public class CreateTourActivity extends AppCompatActivity {
                 Dialog dialog = new DatePickerDialog(CreateTourActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        endDate = String.format("%s / %s / %s", day, month, year);
+                        endDate = String.format("%s / %s / %s", day, month+1, year);
                         tourData_TV_2.setText(endDate);
                     }
                 }, year, month, day);
