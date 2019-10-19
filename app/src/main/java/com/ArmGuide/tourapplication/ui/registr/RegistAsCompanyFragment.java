@@ -23,11 +23,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-
 import com.ArmGuide.tourapplication.R;
-import com.ArmGuide.tourapplication.models.Company;
 import com.ArmGuide.tourapplication.models.Tour;
-import com.ArmGuide.tourapplication.models.Tourist;
+import com.ArmGuide.tourapplication.models.Company;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,7 +40,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 
 import maes.tech.intentanim.CustomIntent;
@@ -52,6 +49,8 @@ import static com.ArmGuide.tourapplication.Constants.COMPANIES_AVATARS_STORAGE;
 import static com.ArmGuide.tourapplication.Constants.COMPANIES_DATABASE_REFERENCE;
 
 public class RegistAsCompanyFragment extends Fragment {
+
+
     // Edit texts
     private EditText company_name_et, email_et, password_et,
             confirm_password_et,phonenumber_et, address_et, websiteUrl_et;
@@ -64,7 +63,6 @@ public class RegistAsCompanyFragment extends Fragment {
     // Constans
     private static final int STORAGE_READ_REQUEST_CODE=98;
     private static final int IMAGE_URI_REQUEST_CODE=178;
-
 
     // Authentication
     private FirebaseAuth mAuth;

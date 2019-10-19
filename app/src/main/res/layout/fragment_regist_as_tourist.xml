@@ -154,6 +154,15 @@
                 app:layout_constraintStart_toStartOf="@+id/view"
                 app:layout_constraintTop_toBottomOf="@+id/tourist_phoneNumber_et"
                 tools:ignore="MissingConstraints" />
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                app:layout_constraintEnd_toEndOf="@+id/view"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/view"
+                app:layout_constraintTop_toBottomOf="@+id/tourist_profileImage_img"
+            </Spinner>
 
             <Button
                 android:id="@+id/tourist_signup_btn"
