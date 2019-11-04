@@ -79,6 +79,7 @@ public class RegistAsTouristFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAoutStateListener;
     private StorageTask mUploadTask;
+    private String question;
 
     // Gallery uri
     private String avatarUri="";
@@ -92,7 +93,7 @@ public class RegistAsTouristFragment extends Fragment {
 
     private SharedPreferences sharedPreferences;
 
-    String[] data = {"one", "two", "three", "four", "five"};
+    String[] data = {"The name of your pet?", "Mother's Maiden Name?", "jhgjhgj", "four", "five"};
 
     @Nullable
     @Override
@@ -103,31 +104,31 @@ public class RegistAsTouristFragment extends Fragment {
         vieiwInit(view);
         setOnClickListeners();
         sharedPreferences = getActivity().getSharedPreferences("statePref",0);
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, data);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//
-//        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-//        spinner.setAdapter(adapter);
-//        // заголовок
-//        spinner.setPrompt("Title");
-//        // выделяем элемент
-//        spinner.setSelection(2);
-//        // устанавливаем обработчик нажатия
-//        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view,
-//                                       int position, long id) {
-//                // показываем позиция нажатого элемента
-//                Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
-//            }
-//            @Override
-//            public void onNothingSelected(AdapterView<?> arg0) {
-//            }
-//        });
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, data);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+        Spinner spinner = view.findViewById(R.id.spinner);
+        spinner.setAdapter(adapter);
+        // заголовок
+        spinner.setPrompt("Title");
+        // выделяем элемент
+        spinner.setSelection(2);
+        // устанавливаем обработчик нажатия
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                // показываем позиция нажатого элемента
+                question = ((String) parent.getAdapter().getItem(position));
+                Toast.makeText(getActivity().getBaseContext(), "Position = " + position + " " +
+                        parent.getAdapter().getItem(position), Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
        return view;
     }
-
 
     @Override
     public void onStart() {
@@ -139,7 +140,6 @@ public class RegistAsTouristFragment extends Fragment {
         super.onStop();
         mAuth.removeAuthStateListener(mAoutStateListener);
     }
-
 
     private void initAuth() {
     mAuth=FirebaseAuth.getInstance();
@@ -154,7 +154,6 @@ public class RegistAsTouristFragment extends Fragment {
         }
     };
     }
-
 
     private void vieiwInit(View view) {
         // Edit text
