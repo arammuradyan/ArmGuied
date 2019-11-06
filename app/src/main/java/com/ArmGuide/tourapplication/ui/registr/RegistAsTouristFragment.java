@@ -62,7 +62,7 @@ public class RegistAsTouristFragment extends Fragment {
 
     // Edit texts
     private EditText full_name_et, email_et, password_et,
-            confirm_password_et,phonenumber_et;
+            confirm_password_et,phonenumber_et, answer_et;
     // Imageview
     private ImageView avatar_img;
     // Progres bar
@@ -81,6 +81,7 @@ public class RegistAsTouristFragment extends Fragment {
     private StorageTask mUploadTask;
     private String question;
 
+
     // Gallery uri
     private String avatarUri="";
 
@@ -93,7 +94,8 @@ public class RegistAsTouristFragment extends Fragment {
 
     private SharedPreferences sharedPreferences;
 
-    String[] data = {"The name of your pet?", "Mother's Maiden Name?", "jhgjhgj", "four", "five"};
+    String[] data = {"The name of your pet", "Mother's Maiden Name", "Favourite dish", "Favorite movie", "Favorite book"};
+    private String answer;
 
     @Nullable
     @Override
@@ -171,6 +173,9 @@ public class RegistAsTouristFragment extends Fragment {
 
         // Imageview
         avatar_img=view.findViewById(R.id.tourist_profileImage_img);
+
+        //forgote pass
+        answer_et=view.findViewById(R.id.answer);
     }
 
     private void setOnClickListeners() {
@@ -248,6 +253,7 @@ public class RegistAsTouristFragment extends Fragment {
          password = password_et.getText().toString().trim();
          phone = phonenumber_et.getText().toString().trim();
          confirm_password = confirm_password_et.getText().toString().trim();
+         answer=answer_et.getText().toString().trim();
 
                          //0     1      2       3         4
           if(checkInputs(name,email,password,phone,confirm_password)){
@@ -421,6 +427,8 @@ public class RegistAsTouristFragment extends Fragment {
         currentTourist.setPhoneNumber(phone);
         currentTourist.setIsCompany(false);
         currentTourist.setTours(tours);
+        currentTourist.setQuestion(question);
+        currentTourist.setAnswer(answer);
         return currentTourist;
     }
 }

@@ -56,7 +56,7 @@ public class RegistAsCompanyFragment extends Fragment {
 
     // Edit texts
     private EditText company_name_et, email_et, password_et,
-            confirm_password_et,phonenumber_et, address_et, websiteUrl_et;
+            confirm_password_et,phonenumber_et, address_et, websiteUrl_et, answer_et;
     // Imageview
     private ImageView avatar_img;
     // Button
@@ -86,7 +86,8 @@ public class RegistAsCompanyFragment extends Fragment {
     private String question;
 
     private SharedPreferences sharedPreferences;
-    String[] data = {"The name of your pet?", "Mother's Maiden Name?", "jhgjhgj", "four", "five"};
+    String[] data = {"The name of your pet?", "Mother's Maiden Name?",  "Favourite dish", "Favorite movie", "Favorite book"};
+    private String answer;
 
 
     @Nullable
@@ -157,6 +158,9 @@ public class RegistAsCompanyFragment extends Fragment {
 
         // Imageview
         avatar_img=view.findViewById(R.id.company_profileImage_img);
+
+        //forgote pass
+        answer_et=view.findViewById(R.id.answer);
     }
 
     @Override
@@ -248,11 +252,11 @@ public class RegistAsCompanyFragment extends Fragment {
         confirm_password = confirm_password_et.getText().toString().trim();
         address = address_et.getText().toString().trim();
         websiteUrl = websiteUrl_et.getText().toString().trim();
+        answer=answer_et.getText().toString().trim();
 
                        //0     1      2       3         4           5         6
         if(checkInputs(name,email,password,phone,confirm_password,address,websiteUrl)){
             company_pb.setVisibility(ProgressBar.VISIBLE);
-
             mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -423,6 +427,8 @@ public class RegistAsCompanyFragment extends Fragment {
         currentCompany.setAddress(address);
         currentCompany.setTours(tours);
         currentCompany.setWebUrl(websiteUrl);
+//        currentCompany.setQuestion(question);
+//        currentCompany.setAnswer(answer);
         return currentCompany;
     }
 }

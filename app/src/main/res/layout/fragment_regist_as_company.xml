@@ -183,6 +183,7 @@
                 android:layout_marginTop="36dp"
                 android:layout_marginEnd="16dp"
                 android:hint="choose the question"
+                android:background="@drawable/sevramka"
                 app:layout_constraintEnd_toEndOf="@+id/view"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/view"
@@ -190,7 +191,7 @@
             </Spinner>
 
             <EditText
-                android:id="@+id/reply"
+                android:id="@+id/answer"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"

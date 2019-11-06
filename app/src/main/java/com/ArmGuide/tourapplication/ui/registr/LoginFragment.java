@@ -2,8 +2,11 @@ package com.ArmGuide.tourapplication.ui.registr;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
@@ -33,6 +36,7 @@ public class LoginFragment extends Fragment {
    private Button login_btn;
     private TextView registr_as_tourist_btn;
     private TextView registr_as_company_btn;
+    private TextView forgote_pass_btn;
     private ImageView eye;
 
     //Edit Texts
@@ -42,6 +46,8 @@ public class LoginFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private SharedPreferences sharedPreferences;
+    Fragment dialogFragmentForgotePass;
+    private onFragmentIteractionListener listener;
 
     @Nullable
     @Override
@@ -52,8 +58,13 @@ public class LoginFragment extends Fragment {
         initFirebaseAuth();
         setButtonListeners();
         sharedPreferences = getActivity().getSharedPreferences("statePref", 0);
+        dialogFragmentForgotePass = new ForgotPasswordFragment();
 
         return view;
+    }
+
+    interface onFragmentIteractionListener{
+        void openForgotPasswordScreen();
     }
 
     @Override
@@ -110,9 +121,27 @@ public class LoginFragment extends Fragment {
         login_btn = view.findViewById(R.id.log_in_btn);
         registr_as_tourist_btn = view.findViewById(R.id.regist_as_tourist_btn);
         registr_as_company_btn = view.findViewById(R.id.regist_as_company_btn);
+        forgote_pass_btn=view.findViewById(R.id.forgote_pass);
         // Edit texts
         login_email_et = view.findViewById(R.id.login_email_et);
         login_password_et = view.findViewById(R.id.login_password_et);
+
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if(context instanceof onFragmentIteractionListener){
+            listener = ((onFragmentIteractionListener) context);
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if(listener != null){
+            listener = null;
+        }
     }
 
     private void setButtonListeners() {
@@ -146,6 +175,12 @@ public class LoginFragment extends Fragment {
                             .replace(R.id.login_conteiner, new RegistAsTouristFragment())
                             .addToBackStack("loginstack")
                             .commit();
+            }
+        });
+        forgote_pass_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.openForgotPasswordScreen();
             }
         });
     }
