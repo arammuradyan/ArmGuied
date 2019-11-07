@@ -20,6 +20,11 @@
             android:id="@+id/nav_my_tours"
             android:icon="@drawable/ic_my_choosen_tours"
             android:title="@string/menu_my_tours" />
+
+        <item
+            android:id="@+id/nav_my_notifications"
+            android:icon="@drawable/ic_notifications_paused_black_24dp"
+            android:title="@string/menu_notifications" />
     </group>
 
     <item android:title="Maps">

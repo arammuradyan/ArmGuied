@@ -46,7 +46,6 @@ public class RepositoryForLatestTour {
                         ) {
                             latestTour = snapshot.getValue(Tour.class);
                         }
-                        Log.d("dobbi", "latestTourName from onDataChange/" + latestTour.getPlaceName());
                         mutableLiveData.setValue(latestTour);
 
                     }

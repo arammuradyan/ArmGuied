@@ -47,9 +47,14 @@ public class RepositoryForPlaces {
         placiesReference.keepSynced(true);
 
          placiesReference.addValueEventListener(new ValueEventListener() {
+         FirebaseDatabase.getInstance().getReference().child("Places").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot d : dataSnapshot.getChildren()) {
+
+                placeList.clear();
+
+                for (DataSnapshot d : dataSnapshot.getChildren()
+                ) {
                     placeList.add(d.getValue(Place.class));
                 }
                 Log.d("MyLog","placeList "+placeList.get(11).getName());

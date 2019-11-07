@@ -13,21 +13,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-
 import com.ArmGuide.tourapplication.R;
-import com.ArmGuide.tourapplication.models.Company;
 import com.ArmGuide.tourapplication.models.Tour;
-import com.ArmGuide.tourapplication.models.Tourist;
+import com.ArmGuide.tourapplication.models.Company;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,7 +43,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 
 import maes.tech.intentanim.CustomIntent;
@@ -52,9 +52,11 @@ import static com.ArmGuide.tourapplication.Constants.COMPANIES_AVATARS_STORAGE;
 import static com.ArmGuide.tourapplication.Constants.COMPANIES_DATABASE_REFERENCE;
 
 public class RegistAsCompanyFragment extends Fragment {
+
+
     // Edit texts
     private EditText company_name_et, email_et, password_et,
-            confirm_password_et,phonenumber_et, address_et, websiteUrl_et;
+            confirm_password_et,phonenumber_et, address_et, websiteUrl_et, answer_et;
     // Imageview
     private ImageView avatar_img;
     // Button
@@ -64,7 +66,6 @@ public class RegistAsCompanyFragment extends Fragment {
     // Constans
     private static final int STORAGE_READ_REQUEST_CODE=98;
     private static final int IMAGE_URI_REQUEST_CODE=178;
-
 
     // Authentication
     private FirebaseAuth mAuth;
@@ -82,8 +83,11 @@ public class RegistAsCompanyFragment extends Fragment {
     private String address;
     private String confirm_password;
     private String websiteUrl;
+    private String question;
 
     private SharedPreferences sharedPreferences;
+    String[] data = {"The name of your pet?", "Mother's Maiden Name?",  "Favourite dish", "Favorite movie", "Favorite book"};
+    private String answer;
 
 
     @Nullable
@@ -95,6 +99,29 @@ public class RegistAsCompanyFragment extends Fragment {
         vieiwInit(view);
         setOnClickListeners();
         sharedPreferences = getActivity().getSharedPreferences("statePref",0);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, data);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        Spinner spinner = view.findViewById(R.id.spinner);
+        spinner.setAdapter(adapter);
+        // заголовок
+        spinner.setPrompt("Title");
+        // выделяем элемент
+        spinner.setSelection(2);
+        // устанавливаем обработчик нажатия
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                // показываем позиция нажатого элемента
+                question = ((String) parent.getAdapter().getItem(position));
+                Toast.makeText(getActivity().getBaseContext(), "Position = " + position + " " +
+                        parent.getAdapter().getItem(position), Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
 
         return view;
     }
@@ -131,6 +158,9 @@ public class RegistAsCompanyFragment extends Fragment {
 
         // Imageview
         avatar_img=view.findViewById(R.id.company_profileImage_img);
+
+        //forgote pass
+        answer_et=view.findViewById(R.id.answer);
     }
 
     @Override
@@ -222,6 +252,7 @@ public class RegistAsCompanyFragment extends Fragment {
         confirm_password = confirm_password_et.getText().toString().trim();
         address = address_et.getText().toString().trim();
         websiteUrl = websiteUrl_et.getText().toString().trim();
+        answer=answer_et.getText().toString().trim();
 
                        //0     1      2       3         4           5         6
         if(checkInputs(name,email,password,phone,confirm_password,address,websiteUrl)){
@@ -231,6 +262,7 @@ public class RegistAsCompanyFragment extends Fragment {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
+                        startActivity(new Intent(getActivity(), MainActivity.class));
 
                         if(mUploadTask!=null && mUploadTask.isInProgress()){
                             Toast.makeText(getContext(),"registration alreade in proces",Toast.LENGTH_SHORT).show();
@@ -397,6 +429,8 @@ public class RegistAsCompanyFragment extends Fragment {
         currentCompany.setAddress(address);
         currentCompany.setTours(tours);
         currentCompany.setWebUrl(websiteUrl);
+//        currentCompany.setQuestion(question);
+//        currentCompany.setAnswer(answer);
         return currentCompany;
     }
 }

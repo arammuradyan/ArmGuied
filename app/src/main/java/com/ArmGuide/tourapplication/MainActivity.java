@@ -30,20 +30,28 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.ArmGuide.tourapplication.Repositories.RepositoryForUserState;
 import com.ArmGuide.tourapplication.models.Company;
 import com.ArmGuide.tourapplication.models.Place;
+import com.ArmGuide.tourapplication.models.Filter;
 import com.ArmGuide.tourapplication.models.Tourist;
 import com.ArmGuide.tourapplication.models.UserState;
+import com.ArmGuide.tourapplication.ui.Notification.NotificationFragment;
 import com.ArmGuide.tourapplication.ui.allTours.AllToursFragment;
 import com.ArmGuide.tourapplication.ui.companies.TourCompaniesFragment;
+import com.ArmGuide.tourapplication.ui.home.FilterFragment;
 import com.ArmGuide.tourapplication.ui.home.HomeFragment;
+import com.ArmGuide.tourapplication.ui.home.UserStateViewModel;
 import com.ArmGuide.tourapplication.ui.map.MapFragment;
 import com.ArmGuide.tourapplication.ui.map.PlaceInfoRepository;
 import com.ArmGuide.tourapplication.ui.myTours.MyToursFragment;
 import com.ArmGuide.tourapplication.ui.registr.LoginActivity;
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -57,7 +65,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -75,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DatabaseReference companyDatabaseReference;
     private ValueEventListener touristValueListener;
     private ValueEventListener companyValueListener;
-
+    private String notification;
     // Views on header
     private ImageView avatar_img;
     private TextView name_tv, email_tv;
@@ -211,8 +219,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
-
-        Log.d("myMain", "onStart");
 
         if (mAuth.getCurrentUser() != null) {
             userUid = mAuth.getCurrentUser().getUid();
@@ -443,6 +449,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.nav_current_location:
                     showCurrentLocation();
                     break;
+                case R.id.nav_my_notifications:
+                    showNotifications();
+                    break;
             }
         } else if (TOUR_AGENCY) {
             // COMPANY items
@@ -489,6 +498,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.nav_current_location:
                     showCurrentLocation();
                     break;
+                case R.id.nav_my_notifications:
+                    showNotifications();
+                    break;
             }
         }
         drawer.closeDrawer(GravityCompat.START);
@@ -513,6 +525,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 navigationView.setCheckedItem(R.id.nav_home);
                 getSupportActionBar().setTitle("Tour diractions");
                 Toast.makeText(MainActivity.this, "superi if ", Toast.LENGTH_SHORT).show();
+                List<Fragment> fragments = getSupportFragmentManager().getFragments();
+                for (Fragment f : fragments
+                ) {
+                    if (f instanceof FilterFragment) {
+                        ((FilterFragment) f).onBackPressed();
+                    }
+                }
             }
             super.onBackPressed();
         }
@@ -554,6 +573,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (getSupportActionBar() != null)
             getSupportActionBar().setTitle("All tours");
     }
+
+    private void showNotifications() {
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle("Suggestion");
+        startActivity(new Intent(MainActivity.this, NotificationActivity.class));
+        Animatoo.animateFade(MainActivity.this);
+    }
+
 
     private void showMyToursFragment() {
         getSupportFragmentManager().popBackStack();

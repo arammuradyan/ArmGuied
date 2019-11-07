@@ -3,13 +3,43 @@ package com.ArmGuide.tourapplication.models;
 import java.util.List;
 
 public class Tour {
-    private String id,placeName, imgUrl, date, moreInfo;
+    private String id,placeName, imgUrl, date, moreInfo, endDate;
     private Company tourCompany;
     private int price;
     private boolean transport, food, threeLangGuide, vineDegustation, wifi;
     private List<String> touristsIds;
 
     public Tour() {
+    }
+
+    public Tour(String id,
+                String placeName,
+                String imgUrl,
+                String date,
+                String moreInfo,
+                String endDate,
+                Company tourCompany,
+                int price,
+                boolean transport,
+                boolean food,
+                boolean threeLangGuide,
+                boolean vineDegustation,
+                boolean wifi,
+                List<String> touristsIds) {
+        this.id = id;
+        this.placeName = placeName;
+        this.imgUrl = imgUrl;
+        this.date = date;
+        this.moreInfo = moreInfo;
+        this.endDate = endDate;
+        this.tourCompany = tourCompany;
+        this.price = price;
+        this.transport = transport;
+        this.food = food;
+        this.threeLangGuide = threeLangGuide;
+        this.vineDegustation = vineDegustation;
+        this.wifi = wifi;
+        this.touristsIds = touristsIds;
     }
 
     public Tour(String id, String placeName, String imgUrl, String date, String moreInfo, Company tourCompany, int price,
@@ -132,5 +162,13 @@ public class Tour {
 
     public void setTouristsIds(List<String> touristsIds) {
         this.touristsIds = touristsIds;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }
