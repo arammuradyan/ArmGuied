@@ -37,9 +37,9 @@ public class Tourist {
         this.toursAlreadySeen = toursAlreadySeen;
     }
 
-    public Tourist(String id, String email, String fullName,
+   /* public Tourist(String id, String email, String fullName,
                    String password, String phoneNumber, String avatarUrl,
-                   boolean isCompany, List<Tour> tours) {
+                   boolean isCompany, List<Tour> tours) {*/
 
     public Tourist(String id, String email, String fullName, String password,
                    String phoneNumber, String avatarUrl, boolean isCompany,

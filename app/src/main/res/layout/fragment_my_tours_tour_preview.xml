@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/tourist_buttons_linlay"
+            android:layout_width="wrap_content"
+            android:layout_gravity="right"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+            <ImageButton
+                android:id="@+id/tourist_make_call_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="@drawable/maps_button_compass_selector"
+                android:src="@drawable/ic_call"
+                />
+            <ImageButton
+                android:id="@+id/tourist_send_email_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="@drawable/maps_button_compass_selector"
+                android:src="@drawable/ic_mail_24dp"/>
+            <ImageButton
+                android:id="@+id/tourist_goto_web_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="@drawable/maps_button_compass_selector"
+                android:src="@drawable/ic_web"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/company_button_linlay"
+            android:layout_width="wrap_content"
+            android:layout_gravity="right"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageButton
+                android:id="@+id/company_open_tourists_list_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="@drawable/maps_button_compass_selector"
+                android:src="@drawable/ic_assignment"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/company_info_linlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_avatar"
+                app:civ_border_color="#03375F"
+                app:civ_border_width="1.8dp" />
+            <TextView
+                android:id="@+id/company_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="company info"
+                android:textSize="20sp"
+                android:layout_marginStart="40dp"
+                android:maxLines="6"
+                android:background="@drawable/shape"
+                android:gravity="center"
+                android:textColor="@color/colorBlack"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+
+            android:padding="8dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="126dp"
+                android:layout_height="126dp"
+                android:src="#7EB3C4"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/thePackageYouSelected"
+                    android:layout_width="200dp"
+                    tools:text="place name"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorBlack"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/shape" />
+
+                <TextView
+                    android:id="@+id/tourData_TV"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    tools:text="date"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorBlack"
+                    android:background="@drawable/shape"
+                    android:layout_margin="4dp"/>
+
+                <TextView
+                    android:id="@+id/price_TV"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    tools:text="price ֏"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorBlack"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/shape"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/includingTransport_CB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Transport"/>
+
+            <CheckBox
+                android:id="@+id/indudingFood_CB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Food"
+                android:textSize="20sp" />
+
+            <CheckBox
+                android:id="@+id/threeLanguageGuiding_CB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Three language guiding"
+                android:textSize="20sp" />
+            <CheckBox
+                android:id="@+id/vineDegustation_CB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vine degustation"
+                android:textSize="20sp"/>
+            <CheckBox
+                android:id="@+id/freeWifiDuringTour_CB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wifi during tour"
+                android:textSize="20sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/title_moreInfo_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="About tour"
+                android:textColor="@color/colorBlack"
+                android:textSize="26sp" />
+
+
+
+            <TextView
+                android:id="@+id/moreInformation_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                tools:text="More about tour"
+                android:textColor="@color/colorBlack"
+                android:layout_margin="8dp"
+                android:background="@drawable/shape"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
+

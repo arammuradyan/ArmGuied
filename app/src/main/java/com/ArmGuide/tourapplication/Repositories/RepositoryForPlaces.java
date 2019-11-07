@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.ArmGuide.tourapplication.models.Place;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -38,18 +39,24 @@ public class RepositoryForPlaces {
         placeList = new ArrayList<>();
     }
 
-     private void getPlacesListFromFirebase() {
-         FirebaseDatabase.getInstance().getReference().child("Places").addValueEventListener(new ValueEventListener() {
+
+    private void getPlacesListFromFirebase() {
+        placeList.clear();
+
+        DatabaseReference placiesReference = FirebaseDatabase.getInstance().getReference().child("Places");
+        placiesReference.keepSynced(true);
+
+        placiesReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                placeList.clear();
+               // placeList.clear();
 
                 for (DataSnapshot d : dataSnapshot.getChildren()
                 ) {
                     placeList.add(d.getValue(Place.class));
                 }
-                Log.d("MyLog","placeList "+placeList.get(11).getName());
+                Log.d("MyLog", "placeList " + placeList.get(11).getName());
                 listMutableLiveData.setValue(placeList);
             }
 

@@ -10,8 +10,13 @@
     <string name="deafault_name">Name</string>
     <string name="default_Email">Email</string>
     <string name="action_sign_out">Sign out</string>
-    <string name="sign_out_dialog_message">Are you sure you want to sign out?</string>
+    <string name="sign_out_dialog_message">Are you sure you want to sign out ?</string>
+    <string name="delete_dialog_message">Are you sure you want to delete ?</string>
+    <string name="company_delete_tour">COMPANY HAS DELETED THIS TOUR</string>
     <string name="action_sign_in">Sign in</string>
+
+
+    <string name="ripple_efect_atribut">android:background="?android:attr/selectableItemBackground"</string>
 
 
     <string name="google_maps_API_key">AIzaSyBQowSumhHgacPo_LedaEI9OyO1wcPRoDU</string>

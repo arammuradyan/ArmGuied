@@ -1,6 +1,7 @@
 package com.ArmGuide.tourapplication.ui.myTours;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,9 +14,11 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,7 +41,7 @@ import static android.view.View.VISIBLE;
 public class MyToursFragment extends Fragment implements MyToursRecyclerViewAdapter.OnToursViewHolderCLickListener {
 
 
-    private boolean TOUR_AGENCY=true;
+    private boolean TOUR_AGENCY;
     private MyToursViewModel myToursViewModel;
     private StateViewModel stateViewModel;
     private MyToursRecyclerViewAdapter adapter;
@@ -80,11 +83,6 @@ public class MyToursFragment extends Fragment implements MyToursRecyclerViewAdap
 
         fab=root.findViewById(R.id.my_tours_fab);
 
-       // if(TOUR_AGENCY){
-        //fab.setVisibility(VISIBLE);}
-
-
-
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,8 +97,57 @@ public class MyToursFragment extends Fragment implements MyToursRecyclerViewAdap
             }
         });
 
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
+
+                                               if(getActivity()!=null){
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                        .setTitle("DELETE TOUR")
+                        .setMessage(R.string.delete_dialog_message)
+                        .setIcon(R.drawable.ic_application)
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteTour(viewHolder.getAdapterPosition());
+                                dialog.dismiss();
+                            }
+                        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                adapter.notifyItemChanged(viewHolder.getAdapterPosition());
+
+                                dialog.dismiss();
+                            }
+                        });
+                AlertDialog signOutDialog = builder.create();
+                signOutDialog.show();
+
+                                               }
+
+            }
+        }).attachToRecyclerView(recyclerView);
+
         return root;
     }
+
+    private void deleteTour(int position) {
+        Tour tour=adapter.getTour(position);
+        String tourId=tour.getId();
+        if(TOUR_AGENCY){
+            myToursViewModel.deleteTourFromCompany(tour);
+        }else{
+            myToursViewModel.deleteTourFromTourist(tourId);
+        }
+    }
+
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -119,9 +166,12 @@ public class MyToursFragment extends Fragment implements MyToursRecyclerViewAdap
             @Override
             public void onChanged(Boolean aBoolean) {
                 if(aBoolean ){
+                    TOUR_AGENCY=aBoolean;
                     fab.setVisibility(VISIBLE);
                     getCompanyTours();
+                    adapter.setTOUR_AGENCY(aBoolean);
                 }else{
+                    TOUR_AGENCY=aBoolean;
                     fab.setVisibility(View.GONE);
                     getTouristsTours();
                 }
@@ -132,6 +182,7 @@ public class MyToursFragment extends Fragment implements MyToursRecyclerViewAdap
 
     private void getCompanyTours(){
         progressBar.setVisibility(View.VISIBLE);
+
         myToursViewModel.getCompanyToursList().observe(this, new Observer<List<Tour>>() {
             @Override
             public void onChanged(List<Tour> tours) {
@@ -182,7 +233,19 @@ public class MyToursFragment extends Fragment implements MyToursRecyclerViewAdap
                     .beginTransaction()
                     .addToBackStack(null)
                     .add(R.id.fragment_container,
-                            new ChooseATravelPackageAdd(tour)).addToBackStack(null).commit();
+                            new MyToursChooseATravelPackageAdd(tour,TOUR_AGENCY)).addToBackStack(null).commit();
+        }
+    }
+
+    @Override
+    public void onEditButtonClick(int position) {
+        Tour tour=adapter.getTour(position);
+        if (getActivity() != null) {
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .addToBackStack(null)
+                    .add(R.id.fragment_container,
+                            new MyToursEditTour(tour)).addToBackStack(null).commit();
         }
     }
 }

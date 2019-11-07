@@ -28,7 +28,7 @@ public class AllCompaniesRecyclerViewAdapter extends RecyclerView.Adapter<AllCom
     @NonNull
     @Override
     public ToursViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.tours_by_category_item,parent,false);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.all_companies_item,parent,false);
         return new ToursViewHolder(view);
     }
 
@@ -64,8 +64,7 @@ public class AllCompaniesRecyclerViewAdapter extends RecyclerView.Adapter<AllCom
     }
 
     public Company getCompany(int position){
-        Company company=companies.get(position);
-        return company;
+        return companies.get(position);
     }
 
    public static class ToursViewHolder extends RecyclerView.ViewHolder{
@@ -102,8 +101,7 @@ public class AllCompaniesRecyclerViewAdapter extends RecyclerView.Adapter<AllCom
 
        // imageview
        tour_category_img=itemView.findViewById(R.id.tour_category_img);
-       agency_img=itemView.findViewById(R.id.tour_agency_img);
-       agency_img.setVisibility(View.GONE);
+
 
    }
 

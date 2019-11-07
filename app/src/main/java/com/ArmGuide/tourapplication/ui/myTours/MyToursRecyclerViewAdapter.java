@@ -3,6 +3,7 @@ package com.ArmGuide.tourapplication.ui.myTours;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import java.util.List;
 public class MyToursRecyclerViewAdapter extends RecyclerView.Adapter<MyToursRecyclerViewAdapter.ToursViewHolder> {
     private List<Tour> tours;
     private OnToursViewHolderCLickListener onToursViewHolderCLickListener;
+    private boolean TOUR_AGENCY;
 
     public MyToursRecyclerViewAdapter() {
         tours = new ArrayList<>();
@@ -27,8 +29,8 @@ public class MyToursRecyclerViewAdapter extends RecyclerView.Adapter<MyToursRecy
     @NonNull
     @Override
     public ToursViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.tours_by_category_item,parent,false);
-        return new ToursViewHolder(view);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.all_tours_item,parent,false);
+        return new ToursViewHolder(view,TOUR_AGENCY,onToursViewHolderCLickListener);
     }
 
     @Override
@@ -38,6 +40,7 @@ public class MyToursRecyclerViewAdapter extends RecyclerView.Adapter<MyToursRecy
             @Override
             public void onClick(View v) {
                 onToursViewHolderCLickListener.onToursViewHolderClick(position);
+
             }
         });
 
@@ -55,12 +58,18 @@ public class MyToursRecyclerViewAdapter extends RecyclerView.Adapter<MyToursRecy
         tours.addAll(toursList);
         notifyDataSetChanged();
     }
+
+    public void setTOUR_AGENCY(boolean TOUR_AGENCY){
+        this.TOUR_AGENCY=TOUR_AGENCY;
+    }
+
     public void setOnToursViewHolderCLickListener(OnToursViewHolderCLickListener onToursViewHolderCLickListener){
         this.onToursViewHolderCLickListener=onToursViewHolderCLickListener;
     }
 
     public interface OnToursViewHolderCLickListener{
          void onToursViewHolderClick(int position);
+         void onEditButtonClick(int position);
     }
 
     public Tour getTour(int position){
@@ -71,16 +80,36 @@ public class MyToursRecyclerViewAdapter extends RecyclerView.Adapter<MyToursRecy
    public static class ToursViewHolder extends RecyclerView.ViewHolder{
         private TextView agency_name_tv, tours_tv, price_tv, duration_tv;
         private ImageView  tour_category_img,agency_img;
-        ToursViewHolder(@NonNull View itemView) {
+        private ImageButton edit_btn;
+
+        private boolean TOUR_AGENCY;
+        private OnToursViewHolderCLickListener onToursViewHolderCLickListener;
+
+
+       ToursViewHolder(@NonNull View itemView,boolean TOUR_AGENCY,OnToursViewHolderCLickListener onToursViewHolderCLickListener) {
             super(itemView);
+            this.TOUR_AGENCY=TOUR_AGENCY;
+            this.onToursViewHolderCLickListener=onToursViewHolderCLickListener;
+
             viewInit(itemView);
-        }
+       }
 
         private void bind(Tour tour){
             agency_name_tv.setText(tour.getTourCompany().getCompanyName());
             price_tv.setText(String.valueOf(tour.getPrice()));
             tours_tv.setText(tour.getPlaceName());
-           duration_tv.setText(tour.getDate());
+
+            duration_tv.setTextColor(duration_tv.getContext().getResources().getColor(R.color.colorBlack));
+
+
+            if(tour.getMoreInfo().equals("COMPANY HAS DELETED THIS TOUR")){
+                duration_tv.setTextColor(duration_tv.getContext().getResources().getColor(R.color.colorRed));
+                duration_tv.setText(tour.getMoreInfo());
+            }else{
+            duration_tv.setText(tour.getDate());
+            }
+
+
             if(tour.getImgUrl()!=null){
                 if(!tour.getImgUrl().isEmpty())
                 { Picasso.get().load(tour.getImgUrl())
@@ -97,6 +126,13 @@ public class MyToursRecyclerViewAdapter extends RecyclerView.Adapter<MyToursRecy
                         .centerCrop()
                         .into(agency_img);}
             }
+
+           edit_btn.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   onToursViewHolderCLickListener.onEditButtonClick(getAdapterPosition());
+               }
+           });
         }
 
    private void viewInit(@NonNull View itemView){
@@ -109,6 +145,11 @@ public class MyToursRecyclerViewAdapter extends RecyclerView.Adapter<MyToursRecy
        // imageview
        tour_category_img=itemView.findViewById(R.id.tour_category_img);
        agency_img=itemView.findViewById(R.id.tour_agency_img);
+       //imagebutton
+       edit_btn=itemView.findViewById(R.id.edit_btn);
+      /* if(TOUR_AGENCY){
+           edit_btn.setVisibility(View.VISIBLE);
+       }*/
 
    }
 

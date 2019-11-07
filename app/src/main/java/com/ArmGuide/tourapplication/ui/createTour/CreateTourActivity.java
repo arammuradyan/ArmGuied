@@ -161,13 +161,13 @@ public class CreateTourActivity extends AppCompatActivity {
                 boolean vine = vineDegustation_CB.isChecked();
                 boolean wifi = freeWifiDuringTour_CB.isChecked();
 
-                // String tourCompanyId= FirebaseAuth.getInstance().getCurrentUser().getUid();
-                // String placeName=packages.get(position);
-                //    String date=tourData_ET.getText().toString().trim();
-                String moreInformation = moreInformation_ET.getText().toString().trim();
+               // String tourCompanyId= FirebaseAuth.getInstance().getCurrentUser().getUid();
+               // String placeName=packages.get(position);
+//                String date=tourData_ET.getText().toString().trim();
+                String moreInformation=moreInformation_ET.getText().toString().trim();
 
-                List<String> touristsIds = new ArrayList<>();
-                touristsIds.add("id 1");
+                List<String> touristsIds=new ArrayList<>();
+              //  touristsIds.add("id 1");
 
 
                 if (TextUtils.isEmpty(price_ET.getText().toString().trim())) {
@@ -210,17 +210,20 @@ public class CreateTourActivity extends AppCompatActivity {
 
                 tour.setImgUrl(imageUrl);
 
-                if (tourId != null)
-                    toursReference.child(tourId).setValue(tour).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(CreateTourActivity.this, "tour saved", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(CreateTourActivity.this, "something went wrong try again", Toast.LENGTH_SHORT).show();
+                if(tourId!=null)
+                toursReference
+                        .child(tourId)
+                        .setValue(tour)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(CreateTourActivity.this,"tour saved", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(CreateTourActivity.this,"something went wrong try again", Toast.LENGTH_SHORT).show();
 
                         }
                     });

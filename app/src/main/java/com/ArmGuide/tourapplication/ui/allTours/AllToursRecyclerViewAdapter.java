@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.models.Tour;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ public class AllToursRecyclerViewAdapter extends RecyclerView.Adapter<AllToursRe
     @NonNull
     @Override
     public ToursViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.tours_by_category_item,parent,false);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.all_tours_item,parent,false);
         return new ToursViewHolder(view);
     }
 
@@ -75,28 +77,71 @@ public class AllToursRecyclerViewAdapter extends RecyclerView.Adapter<AllToursRe
             viewInit(itemView);
         }
 
-        private void bind(Tour tour){
-            agency_name_tv.setText(tour.getTourCompany().getCompanyName());
+        private void bind(final Tour tour) {
+
+            if (tour.getTourCompany() != null){
+
+
+                agency_name_tv.setText(tour.getTourCompany().getCompanyName());
             price_tv.setText(String.valueOf(tour.getPrice()));
             tours_tv.setText(tour.getPlaceName());
             duration_tv.setText(tour.getDate());
 
-            if(tour.getImgUrl()!=null){
-                if(!tour.getImgUrl().isEmpty())
-                { Picasso.get().load(tour.getImgUrl())
-                        .placeholder(R.drawable.ic_avatar)
-                        .fit()
-                        .centerCrop()
-                        .into(tour_category_img);}
+            if (tour.getImgUrl() != null) {
+                if (!tour.getImgUrl().isEmpty()) {
+
+                    Picasso.get().load(tour.getImgUrl())
+                           .placeholder(R.drawable.ic_avatar)
+                            .fit()
+                            .centerCrop()
+                            .networkPolicy(NetworkPolicy.OFFLINE)
+                           .into(tour_category_img, new Callback() {
+                               @Override
+                               public void onSuccess() {
+
+                               }
+
+                               @Override
+                               public void onError(Exception e) {
+                                   Picasso.get().load(tour.getImgUrl())
+                                           .placeholder(R.drawable.ic_avatar)
+                                           .fit()
+                                           .centerCrop()
+                                           .into(tour_category_img);
+                               }
+                           });
+
+                }
             }
-            if(tour.getTourCompany().getAvatarUrl()!=null){
-                if(!tour.getTourCompany().getAvatarUrl().isEmpty())
-                { Picasso.get().load(tour.getTourCompany().getAvatarUrl())
-                        .placeholder(R.drawable.ic_avatar)
-                        .fit()
-                        .centerCrop()
-                        .into(agency_img);}
+            if (tour.getTourCompany().getAvatarUrl() != null) {
+                if (!tour.getTourCompany().getAvatarUrl().isEmpty()) {
+
+                    Picasso.get().load(tour.getTourCompany().getAvatarUrl())
+                            .placeholder(R.drawable.ic_avatar)
+                            .fit()
+                            .centerCrop()
+                            .networkPolicy(NetworkPolicy.OFFLINE)
+                            .into(agency_img, new Callback() {
+                                @Override
+                                public void onSuccess() {
+
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    Picasso.get().load(tour.getTourCompany().getAvatarUrl())
+                                            .placeholder(R.drawable.ic_avatar)
+                                            .fit()
+                                            .centerCrop()
+                                            .into(agency_img);
+                                }
+                            });
+                }
             }
+
+
+        }
+
         }
 
    private void viewInit(@NonNull View itemView){

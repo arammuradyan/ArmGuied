@@ -3,6 +3,13 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="colorRed">#FA0000</color>
+    <color name="colorSilver">#EEEEEE</color>
+    <color name="colorDarkSilver">#9E9E9E</color>
+    <color name="colorTransparent">#00000000</color>
+    <color name="gradStart">#19AA8B</color>
+    <color name="presedState">#01C2FD</color>
+    <color name="gradEnd">#23A7DB</color>
 
     <color name="customViolFon">#b388ff</color>
     <color name="customViolLight">#e7b9ff</color>

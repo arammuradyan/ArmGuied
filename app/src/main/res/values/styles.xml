@@ -61,6 +61,13 @@
 <!--        <item name="android:fontFamily">@color/colorBlack</item>-->
 
 <!--    </style>-->
+    <style name="SelectableItem">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
 
+    <style name="ColdStart" parent="AppTheme.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_bg</item>
+        <item name="android:windowFullscreen">true</item>
 
+    </style>
 </resources>

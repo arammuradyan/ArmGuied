@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import com.ArmGuide.tourapplication.models.Place;
 import com.ArmGuide.tourapplication.models.ServiceForFilteredNotifications;
 import com.ArmGuide.tourapplication.models.UserState;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import su.levenetc.android.textsurface.TextSurface;
@@ -32,16 +34,18 @@ public class HomeFragment extends Fragment {
     private TextSurface textSurface;
 
 
+    private ArrayList<Place> placies;
+
+
+    public HomeFragment(ArrayList<Place> placies) {
+        this.placies = placies;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         Log.d("MyLog", "HomeFragment - onCreate");
         homeViewModel = ViewModelProviders.of(requireActivity()).get(HomeViewModel.class);
-
-
-
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,17 +60,12 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         textSurface = view.findViewById(R.id.text_surface);
-
-
-
-                    textSurface.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            show();
-                        }
-                    });
-
-
+        textSurface.post(new Runnable() {
+            @Override
+            public void run() {
+                show();
+            }
+        });
 
 
         Log.d("MyLog", "HomeFragment - onViewCreated");
@@ -75,23 +74,21 @@ public class HomeFragment extends Fragment {
             adapterViewPager = new AdapterViewPager(getActivity().getSupportFragmentManager());
         viewPagerLand.setAdapter(adapterViewPager);
 
-        homeViewModel.getLiveData().observe(getViewLifecycleOwner(), new Observer<List<Place>>() {
+        adapterViewPager.setPlaces(placies);
+
+
+        /*homeViewModel.getLiveData().observe(HomeFragment.this, new Observer<List<Place>>() {
             @Override
-            public void onChanged(List<Place> places) {
-                if (places != null) {
-                    Log.d("MyLog","Observer before adapter "+ places.size());
-                    adapterViewPager.setPlaces(places);
-                    adapterViewPager.notifyDataSetChanged();
-                }
+            public void onChanged(List<Place> data) {
+                if (data != null){
+                    adapterViewPager.setPlaces(data);
+
+
+                  }
+
             }
-        });
-    }
+        });*/
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        Log.d("MyLog", "HomeFragment - onActivityCreated");
     }
 
     @Override

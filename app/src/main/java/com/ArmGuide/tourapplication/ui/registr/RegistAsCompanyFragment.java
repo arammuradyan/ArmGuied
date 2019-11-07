@@ -26,6 +26,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+
+import com.ArmGuide.tourapplication.MainActivity;
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.models.Tour;
 import com.ArmGuide.tourapplication.models.Company;
