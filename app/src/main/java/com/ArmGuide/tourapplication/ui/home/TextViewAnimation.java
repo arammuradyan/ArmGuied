@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 
+import com.ArmGuide.tourapplication.R;
+
 import su.levenetc.android.textsurface.Text;
 import su.levenetc.android.textsurface.TextBuilder;
 import su.levenetc.android.textsurface.TextSurface;
@@ -31,27 +33,37 @@ public class TextViewAnimation {
 
     public static void play(TextSurface textSurface, AssetManager assetManager) {
 
-        final Typeface robotoBlack = Typeface.createFromAsset(assetManager, "fonts/second.ttf");
+        final Typeface robotoBlack = Typeface.createFromAsset(assetManager, "fonts/aclonica.ttf");
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setTypeface(robotoBlack);
 
         Text text = TextBuilder
-                .create("ArmGuide")
+                .create("ARMENIAN SIGHTS")
                 .setPaint(paint)
-                .setSize(76)
-                .setAlpha(0)
-                .setColor(Color.RED)
+                .setSize(30)
+                .setAlpha(50)
+                .setColor(Color.parseColor("#e7b9ff"))
                 .setPosition(Align.SURFACE_CENTER).build();
 
         textSurface.play(
                 new Sequential(
+                        ShapeReveal.create(text, 3000, SideCut.show(Side.LEFT), false),
+                        new Parallel(ShapeReveal.create(text, 1000, SideCut.hide(Side.LEFT), false),
+                                new Sequential(Delay.duration(5000), ShapeReveal.create(text, 2000, SideCut.show(Side.LEFT), false))),
 
-                        ShapeReveal.create(text, 1500, SideCut.show(Side.LEFT), false),
-                        new Parallel(ShapeReveal.create(text, 500, SideCut.hide(Side.LEFT), false),
-                                new Sequential(Delay.duration(200), ShapeReveal.create(text, 400, SideCut.show(Side.LEFT), false))),
-                        new Parallel(ShapeReveal.create(text, 500, SideCut.hide(Side.LEFT), false),
-                                new Sequential(Delay.duration(200), ShapeReveal.create(text, 1000, SideCut.show(Side.LEFT), true)))
+                        new Parallel(ShapeReveal.create(text, 1000, SideCut.hide(Side.LEFT), false),
+                                new Sequential(Delay.duration(5000), ShapeReveal.create(text, 2000, SideCut.show(Side.LEFT), false))),
+                        new Parallel(ShapeReveal.create(text, 1000, SideCut.hide(Side.LEFT), false),
+                                new Sequential(Delay.duration(5000), ShapeReveal.create(text, 2000, SideCut.show(Side.LEFT), false))),
+                        new Parallel(ShapeReveal.create(text, 1000, SideCut.hide(Side.LEFT), false),
+                                new Sequential(Delay.duration(5000), ShapeReveal.create(text, 2000, SideCut.show(Side.LEFT), false))),
+                        new Parallel(ShapeReveal.create(text, 1000, SideCut.hide(Side.LEFT), false),
+                                new Sequential(Delay.duration(5000), ShapeReveal.create(text, 2000, SideCut.show(Side.LEFT), false))),
+                        new Parallel(ShapeReveal.create(text, 1000, SideCut.hide(Side.LEFT), false),
+                                new Sequential(Delay.duration(5000), ShapeReveal.create(text, 2000, SideCut.show(Side.LEFT), false))),
+                        new Parallel(ShapeReveal.create(text, 1000, SideCut.hide(Side.LEFT), false),
+                                new Sequential(Delay.duration(5000), ShapeReveal.create(text, 2000, SideCut.show(Side.LEFT), false)))
                 )
         );
 

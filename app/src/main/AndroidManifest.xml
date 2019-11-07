@@ -29,13 +29,13 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts"/>
-        <activity android:name=".NotificationActivity"/>
+        <activity android:name=".NotificationActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme.NoActionBar"/>
 
-        <activity android:name=".ui.createTour.CreateTourActivity" />
-        <activity android:name=".ui.registr.LoginActivity"
+        <activity android:name=".ui.createTour.CreateTourActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.registr.LoginActivity" android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
-            android:name=".ui.splash.SplashActivity"
+            android:name=".ui.splash.SplashActivity" android:screenOrientation="portrait"
             android:theme="@style/ColdStart">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,7 +51,7 @@
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".WebActivity"
+            android:name=".WebActivity" android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"

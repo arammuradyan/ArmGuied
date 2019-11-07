@@ -41,7 +41,7 @@ public class RepositoryForPlaces {
 
 
     private void getPlacesListFromFirebase() {
-        placeList.clear();
+       // placeList.clear();
 
         DatabaseReference placiesReference = FirebaseDatabase.getInstance().getReference().child("Places");
         placiesReference.keepSynced(true);
@@ -50,7 +50,7 @@ public class RepositoryForPlaces {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-               // placeList.clear();
+                placeList.clear();
 
                 for (DataSnapshot d : dataSnapshot.getChildren()
                 ) {
