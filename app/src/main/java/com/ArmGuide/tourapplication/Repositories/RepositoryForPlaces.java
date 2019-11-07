@@ -40,24 +40,23 @@ public class RepositoryForPlaces {
     }
 
 
-     private void getPlacesListFromFirebase() {
+    private void getPlacesListFromFirebase() {
         placeList.clear();
 
-        DatabaseReference placiesReference=FirebaseDatabase.getInstance().getReference().child("Places");
+        DatabaseReference placiesReference = FirebaseDatabase.getInstance().getReference().child("Places");
         placiesReference.keepSynced(true);
 
-         placiesReference.addValueEventListener(new ValueEventListener() {
-         FirebaseDatabase.getInstance().getReference().child("Places").addValueEventListener(new ValueEventListener() {
+        placiesReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                placeList.clear();
+               // placeList.clear();
 
                 for (DataSnapshot d : dataSnapshot.getChildren()
                 ) {
                     placeList.add(d.getValue(Place.class));
                 }
-                Log.d("MyLog","placeList "+placeList.get(11).getName());
+                Log.d("MyLog", "placeList " + placeList.get(11).getName());
                 listMutableLiveData.setValue(placeList);
             }
 

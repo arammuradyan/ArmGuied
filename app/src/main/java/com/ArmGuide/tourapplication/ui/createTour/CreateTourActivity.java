@@ -163,7 +163,7 @@ public class CreateTourActivity extends AppCompatActivity {
 
                // String tourCompanyId= FirebaseAuth.getInstance().getCurrentUser().getUid();
                // String placeName=packages.get(position);
-                String date=tourData_ET.getText().toString().trim();
+//                String date=tourData_ET.getText().toString().trim();
                 String moreInformation=moreInformation_ET.getText().toString().trim();
 
                 List<String> touristsIds=new ArrayList<>();

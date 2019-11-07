@@ -21,6 +21,7 @@ import com.ArmGuide.tourapplication.models.Place;
 import com.ArmGuide.tourapplication.models.ServiceForFilteredNotifications;
 import com.ArmGuide.tourapplication.models.UserState;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import su.levenetc.android.textsurface.TextSurface;
@@ -33,7 +34,7 @@ public class HomeFragment extends Fragment {
     private TextSurface textSurface;
 
 
-    private ArrayList<Place> placies=new ArrayList<>();
+    private ArrayList<Place> placies;
 
 
     public HomeFragment(ArrayList<Place> placies) {
@@ -43,13 +44,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         Log.d("MyLog", "HomeFragment - onCreate");
         homeViewModel = ViewModelProviders.of(requireActivity()).get(HomeViewModel.class);
-
-
-
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,17 +60,12 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         textSurface = view.findViewById(R.id.text_surface);
-
-
-
-                    textSurface.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            show();
-                        }
-                    });
-
-
+        textSurface.post(new Runnable() {
+            @Override
+            public void run() {
+                show();
+            }
+        });
 
 
         Log.d("MyLog", "HomeFragment - onViewCreated");

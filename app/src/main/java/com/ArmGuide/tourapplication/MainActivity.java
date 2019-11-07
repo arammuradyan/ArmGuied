@@ -65,6 +65,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -163,9 +164,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (savedInstanceState == null) {
             // ARAJIN@ BACVOX FRAGMENT
-           ArrayList<Place> placies=new ArrayList<>();
+            ArrayList<Place> placies=new ArrayList<>();
             Bundle bundle=  getIntent().getBundleExtra("placiesList");
-            placies.addAll((ArrayList<Place>)bundle.getSerializable("placiesList"));
+            if (bundle != null) {
+                placies.addAll((ArrayList<Place>) bundle.getSerializable("placiesList"));
+            }
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.fragment_container, new HomeFragment(placies), "home")

@@ -23,7 +23,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.ArmGuide.tourapplication.MainActivity;
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.WebActivity;
 import com.ArmGuide.tourapplication.models.Filter;
@@ -61,9 +60,7 @@ public class BlankFragment extends Fragment {
     private Place place;
     private boolean backPressed;
     private String placeKey;
-    private UserStateViewModel userStateViewModel;
     private SubscribedPlacesViewModel subscribedPlacesViewModel;
-    private FilterViewModel filterViewModel;
     private UserState userState;
 
     BlankFragment(Place place, String placeKey) {
@@ -93,9 +90,7 @@ public class BlankFragment extends Fragment {
         // Inflate the layout for this fragment
         Log.d("MyLog", "BlankFragment - onCreateView" + placeKey);
 
-        userStateViewModel = new UserStateViewModel();
         subscribedPlacesViewModel = ViewModelProviders.of(BlankFragment.this).get(SubscribedPlacesViewModel.class);
-        filterViewModel = ViewModelProviders.of(BlankFragment.this).get(FilterViewModel.class);
         return inflater.inflate(R.layout.fragment_blank, container, false);
     }
 
@@ -192,7 +187,7 @@ public class BlankFragment extends Fragment {
         });
 
 
-        userStateViewModel.getState().observe(BlankFragment.this, new Observer<UserState>() {
+        subscribedPlacesViewModel.getState().observe(BlankFragment.this, new Observer<UserState>() {
             @Override
             public void onChanged(UserState state) {
                 Log.d("mystt", "from Blankfr, in observer " + state);
@@ -242,7 +237,7 @@ public class BlankFragment extends Fragment {
                     checkBoxSubscribe.invalidate();
 
 
-                    filterViewModel.getLiveData().observe(BlankFragment.this, new Observer<List<Filter>>() {
+                    subscribedPlacesViewModel.getFilters().observe(BlankFragment.this, new Observer<List<Filter>>() {
                         @Override
                         public void onChanged(List<Filter> filters) {
                             if (filters != null && filters.size() > 0) {

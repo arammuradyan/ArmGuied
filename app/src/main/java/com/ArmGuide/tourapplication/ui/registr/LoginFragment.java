@@ -231,7 +231,8 @@ public class LoginFragment extends Fragment {
                 if (!task.isSuccessful()) {
                     Toast.makeText(getContext(), "sign in colback: " + task.getException(), Toast.LENGTH_SHORT).show();
                 }
-                startActivity(new Intent(getActivity(),MainActivity.class));
+//                startActivity(new Intent(getActivity(),MainActivity.class));
+                getActivity().finish();
             }
         });
     }

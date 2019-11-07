@@ -26,9 +26,9 @@ public class SplashActivity extends AppCompatActivity {
 
     private ImageView application_icon;
     private TextView loading_tv;
-    private Handler handler=new Handler();
+    private Handler handler = new Handler();
     private HomeViewModel homeViewModel;
-    private ArrayList<Place> places=new ArrayList<>();
+    private ArrayList<Place> places = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,60 +36,62 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
 
-       homeViewModel= ViewModelProviders.of(this).get(HomeViewModel.class);
+        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
 
-     homeViewModel.getLiveData().observe(this, new Observer<List<Place>>() {
+        homeViewModel.getLiveData().observe(this, new Observer<List<Place>>() {
             @Override
             public void onChanged(List<Place> data) {
+                places.clear();
                 places.addAll(data);
             }
         });
 
         setAnimation();
 
-       MyRunnable runnable=new MyRunnable(2);
-       new Thread(runnable).start();
+        MyRunnable runnable = new MyRunnable(2);
+        new Thread(runnable).start();
     }
 
 
-    private void setAnimation(){
-        application_icon=findViewById(R.id.splash_icon_img);
+    private void setAnimation() {
+        application_icon = findViewById(R.id.splash_icon_img);
 
-        loading_tv=findViewById(R.id.loading_tv);
+        loading_tv = findViewById(R.id.loading_tv);
         YoYo.with(Techniques.FadeIn).duration(2000).playOn(loading_tv);
         YoYo.with(Techniques.FadeOut).duration(2000).delay(2000).playOn(loading_tv);
         YoYo.with(Techniques.FadeIn).duration(1000).delay(4000).playOn(loading_tv);
     }
 
-    private void startMainActinity(){
-        Intent intent=new Intent(SplashActivity.this, MainActivity.class);
-        Bundle placiesBundle=new Bundle();
-        placiesBundle.putSerializable("placiesList",places);
-        intent.putExtra("placiesList",placiesBundle);
+    private void startMainActinity() {
+        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        Bundle placiesBundle = new Bundle();
+        placiesBundle.putSerializable("placiesList", places);
+        intent.putExtra("placiesList", placiesBundle);
         startActivity(intent);
-        CustomIntent.customType(SplashActivity.this,"fadein-to-fadeout");
+        CustomIntent.customType(SplashActivity.this, "fadein-to-fadeout");
         finish();
     }
 
-   private  class MyRunnable implements Runnable{
+    private class MyRunnable implements Runnable {
         int seconds;
 
         private MyRunnable(int seconds) {
             this.seconds = seconds;
         }
+
         @Override
         public void run() {
             try {
-                Thread.sleep(seconds*1000);
+                Thread.sleep(seconds * 1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-      handler.post(new Runnable() {
-          @Override
-          public void run() {
-              startMainActinity();
-          }
-      });
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    startMainActinity();
+                }
+            });
         }
     }
 }

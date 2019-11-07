@@ -110,7 +110,8 @@ public class NotificationActivity extends AppCompatActivity {
                             .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    startActivity(new Intent(NotificationActivity.this, MainActivity.class));
+//                                    startActivity(new Intent(NotificationActivity.this, MainActivity.class));
+                                    finish();
                                 }
                             });
                     AlertDialog alertDialog = builder.create();
@@ -125,7 +126,8 @@ public class NotificationActivity extends AppCompatActivity {
                             .setPositiveButton("Close", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    startActivity(new Intent(NotificationActivity.this, MainActivity.class));
+                                    finish();
+//                                    startActivity(new Intent(NotificationActivity.this, MainActivity.class));
                                 }
                             });
                     AlertDialog alertDialog = builder.create();

@@ -197,7 +197,6 @@
                     android:gravity="center"
                     android:text="PRICE"
                     android:textColor="#F7F2F2"
-                    android:gravity="center"
                     />
 
                 <LinearLayout
