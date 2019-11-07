@@ -60,12 +60,6 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         textSurface = view.findViewById(R.id.text_surface);
-        textSurface.post(new Runnable() {
-            @Override
-            public void run() {
-                show();
-            }
-        });
 
 
         Log.d("MyLog", "HomeFragment - onViewCreated");
@@ -93,6 +87,12 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onResume() {
+        textSurface.post(new Runnable() {
+            @Override
+            public void run() {
+                show();
+            }
+        });
         super.onResume();
         Log.d("MyLog", "HomeFragment - onResume");
     }

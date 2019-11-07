@@ -129,32 +129,30 @@ public class AdapterRecyclerNotification extends RecyclerView.Adapter<AdapterRec
                 FirebaseDatabase.getInstance().getReference().child("Tourists").child(userKey)
                         .child("tours").addValueEventListener(new ValueEventListener() {
                     List<Tour> toursFormFB = new ArrayList<>();
+                    boolean exists;
 
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        boolean exists = false;
                         for (DataSnapshot data : dataSnapshot.getChildren()
                         ) {
-                            if(data!=null) {
-                                Tour t = data.getValue(Tour.class);
-                                toursFormFB.add(t);
-                                if (t.getId().equals(tours.get(position).getId())) {
-                                    exists = true;
-                                    if (fragment.getContext() != null)
-                                        Toast.makeText(fragment.getContext(), "The Tour already exists in 'My Tours'.", Toast.LENGTH_LONG).show();
-                                }
+                            Tour t = data.getValue(Tour.class);
+                            toursFormFB.add(t);
+                            if (t.getId().equals(tours.get(position).getId())) {
+                                exists = true;
+                                break;
                             }
                         }
-                        if (!exists) {
+                        if (exists && fragment.getContext() != null)
+                            Toast.makeText(fragment.getContext(), "The Tour already exists in 'My Tours'.", Toast.LENGTH_LONG).show();
+                        if (!exists && fragment.getContext() != null) {
                             toursFormFB.add(tours.get(position));
                             FirebaseDatabase.getInstance().getReference().child("Tourists")
                                     .child(userKey).child("tours").setValue(toursFormFB)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            if (fragment.getContext() != null)
-                                                Toast.makeText(fragment.getContext(), "The Tour has successfully been added into 'My Tours'.",
-                                                        Toast.LENGTH_LONG).show();
+                                            Toast.makeText(fragment.getContext(), "The Tour has successfully been added into 'My Tours'.",
+                                                    Toast.LENGTH_LONG).show();
                                         }
                                     });
                         }
