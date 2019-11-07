@@ -14,10 +14,32 @@ public class Tourist {
    private List<String> subscribedPlacesIds;
    private String question;
    private String answer;
+   private List<Filter> filters;
+   private List<Tour> toursAlreadySeen;
+   private List<Tour> notifications;
 
     public Tourist() {
     }
 
+    public List<Filter> getFilters() {
+        return filters;
+    }
+
+    public void setFilters(List<Filter> filters) {
+        this.filters = filters;
+    }
+
+    public List<Tour> getToursAlreadySeen() {
+        return toursAlreadySeen;
+    }
+
+    public void setToursAlreadySeen(List<Tour> toursAlreadySeen) {
+        this.toursAlreadySeen = toursAlreadySeen;
+    }
+
+    public Tourist(String id, String email, String fullName,
+                   String password, String phoneNumber, String avatarUrl,
+                   boolean isCompany, List<Tour> tours) {
 
     public Tourist(String id, String email, String fullName, String password,
                    String phoneNumber, String avatarUrl, boolean isCompany,

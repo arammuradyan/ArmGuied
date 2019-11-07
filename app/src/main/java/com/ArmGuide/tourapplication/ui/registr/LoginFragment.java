@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
@@ -230,7 +231,10 @@ public class LoginFragment extends Fragment {
                 if (!task.isSuccessful()) {
                     Toast.makeText(getContext(), "sign in colback: " + task.getException(), Toast.LENGTH_SHORT).show();
                 }
+                startActivity(new Intent(getActivity(),MainActivity.class));
             }
         });
     }
+
+
 }

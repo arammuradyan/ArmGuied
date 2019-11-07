@@ -6,6 +6,8 @@ import android.webkit.WebViewClient;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+
 public class WebActivity extends AppCompatActivity {
 
     WebView webView;
@@ -22,5 +24,13 @@ public class WebActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setSupportZoom(false);
         getSupportActionBar().setTitle("Learn More with us");
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Animatoo.animateSlideDown(WebActivity.this);
+
     }
 }

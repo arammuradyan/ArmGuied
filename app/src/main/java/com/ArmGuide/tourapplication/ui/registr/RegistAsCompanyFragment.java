@@ -257,10 +257,12 @@ public class RegistAsCompanyFragment extends Fragment {
                        //0     1      2       3         4           5         6
         if(checkInputs(name,email,password,phone,confirm_password,address,websiteUrl)){
             company_pb.setVisibility(ProgressBar.VISIBLE);
+
             mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
+                        startActivity(new Intent(getActivity(), MainActivity.class));
 
                         if(mUploadTask!=null && mUploadTask.isInProgress()){
                             Toast.makeText(getContext(),"registration alreade in proces",Toast.LENGTH_SHORT).show();
