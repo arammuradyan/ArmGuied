@@ -19,10 +19,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.ArmGuide.tourapplication.MainActivity;
@@ -59,7 +62,7 @@ public class RegistAsTouristFragment extends Fragment {
 
     // Edit texts
     private EditText full_name_et, email_et, password_et,
-            confirm_password_et,phonenumber_et;
+            confirm_password_et,phonenumber_et, answer_et;
     // Imageview
     private ImageView avatar_img;
     // Progres bar
@@ -76,6 +79,8 @@ public class RegistAsTouristFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAoutStateListener;
     private StorageTask mUploadTask;
+    private String question;
+
 
     // Gallery uri
     private String avatarUri="";
@@ -89,6 +94,8 @@ public class RegistAsTouristFragment extends Fragment {
 
     private SharedPreferences sharedPreferences;
 
+    String[] data = {"The name of your pet", "Mother's Maiden Name", "Favourite dish", "Favorite movie", "Favorite book"};
+    private String answer;
 
     @Nullable
     @Override
@@ -99,7 +106,30 @@ public class RegistAsTouristFragment extends Fragment {
         vieiwInit(view);
         setOnClickListeners();
         sharedPreferences = getActivity().getSharedPreferences("statePref",0);
-        return view;
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, data);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        Spinner spinner = view.findViewById(R.id.spinner);
+        spinner.setAdapter(adapter);
+        // заголовок
+        spinner.setPrompt("Title");
+        // выделяем элемент
+        spinner.setSelection(2);
+        // устанавливаем обработчик нажатия
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                // показываем позиция нажатого элемента
+                question = ((String) parent.getAdapter().getItem(position));
+                Toast.makeText(getActivity().getBaseContext(), "Position = " + position + " " +
+                        parent.getAdapter().getItem(position), Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+       return view;
     }
 
     @Override
@@ -112,7 +142,6 @@ public class RegistAsTouristFragment extends Fragment {
         super.onStop();
         mAuth.removeAuthStateListener(mAoutStateListener);
     }
-
 
     private void initAuth() {
     mAuth=FirebaseAuth.getInstance();
@@ -127,7 +156,6 @@ public class RegistAsTouristFragment extends Fragment {
         }
     };
     }
-
 
     private void vieiwInit(View view) {
         // Edit text
@@ -145,6 +173,9 @@ public class RegistAsTouristFragment extends Fragment {
 
         // Imageview
         avatar_img=view.findViewById(R.id.tourist_profileImage_img);
+
+        //forgote pass
+        answer_et=view.findViewById(R.id.answer);
     }
 
     private void setOnClickListeners() {
@@ -222,6 +253,7 @@ public class RegistAsTouristFragment extends Fragment {
          password = password_et.getText().toString().trim();
          phone = phonenumber_et.getText().toString().trim();
          confirm_password = confirm_password_et.getText().toString().trim();
+         answer=answer_et.getText().toString().trim();
 
                          //0     1      2       3         4
           if(checkInputs(name,email,password,phone,confirm_password)){
@@ -396,6 +428,8 @@ public class RegistAsTouristFragment extends Fragment {
         currentTourist.setPhoneNumber(phone);
         currentTourist.setIsCompany(false);
         currentTourist.setTours(tours);
+        currentTourist.setQuestion(question);
+        currentTourist.setAnswer(answer);
         return currentTourist;
     }
 }

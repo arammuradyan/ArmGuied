@@ -12,6 +12,8 @@ public class Tourist {
    private boolean IsCompany;
    private List<Tour> tours;
    private List<String> subscribedPlacesIds;
+   private String question;
+   private String answer;
    private List<Filter> filters;
    private List<Tour> toursAlreadySeen;
    private List<Tour> notifications;
@@ -38,6 +40,10 @@ public class Tourist {
     public Tourist(String id, String email, String fullName,
                    String password, String phoneNumber, String avatarUrl,
                    boolean isCompany, List<Tour> tours) {
+
+    public Tourist(String id, String email, String fullName, String password,
+                   String phoneNumber, String avatarUrl, boolean isCompany,
+                   List<Tour> tours, List<String> subscribedPlacesIds, String question, String answer) {
         this.id = id;
         this.email = email;
         this.fullName = fullName;
@@ -46,9 +52,34 @@ public class Tourist {
         this.avatarUrl = avatarUrl;
         IsCompany = isCompany;
         this.tours = tours;
+        this.subscribedPlacesIds = subscribedPlacesIds;
+        this.question = question;
+        this.answer = answer;
     }
 
+    public boolean isCompany() {
+        return IsCompany;
+    }
 
+    public void setCompany(boolean company) {
+        IsCompany = company;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
 
     public String getId() {
         return id;
