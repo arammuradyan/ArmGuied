@@ -23,6 +23,7 @@ import com.ArmGuide.tourapplication.Constants;
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.StateViewModel;
 import com.ArmGuide.tourapplication.models.Tour;
+import com.ArmGuide.tourapplication.models.Tourist;
 import com.ArmGuide.tourapplication.ui.registr.LoginActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -90,7 +91,20 @@ public class ToursByCategoryChooseATravelPackageAadd extends Fragment {
         setTourInformation();
 
 
+        stateViewModel.getState().observe(ToursByCategoryChooseATravelPackageAadd.this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    addToMyTours.setVisibility(View.GONE);
 
+                }else{
+                    addToMyTours.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+
+       // addToMyTours.setVisibility(View.VISIBLE);
         addToMyTours.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -209,6 +223,7 @@ String companyInfo=tour.getTourCompany().getCompanyName()+"\n"
     freeWifiDuringTour_CB.setClickable(false);
 }
 private void saveTour(){
+
   String touristId="";
 
     if(FirebaseAuth.getInstance().getCurrentUser()!=null){
@@ -223,37 +238,38 @@ private void saveTour(){
 
   final DatabaseReference touristReferance= FirebaseDatabase.getInstance().getReference(Constants.TOURISTS_DATABASE_REFERENCE);
 
-    touristReferance.child(touristId).child("tours").addValueEventListener(new ValueEventListener() {
+    touristReferance.child(touristId).child("tours").addListenerForSingleValueEvent(new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             Toast.makeText(getActivity(), "on DATA CHANGE",Toast.LENGTH_SHORT).show();
-
             List<Tour> toursfromFB=new ArrayList<>();
-            if (dataSnapshot.exists()){
+           // if (dataSnapshot.exists()){
                 for (DataSnapshot toursFB:dataSnapshot.getChildren()) {
                     Tour tourFB=toursFB.getValue(Tour.class);
                     toursfromFB.add(tourFB);
                 }
              for (int i = 0; i <toursfromFB.size() ; i++) {
                     if(tour.getId().equals(toursfromFB.get(i).getId())){
+
                         Toast.makeText(getActivity(), "ID _"+toursfromFB.get(i).getId()+
                         " Cant add, you allready added "+tour.getId(),Toast.LENGTH_SHORT).show();
                         return;
-                    }/*else{
-                        toursfromFB.add(tour);
-                    }*/
+                    }
                 }
                 toursfromFB.add(tour);
 
-                String touristId= FirebaseAuth.getInstance().getCurrentUser().getUid();
+                final String touristId= FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                touristReferance.child(touristId)
+                touristReferance
+                        .child(touristId)
                         .child("tours")
-                       // .child(tour.getId())
                         .setValue(toursfromFB).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        saveTouristIdInTour();
+
                         Toast.makeText(getActivity(), "Added",Toast.LENGTH_SHORT).show();
+                        return;
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -262,28 +278,28 @@ private void saveTour(){
                     }
                 });
 
-            }
-            else{
-                toursfromFB.add(tour);
-                String touristId= FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                touristReferance.child(touristId)
-                        .child("tours")
-                        // .child(tour.getId())
-                        .setValue(toursfromFB).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(getActivity(), "Added",Toast.LENGTH_SHORT).show();
-                    return;
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), "Failed "+e.getMessage(),Toast.LENGTH_SHORT).show();
-                    }
-                });
-                return;
-            }
+           // }
+//            else{
+//                toursfromFB.add(tour);
+//                String touristId= FirebaseAuth.getInstance().getCurrentUser().getUid();
+//
+//                touristReferance
+//                        .child(touristId)
+//                        .child("tours")
+//                        .setValue(toursfromFB).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        Toast.makeText(getActivity(), "Added",Toast.LENGTH_SHORT).show();
+//                    return;
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Toast.makeText(getActivity(), "Failed "+e.getMessage(),Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//
+//            }
        return;
         }
 
@@ -294,6 +310,45 @@ private void saveTour(){
     });
 
 }
+
+private void saveTouristIdInTour(){
+
+    final String touristId= FirebaseAuth.getInstance().getCurrentUser().getUid();
+    final  DatabaseReference toursReference=FirebaseDatabase.getInstance()
+            .getReference(Constants.TOURS_DATABASE_REFERENCE);
+    toursReference
+            .child(tour.getId())
+            .child("touristsIds")
+            .addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    List<String> touristsIdsFB=new ArrayList<>();
+                    for (DataSnapshot toursistIds:dataSnapshot.getChildren()) {
+                        String id=toursistIds.getValue(String.class);
+                        touristsIdsFB.add(id);
+                    }
+                    touristsIdsFB.add(touristId);
+
+                    toursReference
+                            .child(tour.getId())
+                            .child("touristsIds")
+                            .setValue(touristsIdsFB).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(getActivity(),"Id aded to tour",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+}
+
+
 }
 
 

@@ -3,9 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="8dp"
     app:cardCornerRadius="6dp"
-    app:cardElevation="6dp"
+    app:cardElevation="2dp"
     app:cardUseCompatPadding="true">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/const_lay"
@@ -15,8 +14,8 @@
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/tour_category_img"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
             android:src="@drawable/testing_img"
             app:layout_constraintTop_toTopOf="@id/const_lay"
             app:layout_constraintBottom_toBottomOf="@id/const_lay"
@@ -24,8 +23,8 @@
             android:transitionName="img_trans"/>
         <ImageView
             android:id="@+id/tour_agency_img"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:background="@drawable/ic_avatar"
             android:layout_margin="6dp"
             app:layout_constraintTop_toTopOf="@id/const_lay"
@@ -36,10 +35,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Agency name"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"
             android:layout_marginStart="4dp"
-            app:layout_constraintEnd_toEndOf="@id/const_lay"
-            app:layout_constraintTop_toTopOf="@id/const_lay"
+            app:layout_constraintTop_toTopOf="@id/tour_agency_img"
             app:layout_constraintBottom_toBottomOf="@id/tour_agency_img"
             app:layout_constraintLeft_toRightOf="@id/tour_agency_img"
             android:drawablePadding="6dp"/>
@@ -50,7 +49,8 @@
             android:text="Dilijan,Caxkadzor"
             android:layout_marginStart="6dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:layout_marginTop="50dp"
+            android:textColor="@color/colorBlack"
+            android:layout_marginTop="44dp"
             app:layout_constraintTop_toTopOf="@id/const_lay"
             app:layout_constraintLeft_toRightOf="@id/tour_category_img"
             app:layout_constraintBottom_toTopOf="@id/price_tv"/>
@@ -59,6 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Price"
+            android:textColor="@color/colorBlack"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintTop_toBottomOf="@id/tours_tv"
             app:layout_constraintLeft_toLeftOf="@id/tours_tv"
@@ -68,7 +69,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="29.09.2019 - 10.10.2019"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="14dp"
+            android:textColor="@color/colorBlack"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintTop_toBottomOf="@id/price_tv"
             app:layout_constraintLeft_toLeftOf="@id/price_tv"
@@ -79,11 +81,11 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_edit_black"
             android:background="@drawable/maps_button_compass_selector"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="4dp"
             android:visibility="gone"
-            app:layout_constraintTop_toTopOf="@id/const_lay"
+            app:layout_constraintTop_toTopOf="@id/duration_tv"
             app:layout_constraintRight_toRightOf="@id/const_lay"
-            app:layout_constraintBottom_toBottomOf="@id/const_lay"/>
+            app:layout_constraintBottom_toBottomOf="@id/duration_tv"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,4 +1,4 @@
-package com.ArmGuide.tourapplication.ui.myTours;
+package com.ArmGuide.tourapplication.ui.companies;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,19 +17,19 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyToursRecyclerViewAdapter extends RecyclerView.Adapter<MyToursRecyclerViewAdapter.ToursViewHolder> {
+public class ChoosenCompanyToursRecyclerViewAdapter extends RecyclerView.Adapter<ChoosenCompanyToursRecyclerViewAdapter.ToursViewHolder> {
     private List<Tour> tours;
     private OnToursViewHolderCLickListener onToursViewHolderCLickListener;
     private boolean TOUR_AGENCY;
 
-    public MyToursRecyclerViewAdapter() {
+    public ChoosenCompanyToursRecyclerViewAdapter() {
         tours = new ArrayList<>();
     }
 
     @NonNull
     @Override
     public ToursViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.all_tours_item,parent,false);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.choosen_company_tours_item,parent,false);
         return new ToursViewHolder(view,TOUR_AGENCY,onToursViewHolderCLickListener);
     }
 
@@ -78,9 +78,9 @@ public class MyToursRecyclerViewAdapter extends RecyclerView.Adapter<MyToursRecy
     }
 
    public static class ToursViewHolder extends RecyclerView.ViewHolder{
-        private TextView agency_name_tv, tours_tv, price_tv, duration_tv;
-        private ImageView  tour_category_img,agency_img;
-        private ImageButton edit_btn;
+        private TextView  tours_tv, price_tv, duration_tv;
+        private ImageView  tour_category_img;
+
 
         private boolean TOUR_AGENCY;
         private OnToursViewHolderCLickListener onToursViewHolderCLickListener;
@@ -95,7 +95,6 @@ public class MyToursRecyclerViewAdapter extends RecyclerView.Adapter<MyToursRecy
        }
 
         private void bind(Tour tour){
-            agency_name_tv.setText(tour.getTourCompany().getCompanyName());
             price_tv.setText(String.valueOf(tour.getPrice()));
             tours_tv.setText(tour.getPlaceName());
 
@@ -114,44 +113,21 @@ public class MyToursRecyclerViewAdapter extends RecyclerView.Adapter<MyToursRecy
                 if(!tour.getImgUrl().isEmpty())
                 { Picasso.get().load(tour.getImgUrl())
                         .placeholder(R.mipmap.ic_launcher)
-                        .fit()
-                        .centerCrop()
+                        .resize(110,110)
                         .into(tour_category_img);}
             }
-           if(tour.getTourCompany().getAvatarUrl()!=null){
-                if(!tour.getTourCompany().getAvatarUrl().isEmpty())
-                { Picasso.get().load(tour.getTourCompany().getAvatarUrl())
-                        .placeholder(R.mipmap.ic_launcher)
-                        .fit()
-                        .centerCrop()
-                        .into(agency_img);}
-            }
 
-           edit_btn.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                   onToursViewHolderCLickListener.onEditButtonClick(getAdapterPosition());
-               }
-           });
         }
 
    private void viewInit(@NonNull View itemView){
        // text views
-       agency_name_tv=itemView.findViewById(R.id.tour_agency_name_tv);
        tours_tv=itemView.findViewById(R.id.tours_tv);
        price_tv=itemView.findViewById(R.id.price_tv);
        duration_tv=itemView.findViewById(R.id.duration_tv);
 
        // imageview
        tour_category_img=itemView.findViewById(R.id.tour_category_img);
-       agency_img=itemView.findViewById(R.id.tour_agency_img);
-       //imagebutton
-       edit_btn=itemView.findViewById(R.id.edit_btn);
-      /* if(TOUR_AGENCY){
-           edit_btn.setVisibility(View.VISIBLE);
-       }*/
-
-   }
+       }
 
     }
 }

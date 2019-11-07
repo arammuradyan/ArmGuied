@@ -29,10 +29,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.ArmGuide.tourapplication.Repositories.RepositoryForUserState;
 import com.ArmGuide.tourapplication.models.Company;
+import com.ArmGuide.tourapplication.models.Place;
 import com.ArmGuide.tourapplication.models.Tourist;
 import com.ArmGuide.tourapplication.models.UserState;
 import com.ArmGuide.tourapplication.ui.allTours.AllToursFragment;
@@ -54,6 +56,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -80,17 +84,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionButton fab;
     private RepositoryForUserState repositoryForUserState;
 
+    // view models
+   private StateViewModel stateViewModel;
+   private Company companyForInfoWindow;
+   private Tourist touristForInfoWindow;
+    String title="";
+    String info="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        stateViewModel=ViewModelProviders.of(this).get(StateViewModel.class);
         repositoryForUserState = RepositoryForUserState.getInstance();
         getUserState();
         initFireBase();
         initViews(savedInstanceState);
         getLocationPermission();
         isServicesOK();
+
+        stateViewModel.getState().observe(MainActivity.this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean && companyForInfoWindow!=null){
+                    info=companyForInfoWindow.getCompanyName()+"\n"
+                            +companyForInfoWindow.getPhoneNumber()+"\n"
+                            +companyForInfoWindow.getAddress()+"\n"
+                            +companyForInfoWindow.getEmail()+"\n"
+                            +companyForInfoWindow.getWebUrl();
+                }else if(touristForInfoWindow!=null){
+                    info=touristForInfoWindow.getFullName()+"\n"
+                            +touristForInfoWindow.getPhoneNumber()+"\n"
+                            +touristForInfoWindow.getEmail()+"\n";
+                }
+            }
+        });
 
         Log.d("myMain", "onCreate");
     }
@@ -127,9 +155,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (savedInstanceState == null) {
             // ARAJIN@ BACVOX FRAGMENT
+           ArrayList<Place> placies=new ArrayList<>();
+            Bundle bundle=  getIntent().getBundleExtra("placiesList");
+            placies.addAll((ArrayList<Place>)bundle.getSerializable("placiesList"));
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragment_container, new HomeFragment(), "home")
+                    .add(R.id.fragment_container, new HomeFragment(placies), "home")
                     .commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }
@@ -137,6 +168,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         name_tv = hView.findViewById(R.id.header_username_tv);
         email_tv = hView.findViewById(R.id.header_email_tv);
 
+        avatar_img.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                if(mAuth.getCurrentUser()==null){
+                    title="You aren't sign in";
+                    info="No info to show";
+                    showInfoWindowDialog();
+                }else{
+                    title="PROFILE INFO";
+                    if(companyForInfoWindow!=null || touristForInfoWindow!=null){
+                        showInfoWindowDialog();
+                    }
+                }
+                return false;
+            }
+        });
+
+    }
+
+    private void showInfoWindowDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
+                .setTitle(title)
+                .setMessage(info)
+                .setIcon(R.drawable.ic_application);
+        AlertDialog infoWindowDialog = builder.create();
+        infoWindowDialog.show();
     }
 
     private void initFireBase() {
@@ -145,7 +203,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             userUid = mAuth.getCurrentUser().getUid();
         }
         touristDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.TOURISTS_DATABASE_REFERENCE);
+        touristDatabaseReference.keepSynced(true);
         companyDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.COMPANIES_DATABASE_REFERENCE);
+        companyDatabaseReference.keepSynced(true);
     }
 
     @Override
@@ -170,13 +230,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         Tourist touristfromDB = dataSnapshot.getChildren().iterator().next().getValue(Tourist.class);
+
+                        touristForInfoWindow=touristfromDB;
+
                         if (touristfromDB != null) {
                             Toast.makeText(MainActivity.this, touristfromDB.toString(), Toast.LENGTH_LONG).show();
 
                             TOUR_AGENCY = touristfromDB.getIsCompany();
 
                             //reloadMenu(TOUR_AGENCY);
-                            StateViewModel stateViewModel = ViewModelProviders.of(MainActivity.this).get(StateViewModel.class);
+                           // StateViewModel stateViewModel = ViewModelProviders.of(MainActivity.this).get(StateViewModel.class);
 
                             stateViewModel.setState(TOUR_AGENCY);
 
@@ -215,10 +278,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         Company company = dataSnapshot.getChildren().iterator().next().getValue(Company.class);
+
+                        companyForInfoWindow=company;
+
                         if (company != null) {
                             TOUR_AGENCY = company.isCompany();
 
-                            StateViewModel stateViewModel = ViewModelProviders.of(MainActivity.this).get(StateViewModel.class);
+                           // StateViewModel stateViewModel = ViewModelProviders.of(MainActivity.this).get(StateViewModel.class);
                             stateViewModel.setState(TOUR_AGENCY);
                             reloadMenu(TOUR_AGENCY);
 
@@ -460,7 +526,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .replace(R.id.fragment_container, homeFragment)
                 //  .addToBackStack(null)
                 .commit();
-        //getSupportFragmentManager().beginTransaction().remove(homeFragment);
 
         if (getSupportActionBar() != null)
             getSupportActionBar().setTitle("Tour diractions");
@@ -576,7 +641,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.activity_main_drawer);
             invalidateOptionsMenu();
-
+            showHomeFragment();
             repositoryForUserState.setIntoRep(UserState.NO_REGISTRATED);
         }
     }

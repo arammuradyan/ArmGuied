@@ -21,20 +21,21 @@ public class AllToursRepository {
    private List<Tour> allToursList= new ArrayList<>();
    private MutableLiveData<List<Tour>> allTours= new MutableLiveData<>();
 
-   private DatabaseReference companiesDatabaseReference= FirebaseDatabase.getInstance().getReference(Constants.TOURS_DATABASE_REFERENCE);
+   private DatabaseReference toursDatabaseReference= FirebaseDatabase.getInstance()
+           .getReference(Constants.TOURS_DATABASE_REFERENCE);
 
 
     public AllToursRepository() {
     }
 
     public LiveData<List<Tour>> getAllTours(){
-        companiesDatabaseReference.addValueEventListener(new ValueEventListener() {
+        toursDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
               // companiesList.clear();
                 if (dataSnapshot.exists()){
-                    for (DataSnapshot companyData:dataSnapshot.getChildren()) {
-                        Tour tour=companyData.getValue(Tour.class);
+                    for (DataSnapshot tourData:dataSnapshot.getChildren()) {
+                        Tour tour=tourData.getValue(Tour.class);
                         allToursList.add(tour);
                     }
                allTours.postValue(allToursList);

@@ -144,7 +144,7 @@ public class BlankFragment extends Fragment {
                 if (getActivity() != null) {
                     getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null)
                             .add(R.id.fragment_container,
-                                    new ToursByCategoryFragment(place.getName())).commit();
+                                    new ToursByCategoryFragment(place)).commit();
                 }
                 textViewViewTours.setTextSize(18);
             }

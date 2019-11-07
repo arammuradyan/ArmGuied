@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.models.Company;
 import com.ArmGuide.tourapplication.models.Tour;
+import com.ArmGuide.tourapplication.ui.tours.by.category.ToursByCategoryChooseATravelPackageAadd;
 import com.ArmGuide.tourapplication.ui.tours.by.category.ToursByCategoryViewModel;
 import com.ArmGuide.tourapplication.ui.tours.by.category.ToursRecyclerViewAdapter;
 
@@ -77,6 +78,13 @@ public class TourCompaniesFragment extends Fragment implements AllCompaniesRecyc
 
     @Override
     public void onToursViewHolderClick(int position) {
-
+    Company company =adapter.getCompany(position);
+        if (getActivity() != null) {
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .addToBackStack(null)
+                    .add(R.id.fragment_container, new ChoosenCompaniesToursFragment(company))
+                    .addToBackStack(null)
+                    .commit();}
     }
 }

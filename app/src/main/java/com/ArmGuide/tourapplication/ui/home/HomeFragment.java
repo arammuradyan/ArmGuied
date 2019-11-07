@@ -5,24 +5,31 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.models.Place;
 
-import java.util.List;
+import java.util.ArrayList;
 
 
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private AdapterViewPager adapterViewPager;
+
+    private ArrayList<Place> placies=new ArrayList<>();
+
+
+    public HomeFragment(ArrayList<Place> placies) {
+        this.placies = placies;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +49,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Toast.makeText(getActivity(),"on create view",Toast.LENGTH_SHORT).show();
+
 
         Log.d("MyLog", "HomeFragment - onViewCreated");
         ViewPager viewPagerLand = view.findViewById(R.id.viewPagerLand);
@@ -49,13 +58,20 @@ public class HomeFragment extends Fragment {
             adapterViewPager = new AdapterViewPager(getActivity().getSupportFragmentManager());
         viewPagerLand.setAdapter(adapterViewPager);
 
-        homeViewModel.getLiveData().observe(HomeFragment.this, new Observer<List<Place>>() {
+        adapterViewPager.setPlaces(placies);
+
+
+        /*homeViewModel.getLiveData().observe(HomeFragment.this, new Observer<List<Place>>() {
             @Override
             public void onChanged(List<Place> data) {
-                if (data != null)
+                if (data != null){
                     adapterViewPager.setPlaces(data);
+
+
+                  }
+
             }
-        });
+        });*/
 
     }
 

@@ -162,7 +162,7 @@ public class CreateTourActivity extends AppCompatActivity {
                 String moreInformation=moreInformation_ET.getText().toString().trim();
 
                 List<String> touristsIds=new ArrayList<>();
-                touristsIds.add("id 1");
+              //  touristsIds.add("id 1");
 
 
 
@@ -201,7 +201,10 @@ public class CreateTourActivity extends AppCompatActivity {
                 tour.setImgUrl(imageUrl);
 
                 if(tourId!=null)
-                toursReference.child(tourId).setValue(tour).addOnSuccessListener(new OnSuccessListener<Void>() {
+                toursReference
+                        .child(tourId)
+                        .setValue(tour)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(CreateTourActivity.this,"tour saved", Toast.LENGTH_SHORT).show();

@@ -15,7 +15,7 @@ public class HomeViewModel extends ViewModel {
     private MutableLiveData<List<Place>> mutableLiveData;
 
     public LiveData<List<Place>> getLiveData(){
-        if(mutableLiveData==null)
+       if(mutableLiveData==null)
             mutableLiveData = RepositoryForPlaces.getInstance().getListMutableLiveData();
         return mutableLiveData;
     }
