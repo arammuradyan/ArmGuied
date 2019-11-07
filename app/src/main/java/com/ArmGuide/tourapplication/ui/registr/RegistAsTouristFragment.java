@@ -231,6 +231,7 @@ public class RegistAsTouristFragment extends Fragment {
                   @Override
                   public void onComplete(@NonNull Task<AuthResult> task) {
                       if(task.isSuccessful()){
+                          startActivity(new Intent(getActivity(),MainActivity.class));
 
                           if(mUploadTask!=null && mUploadTask.isInProgress()){
                               Toast.makeText(getContext(),"registration alreade in proces",Toast.LENGTH_SHORT).show();

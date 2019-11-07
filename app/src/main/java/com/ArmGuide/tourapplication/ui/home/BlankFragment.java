@@ -1,6 +1,8 @@
 package com.ArmGuide.tourapplication.ui.home;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,37 +12,38 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
+import com.ArmGuide.tourapplication.MainActivity;
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.WebActivity;
+import com.ArmGuide.tourapplication.models.Filter;
 import com.ArmGuide.tourapplication.models.Place;
 import com.ArmGuide.tourapplication.models.PlaceKEY;
-import com.ArmGuide.tourapplication.models.ServiceForNotification;
+import com.ArmGuide.tourapplication.models.ServiceForFilteredNotifications;
 import com.ArmGuide.tourapplication.models.UserState;
 import com.ArmGuide.tourapplication.ui.Images.ImagesFragment;
 
 import com.ArmGuide.tourapplication.ui.map.MapFragment;
 import com.ArmGuide.tourapplication.ui.map.PlaceInfo;
 import com.ArmGuide.tourapplication.ui.map.PlaceInfoRepository;
+import com.ArmGuide.tourapplication.ui.registr.LoginActivity;
 import com.ArmGuide.tourapplication.ui.tours.by.category.ToursByCategoryFragment;
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 
@@ -53,23 +56,36 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BlankFragment extends Fragment  {
+public class BlankFragment extends Fragment {
 
     private Place place;
+    private boolean backPressed;
     private String placeKey;
     private UserStateViewModel userStateViewModel;
+    private SubscribedPlacesViewModel subscribedPlacesViewModel;
+    private FilterViewModel filterViewModel;
+    private UserState userState;
 
     BlankFragment(Place place, String placeKey) {
         this.place = place;
         this.placeKey = placeKey;
     }
 
+
     private TextView textViewViewMore, textViewDescription, textViewPlaceName, textViewViewTours;
     private ImageView imageViewBack, imageViewForward, imageViewMap, imageViewPressHand;
     private CircleImageView circleImageView;
     private CheckBox checkBoxSubscribe;
     private Intent intentWeb;
+    private FilterBackPressedViewModel filterBackPressedViewModel;
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        filterBackPressedViewModel = ViewModelProviders.of(requireActivity()).get(FilterBackPressedViewModel.class);
+        Log.d("MyLog", "BlankFragment - onCreate" + placeKey);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,6 +94,8 @@ public class BlankFragment extends Fragment  {
         Log.d("MyLog", "BlankFragment - onCreateView" + placeKey);
 
         userStateViewModel = new UserStateViewModel();
+        subscribedPlacesViewModel = ViewModelProviders.of(BlankFragment.this).get(SubscribedPlacesViewModel.class);
+        filterViewModel = ViewModelProviders.of(BlankFragment.this).get(FilterViewModel.class);
         return inflater.inflate(R.layout.fragment_blank, container, false);
     }
 
@@ -136,6 +154,8 @@ public class BlankFragment extends Fragment  {
                 intentWeb = new Intent(view.getContext(), WebActivity.class);
                 intentWeb.putExtra("uri", place.getUrl_Wiki());
                 startActivity(intentWeb);
+                Animatoo.animateSlideUp(view.getContext());
+
             }
         });
         textViewViewTours.setOnClickListener(new View.OnClickListener() {
@@ -175,78 +195,121 @@ public class BlankFragment extends Fragment  {
         userStateViewModel.getState().observe(BlankFragment.this, new Observer<UserState>() {
             @Override
             public void onChanged(UserState state) {
-
-                Log.d("MyLog", "BlankFragment real state:" + state);
-                if (state == UserState.COMPANY) {
+                Log.d("mystt", "from Blankfr, in observer " + state);
+                //checkBox GONE
+                if (state == UserState.COMPANY && getActivity() != null) {
+                    getActivity().stopService(new Intent(getActivity(), ServiceForFilteredNotifications.class));
                     checkBoxSubscribe.setVisibility(View.GONE);
                     checkBoxSubscribe.invalidate();
-                } else {
-
-                    if (state == UserState.TOURIST && getActivity() != null)
-                        getActivity().startService(new Intent(getActivity(), ServiceForNotification.class));
-
+                }
+                // DIALOG
+                else if (state == UserState.NO_REGISTRATED && getActivity() != null) {
+                    getActivity().stopService(new Intent(getActivity(), ServiceForFilteredNotifications.class));
                     checkBoxSubscribe.setVisibility(View.VISIBLE);
+                    checkBoxSubscribe.setChecked(false);
                     checkBoxSubscribe.invalidate();
-                    final UserState userState = state;
-                    checkBoxSubscribe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    checkBoxSubscribe.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            if (userState == UserState.NO_REGISTRATED) {
-                                checkBoxSubscribe.setChecked(false);
-                                checkBoxSubscribe.invalidate();
-                            } else if (userState == UserState.TOURIST) {
-                                final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Tourists").
-                                        child(userId).child("getSubscribedPlacesIds");
-
-                                Log.d("reg", "onCheckedChangeListener = " + isChecked);
-                                if (isChecked) {
-                                    reference.child(placeKey).setValue(place.getName()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        public void onClick(View v) {
+                            checkBoxSubscribe.setChecked(false);
+                            AlertDialog.Builder ad = new AlertDialog.Builder(view.getContext());
+                            ad.setTitle("Project requirements.")
+                                    .setIcon(R.drawable.ic_info_black_24dp)
+                                    .setMessage("You are going to subscribe on new tours, but haven't " +
+                                            " logged in. Please enter your account to get notifications about new events!")
+                                    .setCancelable(true)
+                                    .setPositiveButton("LogIn", new DialogInterface.OnClickListener() {
                                         @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            Log.d("reg", "subscribed succeeded");
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent intent = new Intent(view.getContext(), LoginActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    })
+                                    .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
                                         }
                                     });
-                                } else {
-                                    reference.child(placeKey).removeValue(new DatabaseReference.CompletionListener() {
-                                        @Override
-                                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                            Log.d("reg", "subscribed removing succeeded");
-                                        }
-                                    });
-                                }
-
-                                reference.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()
-                                        ) {
-                                            if (snapshot.getKey().equals(placeKey)) {
-                                                checkBoxSubscribe.setChecked(true);
-                                                checkBoxSubscribe.invalidate();
-                                                break;
-                                            }
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    }
-                                });
-                            }
+                            ad.show();
                         }
                     });
                 }
+                // Tourist
+                else if (state == UserState.TOURIST && getActivity() != null) {
+                    getActivity().startService(new Intent(getActivity(), ServiceForFilteredNotifications.class));
+
+                    checkBoxSubscribe.setVisibility(View.VISIBLE);
+                    checkBoxSubscribe.invalidate();
+
+
+                    filterViewModel.getLiveData().observe(BlankFragment.this, new Observer<List<Filter>>() {
+                        @Override
+                        public void onChanged(List<Filter> filters) {
+                            if (filters != null && filters.size() > 0) {
+                                for (Filter f : filters
+                                ) {
+                                    if (f.getPlaceName().equals(place.getName())) {
+                                        checkBoxSubscribe.setChecked(true);
+                                        checkBoxSubscribe.invalidate();
+                                        break;
+                                    } else {
+                                        checkBoxSubscribe.setChecked(false);
+                                        checkBoxSubscribe.invalidate();
+                                    }
+                                }
+                                Log.d("kkkl", "" + backPressed);
+                                if (backPressed)
+                                    checkBoxSubscribe.setChecked(false);
+                            }
+                        }
+                    });
+
+                    filterBackPressedViewModel.getLiveData().observe(requireActivity(), new Observer<Boolean>() {
+                        @Override
+                        public void onChanged(Boolean aBoolean) {
+                            checkBoxSubscribe.setChecked(false);
+                        }
+                    });
+
+
+                    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                        final String userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        checkBoxSubscribe.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (checkBoxSubscribe.isChecked()) {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("userKey", userKey);
+                                    bundle.putString("placeName", place.getName());
+                                    bundle.putString("placeKey", placeKey);
+                                    FilterFragment filterFragment = new FilterFragment();
+                                    filterFragment.setArguments(bundle);
+                                    ((FragmentActivity) view.getContext()).getSupportFragmentManager().beginTransaction()
+                                            .add(R.id.fragment_container, filterFragment).addToBackStack(null).commit();
+                                } else {
+                                    final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Tourists").
+                                            child(userKey).child("SubscribedToursCriteria");
+                                    reference.child(placeKey).removeValue(new DatabaseReference.CompletionListener() {
+                                        @Override
+                                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                            Toast.makeText(view.getContext(), "You have successfully removed the subscription!", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                }
             }
         });
-
-
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
+
+
         textViewViewMore.setTextSize(15);
         textViewViewTours.setTextSize(15);
     }
@@ -278,11 +341,6 @@ public class BlankFragment extends Fragment  {
         Log.d("MyLog", "BlankFragment - onDestroy" + placeKey);
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d("MyLog", "BlankFragment - onCreate" + placeKey);
-    }
 
     @Override
     public void onDestroyView() {
@@ -291,6 +349,8 @@ public class BlankFragment extends Fragment  {
         Log.d("MyLog", "BlankFragment - onDestroyView" + placeKey);
     }
 
-
+    public void getBackPressedState(boolean bool) {
+        backPressed = bool;
+    }
 
 }

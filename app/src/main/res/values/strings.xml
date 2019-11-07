@@ -18,6 +18,7 @@
 
 
     <string name="menu_home">Home</string>
+    <string name="menu_notifications">Suggestion</string>
     <string name="menu_tour_companies">Tour companies</string>
     <string name="menu_all_tours">All tours</string>
     <string name="menu_my_tours">My tours</string>
@@ -40,5 +41,8 @@
         rivers, and lush forests to enjoy along with remote regions, forts, and monasteries to discover,the country will never cease
         to impress. We explore the 12 most beautiful places to visit.</string>
     <string name="location">Go to location clicking\n on the map </string>
+    <string name="notif_info">"See your notification content here. You can remove or send the offer to your special Menu option\n 'MyTours'."</string>
+    <string name="introFilterText">This section allows You to customize Your specific tours\n with some criteria introduced below.</string>
     //
+    <string name="addtomytours">Add to \nMy Tours</string>
 </resources>

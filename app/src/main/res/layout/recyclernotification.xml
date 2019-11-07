@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="6dp">
+
+
+    <ImageView
+        android:id="@+id/imageViewNot"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+    </ImageView>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/btn_AddToMyTours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_document"
+        android:fontFamily="@font/wendy_one"
+        android:gravity="bottom|center"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="3dp"
+        android:text="@string/addtomytours"
+        android:textColor="@android:color/black"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.90">
+    </TextView>
+
+    <LinearLayout
+        android:id="@+id/linearNot"
+        android:layout_width="match_parent"
+        android:background="@color/customGreenTransparent"
+        android:layout_margin="4dp"
+        android:layout_height="match_parent"
+        android:paddingLeft="16dp"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_marginTop="4dp"
+            android:id="@+id/tv_placeNameNot"
+            style="@style/textViewNotification"
+            android:layout_gravity="center"
+            android:fontFamily="@font/kaushan_script"
+            android:text="Mount Aragats"
+            android:textSize="22sp"
+            android:textStyle="italic">
+        </TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_tourCompanyNameNot"
+                style="@style/textViewNotification"
+                android:fontFamily="@font/kaushan_script"
+                android:text="Tour Agency:  One Way">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_dateNot"
+                android:fontFamily="@font/kaushan_script"
+                style="@style/textViewNotification"
+                android:text="Date: from 20/10/2019 to 30/10/2019">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_PriceNot"
+                style="@style/textViewNotification"
+                android:fontFamily="@font/kaushan_script"
+                android:text="Price:  45000 AMD">
+            </TextView>
+
+
+
+
+
+            <TextView
+                android:id="@+id/tv_IncludingNot"
+                style="@style/textViewNotification"
+                android:fontFamily="@font/kaushan_script"
+                android:text="Tour includes: ">
+            </TextView>
+        </LinearLayout>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:id="@+id/tv_transportNot"
+                    style="@style/textViewNotification"
+                    android:fontFamily="@font/kaushan_script"
+                    android:text="Transportation,">
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tv_foodNot"
+                    style="@style/textViewNotification"
+                    android:fontFamily="@font/kaushan_script"
+                    android:text="Lunch,">
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tv_wifiNot"
+                    style="@style/textViewNotification"
+                    android:fontFamily="@font/kaushan_script"
+                    android:text="Free Wifi">
+                </TextView>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_guideNot"
+                    style="@style/textViewNotification"
+                    android:fontFamily="@font/kaushan_script"
+                    android:text="3-lingual guiding,">
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tv_wineNot"
+                    style="@style/textViewNotification"
+                    android:fontFamily="@font/kaushan_script"
+                    android:text="Wine-degustation.">
+                </TextView>
+
+
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

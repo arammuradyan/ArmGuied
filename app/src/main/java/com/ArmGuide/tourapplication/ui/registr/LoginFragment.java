@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -36,7 +37,6 @@ public class LoginFragment extends Fragment {
     //Authentication
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-    private SharedPreferences sharedPreferences;
 
 
     @Nullable
@@ -47,7 +47,6 @@ public class LoginFragment extends Fragment {
         viewInit(view);
         initFirebaseAuth();
         setButtonListeners();
-        sharedPreferences = getActivity().getSharedPreferences("statePref",0);
 
         return view;
     }
@@ -83,9 +82,6 @@ private void setButtonListeners(){
         @Override
         public void onClick(View v) {
             login();
-            sharedPreferences.edit().putString("newState","newState").apply();
-            Log.d("MyLog","LoginFragment "+ sharedPreferences.getString("newState","lll"));
-
         }
     });
 
@@ -154,9 +150,11 @@ String password=login_password_et.getText().toString().trim();
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
+
                 if(!task.isSuccessful()){
                     Toast.makeText(getContext(),"sign in colback: "+task.getException(),Toast.LENGTH_SHORT).show();
                 }
+                startActivity(new Intent(getActivity(),MainActivity.class));
             }
         });
     }
