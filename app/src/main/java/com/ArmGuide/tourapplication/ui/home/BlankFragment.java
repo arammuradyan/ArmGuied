@@ -23,11 +23,13 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.ArmGuide.tourapplication.MainActivity;
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.WebActivity;
 import com.ArmGuide.tourapplication.models.Filter;
 import com.ArmGuide.tourapplication.models.Place;
 import com.ArmGuide.tourapplication.models.PlaceKEY;
+import com.ArmGuide.tourapplication.models.ServiceForFilteredNotifications;
 import com.ArmGuide.tourapplication.models.UserState;
 import com.ArmGuide.tourapplication.ui.Images.ImagesFragment;
 
@@ -36,6 +38,7 @@ import com.ArmGuide.tourapplication.ui.map.PlaceInfo;
 import com.ArmGuide.tourapplication.ui.map.PlaceInfoRepository;
 import com.ArmGuide.tourapplication.ui.registr.LoginActivity;
 import com.ArmGuide.tourapplication.ui.tours.by.category.ToursByCategoryFragment;
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
@@ -151,6 +154,8 @@ public class BlankFragment extends Fragment {
                 intentWeb = new Intent(view.getContext(), WebActivity.class);
                 intentWeb.putExtra("uri", place.getUrl_Wiki());
                 startActivity(intentWeb);
+                Animatoo.animateSlideUp(view.getContext());
+
             }
         });
         textViewViewTours.setOnClickListener(new View.OnClickListener() {
@@ -192,12 +197,14 @@ public class BlankFragment extends Fragment {
             public void onChanged(UserState state) {
                 Log.d("mystt", "from Blankfr, in observer " + state);
                 //checkBox GONE
-                if (state == UserState.COMPANY) {
+                if (state == UserState.COMPANY && getActivity() != null) {
+                    getActivity().stopService(new Intent(getActivity(), ServiceForFilteredNotifications.class));
                     checkBoxSubscribe.setVisibility(View.GONE);
                     checkBoxSubscribe.invalidate();
                 }
                 // DIALOG
-                else if (state == UserState.NO_REGISTRATED) {
+                else if (state == UserState.NO_REGISTRATED && getActivity() != null) {
+                    getActivity().stopService(new Intent(getActivity(), ServiceForFilteredNotifications.class));
                     checkBoxSubscribe.setVisibility(View.VISIBLE);
                     checkBoxSubscribe.setChecked(false);
                     checkBoxSubscribe.invalidate();
@@ -215,7 +222,6 @@ public class BlankFragment extends Fragment {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             Intent intent = new Intent(view.getContext(), LoginActivity.class);
-                                            intent.putExtra("fromHome", "fromHome");
                                             startActivity(intent);
                                         }
                                     })
@@ -229,7 +235,9 @@ public class BlankFragment extends Fragment {
                     });
                 }
                 // Tourist
-                else if (state == UserState.TOURIST) {
+                else if (state == UserState.TOURIST && getActivity() != null) {
+                    getActivity().startService(new Intent(getActivity(), ServiceForFilteredNotifications.class));
+
                     checkBoxSubscribe.setVisibility(View.VISIBLE);
                     checkBoxSubscribe.invalidate();
 

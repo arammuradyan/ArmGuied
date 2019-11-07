@@ -29,7 +29,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.ArmGuide.tourapplication.Repositories.RepositoryForUserState;
@@ -37,14 +39,17 @@ import com.ArmGuide.tourapplication.models.Company;
 import com.ArmGuide.tourapplication.models.Filter;
 import com.ArmGuide.tourapplication.models.Tourist;
 import com.ArmGuide.tourapplication.models.UserState;
+import com.ArmGuide.tourapplication.ui.Notification.NotificationFragment;
 import com.ArmGuide.tourapplication.ui.allTours.AllToursFragment;
 import com.ArmGuide.tourapplication.ui.companies.TourCompaniesFragment;
 import com.ArmGuide.tourapplication.ui.home.FilterFragment;
 import com.ArmGuide.tourapplication.ui.home.HomeFragment;
+import com.ArmGuide.tourapplication.ui.home.UserStateViewModel;
 import com.ArmGuide.tourapplication.ui.map.MapFragment;
 import com.ArmGuide.tourapplication.ui.map.PlaceInfoRepository;
 import com.ArmGuide.tourapplication.ui.myTours.MyToursFragment;
 import com.ArmGuide.tourapplication.ui.registr.LoginActivity;
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -76,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DatabaseReference companyDatabaseReference;
     private ValueEventListener touristValueListener;
     private ValueEventListener companyValueListener;
-
+    private String notification;
     // Views on header
     private ImageView avatar_img;
     private TextView name_tv, email_tv;
@@ -90,12 +95,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // notification = getIntent().getStringExtra("notification");
         repositoryForUserState = RepositoryForUserState.getInstance();
         getUserState();
         initFireBase();
         initViews(savedInstanceState);
         getLocationPermission();
         isServicesOK();
+
 
         Log.d("myMain", "onCreate");
     }
@@ -130,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorWhite));
 
+
         if (savedInstanceState == null) {
             // ARAJIN@ BACVOX FRAGMENT
             getSupportFragmentManager()
@@ -138,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }
+
         avatar_img = hView.findViewById(R.id.header_avatar_img);
         name_tv = hView.findViewById(R.id.header_username_tv);
         email_tv = hView.findViewById(R.id.header_email_tv);
@@ -156,8 +165,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
-
-        Log.d("myMain", "onStart");
 
         if (mAuth.getCurrentUser() != null) {
             userUid = mAuth.getCurrentUser().getUid();
@@ -382,6 +389,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.nav_current_location:
                     showCurrentLocation();
                     break;
+                case R.id.nav_my_notifications:
+                    showNotifications();
+                    break;
             }
         } else if (TOUR_AGENCY) {
             // COMPANY items
@@ -406,6 +416,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.nav_current_location:
                     showCurrentLocation();
                     break;
+
             }
         } else {
             // TOURIST menu items
@@ -427,6 +438,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
                 case R.id.nav_current_location:
                     showCurrentLocation();
+                    break;
+                case R.id.nav_my_notifications:
+                    showNotifications();
                     break;
             }
         }
@@ -458,9 +472,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportActionBar().setTitle("Tour diractions");
                 Toast.makeText(MainActivity.this, "superi if ", Toast.LENGTH_SHORT).show();
                 List<Fragment> fragments = getSupportFragmentManager().getFragments();
-                for (Fragment f: fragments
+                for (Fragment f : fragments
                 ) {
-                    if(f instanceof FilterFragment){
+                    if (f instanceof FilterFragment) {
                         ((FilterFragment) f).onBackPressed();
                     }
                 }
@@ -470,6 +484,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void showHomeFragment() {
+
+       /* if(notification!=null && notification.equals("notification")){
+            notification = "clearing";
+            showNotifications();
+        }
+        else {*/
         getSupportFragmentManager().popBackStack();
         HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("home");
         getSupportFragmentManager()
@@ -481,6 +501,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (getSupportActionBar() != null)
             getSupportActionBar().setTitle("Tour diractions");
+        // }
     }
 
     private void showTourCompaniesFragment() {
@@ -506,6 +527,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (getSupportActionBar() != null)
             getSupportActionBar().setTitle("All tours");
     }
+
+    private void showNotifications() {
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle("Suggestion");
+        startActivity(new Intent(MainActivity.this, NotificationActivity.class));
+        Animatoo.animateFade(MainActivity.this);
+    }
+
 
     private void showMyToursFragment() {
         getSupportFragmentManager().popBackStack();
@@ -598,125 +627,122 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-        /*
-         * ------------------------------MAP PERMISSIONS END GOOGLE MAP SERVICE CHECK----------------------------------------------------
-         * */
-        public boolean isServicesOK () {
-            Log.d(TAG, "isServiceOk: checking google services version");
+    /*
+     * ------------------------------MAP PERMISSIONS END GOOGLE MAP SERVICE CHECK----------------------------------------------------
+     * */
+    public boolean isServicesOK() {
+        Log.d(TAG, "isServiceOk: checking google services version");
 
-            int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
 
-            if (available == ConnectionResult.SUCCESS) {
-                // evriting ok can use map
-                Log.d(TAG, "isServiceOk: Googgle play service working");
-                return true;
-            } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
-                // ann eror that we can resolve it
-                Log.d(TAG, "isServiceOk: ann eror but we can solve it");
-                Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(this, available, ERROR_DIALOG_REQUEST);
-                dialog.show();
-            } else {
-                Toast.makeText(this, "You cant use maps", Toast.LENGTH_SHORT).show();
-            }
-            return false;
+        if (available == ConnectionResult.SUCCESS) {
+            // evriting ok can use map
+            Log.d(TAG, "isServiceOk: Googgle play service working");
+            return true;
+        } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
+            // ann eror that we can resolve it
+            Log.d(TAG, "isServiceOk: ann eror but we can solve it");
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(this, available, ERROR_DIALOG_REQUEST);
+            dialog.show();
+        } else {
+            Toast.makeText(this, "You cant use maps", Toast.LENGTH_SHORT).show();
         }
+        return false;
+    }
 
-        private void getLocationPermission () {
-            String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION};
-            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+    private void getLocationPermission() {
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION};
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
-                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED) {
-                    locationPermissionsGrabted = true;
-                } else {
-                    ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_COD);
-                }
+                locationPermissionsGrabted = true;
             } else {
                 ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_COD);
             }
+        } else {
+            ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_COD);
         }
+    }
 
-        @Override
-        public void onRequestPermissionsResult ( int requestCode, @NonNull String[] permissions,
-        @NonNull int[] grantResults){
-            locationPermissionsGrabted = false;
-            switch (requestCode) {
-                case PERMISSION_REQUEST_COD: {
-                    if (grantResults.length > 0) {
-                        for (int i = 0; i < grantResults.length; i++) {
-                            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                                locationPermissionsGrabted = false;
-                                return;
-                            }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        locationPermissionsGrabted = false;
+        switch (requestCode) {
+            case PERMISSION_REQUEST_COD: {
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                            locationPermissionsGrabted = false;
+                            return;
                         }
-                        locationPermissionsGrabted = true;
                     }
+                    locationPermissionsGrabted = true;
                 }
             }
         }
+    }
 
-        @Override
-        protected void onActivityResult ( int requestCode, int resultCode, @Nullable Intent data)
-        {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
-        @Override
-        protected void onDestroy () {
-            super.onDestroy();
-            Log.d("myMain", "onDestroy");
-        }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("myMain", "onDestroy");
+    }
 
-        @Override
-        protected void onPause () {
-            super.onPause();
-            Log.d("myMain", "onPause");
-        }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("myMain", "onPause");
+    }
 
-        @Override
-        protected void onResume () {
-            super.onResume();
-            getUserState();
-            Log.d("myMain", "onResume");
-        }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("myMain", "onResume" + notification);
+    }
 
 
-        private void getUserState () {
-            final String key;
-            if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-                repositoryForUserState.setIntoRep(UserState.NO_REGISTRATED);
-                Log.d("state", "inside getUserState method, not reg");
+    private void getUserState() {
+        final String key;
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            repositoryForUserState.setIntoRep(UserState.NO_REGISTRATED);
+            Log.d("state", "inside getUserState method, not reg");
 
-            } else {
-                key = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                FirebaseDatabase.getInstance().getReference().child("Companies").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        boolean isCompany = false;
-                        for (DataSnapshot data : dataSnapshot.getChildren()
-                        ) {
-                            if (data.getKey().equals(key)) {
-                                isCompany = true;
-                                Log.d("state", "inside getUserState method, iscompany" + isCompany);
-                                repositoryForUserState.setIntoRep(UserState.COMPANY);
-                                break;
-                            }
-                        }
-                        if (!isCompany) {
+        } else {
+            key = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            FirebaseDatabase.getInstance().getReference().child("Companies").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    boolean isCompany = false;
+                    for (DataSnapshot data : dataSnapshot.getChildren()
+                    ) {
+                        if (data.getKey().equals(key)) {
+                            isCompany = true;
                             Log.d("state", "inside getUserState method, iscompany" + isCompany);
-                            repositoryForUserState.setIntoRep(UserState.TOURIST);
+                            repositoryForUserState.setIntoRep(UserState.COMPANY);
+                            break;
                         }
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                    if (!isCompany) {
+                        Log.d("state", "inside getUserState method, iscompany" + isCompany);
+                        repositoryForUserState.setIntoRep(UserState.TOURIST);
                     }
-                });
-            }
-        }
+                }
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
 }
 
 

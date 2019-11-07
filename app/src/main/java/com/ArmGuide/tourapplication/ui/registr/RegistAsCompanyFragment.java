@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.ArmGuide.tourapplication.MainActivity;
 import com.ArmGuide.tourapplication.R;
 import com.ArmGuide.tourapplication.models.Company;
 import com.ArmGuide.tourapplication.models.Tour;
@@ -231,6 +232,7 @@ public class RegistAsCompanyFragment extends Fragment {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
+                        startActivity(new Intent(getActivity(), MainActivity.class));
 
                         if(mUploadTask!=null && mUploadTask.isInProgress()){
                             Toast.makeText(getContext(),"registration alreade in proces",Toast.LENGTH_SHORT).show();

@@ -228,7 +228,8 @@ public class ToursByCategoryChooseATravelPackageAadd extends Fragment {
         touristReferance.child(touristId).child("tours").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Toast.makeText(getActivity(), "on DATA CHANGE", Toast.LENGTH_SHORT).show();
+                if (getActivity() != null){
+                    Toast.makeText(getActivity(), "on DATA CHANGE", Toast.LENGTH_SHORT).show();
 
                 List<Tour> toursfromFB = new ArrayList<>();
                 if (dataSnapshot.exists()) {
@@ -286,6 +287,7 @@ public class ToursByCategoryChooseATravelPackageAadd extends Fragment {
                     return;
                 }
                 return;
+            }
             }
 
             @Override

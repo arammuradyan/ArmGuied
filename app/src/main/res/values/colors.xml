@@ -9,6 +9,11 @@
     <color name="customViolDark">#BF805ACB</color>
     <color name="customViolVeryDark">#4a148c</color>
     <color name="customWhiteTransparent">#66FFFFFF</color>
+    <color name="customViolDarkTransparent">#8B805ACB</color>
+    <color name="customViolVeryDarkTransparent">#B54A148C</color>
+    <color name="customGreenTransparent">#6F030C29</color>
+    <color name="customBlueLight">#81A8EE</color>
+    <color name="customDAAARKViol">#050C38</color>
 
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>

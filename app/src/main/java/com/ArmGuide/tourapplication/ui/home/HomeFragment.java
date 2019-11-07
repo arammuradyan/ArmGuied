@@ -1,6 +1,7 @@
 package com.ArmGuide.tourapplication.ui.home;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,12 +22,15 @@ import com.ArmGuide.tourapplication.models.UserState;
 
 import java.util.List;
 
+import su.levenetc.android.textsurface.TextSurface;
+
 
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private AdapterViewPager adapterViewPager;
-    private UserStateViewModel userStateViewModel;
+    private TextSurface textSurface;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,15 +39,9 @@ public class HomeFragment extends Fragment {
 
         Log.d("MyLog", "HomeFragment - onCreate");
         homeViewModel = ViewModelProviders.of(requireActivity()).get(HomeViewModel.class);
-        userStateViewModel = ViewModelProviders.of(HomeFragment.this).get(UserStateViewModel.class);
-        userStateViewModel.getState().observe(HomeFragment.this, new Observer<UserState>() {
-            @Override
-            public void onChanged(UserState userState) {
-                if (userState == UserState.TOURIST)
-                    if (getActivity() != null)
-                        getActivity().startService(new Intent(getActivity(), ServiceForFilteredNotifications.class));
-            }
-        });
+
+
+
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +55,20 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        textSurface = view.findViewById(R.id.text_surface);
+
+
+
+                    textSurface.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            show();
+                        }
+                    });
+
+
+
+
         Log.d("MyLog", "HomeFragment - onViewCreated");
         ViewPager viewPagerLand = view.findViewById(R.id.viewPagerLand);
         if (getActivity() != null)
@@ -68,7 +80,6 @@ public class HomeFragment extends Fragment {
             public void onChanged(List<Place> places) {
                 if (places != null) {
                     Log.d("MyLog","Observer before adapter "+ places.size());
-
                     adapterViewPager.setPlaces(places);
                     adapterViewPager.notifyDataSetChanged();
                 }
@@ -116,5 +127,10 @@ public class HomeFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         Log.d("MyLog", "HomeFragment - onDestroy");
+    }
+
+    private void show() {
+        textSurface.reset();
+        TextViewAnimation.play(textSurface, getActivity().getAssets());
     }
 }

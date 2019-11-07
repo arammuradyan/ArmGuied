@@ -12,25 +12,32 @@ public class SpecialFilteringClass {
     private List<Filter> filters;
     private List<Tour> tours;
     private List<Tour> toursUnderCondition;
+    private List<Tour> toursAlreadySeen;
+    private List<Tour> finalTours;
 
     public SpecialFilteringClass() {
         toursUnderCondition = new ArrayList<>();
+        toursAlreadySeen = new ArrayList<>();
+        finalTours = new ArrayList<>();
+        filters = new ArrayList<>();
+        tours = new ArrayList<>();
     }
 
-    public void setPlaceNames(List<Filter> filters) {
-        if (this.filters != null) {
+    public void setCriteria(List<Filter> filters) {
+        if(filters!=null && filters.size()>0) {
             this.filters.clear();
             this.filters.addAll(filters);
+            Log.d("polo", "inside setCriteria, filters: " + filters.size());
         }
-        this.filters = filters;
+
     }
 
     public void setTours(List<Tour> tours) {
-        if (this.tours != null) {
+        if(tours!=null && tours.size()>0) {
             this.tours.clear();
             this.tours.addAll(tours);
+            Log.d("polo", "inside setTours, tours: " + tours.size());
         }
-        this.tours = tours;
     }
 
     public List<Tour> getToursUnderCondition() {
@@ -119,4 +126,28 @@ public class SpecialFilteringClass {
         }
         return result;
     }
+
+    public List<Tour> setToursToFilter(List<Tour> alreadySeen, List<Tour> newTours) {
+        finalTours = newTours;
+
+        Log.d("polo", "inside setToursToFilter, alreadySeen: " + alreadySeen.size());
+        Log.d("polo", "inside setToursToFilter, newTours: " + newTours.size());
+        if (newTours.size() > 0 && alreadySeen.size() > 0) {
+            for (Tour tAlSeen : alreadySeen
+            ) {
+                String keyTAlSeen = tAlSeen.getId();
+                for (Tour newTour : newTours
+                ) {
+                    if (keyTAlSeen.equals(newTour.getId())) {
+                        finalTours.remove(newTour);
+                        break;
+                    }
+                }
+            }
+        }
+        Log.d("polo", "inside setToursToFilter, finalTours: " + finalTours.size());
+        return finalTours;
+    }
+
+
 }

@@ -19,6 +19,4 @@ public class HomeViewModel extends ViewModel {
         mutableLiveData = RepositoryForPlaces.getInstance().getListMutableLiveData();
         return mutableLiveData;
     }
-
-
 }

@@ -38,7 +38,6 @@ public class RepositoryForPlaces {
         placeList = new ArrayList<>();
     }
 
-
      private void getPlacesListFromFirebase() {
          FirebaseDatabase.getInstance().getReference().child("Places").addValueEventListener(new ValueEventListener() {
             @Override
