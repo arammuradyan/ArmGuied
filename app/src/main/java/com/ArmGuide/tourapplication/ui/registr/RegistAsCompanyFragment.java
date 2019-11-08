@@ -85,11 +85,8 @@ public class RegistAsCompanyFragment extends Fragment {
     private String address;
     private String confirm_password;
     private String websiteUrl;
-    private String question;
 
     private SharedPreferences sharedPreferences;
-    String[] data = {"The name of your pet?", "Mother's Maiden Name?",  "Favourite dish", "Favorite movie", "Favorite book"};
-    private String answer;
 
 
     @Nullable
@@ -101,29 +98,7 @@ public class RegistAsCompanyFragment extends Fragment {
         vieiwInit(view);
         setOnClickListeners();
         sharedPreferences = getActivity().getSharedPreferences("statePref",0);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, data);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        Spinner spinner = view.findViewById(R.id.spinner);
-        spinner.setAdapter(adapter);
-        // заголовок
-        spinner.setPrompt("Title");
-        // выделяем элемент
-        spinner.setSelection(2);
-        // устанавливаем обработчик нажатия
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                // показываем позиция нажатого элемента
-                question = ((String) parent.getAdapter().getItem(position));
-                Toast.makeText(getActivity().getBaseContext(), "Position = " + position + " " +
-                        parent.getAdapter().getItem(position), Toast.LENGTH_SHORT).show();
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-            }
-        });
 
         return view;
     }
@@ -161,8 +136,7 @@ public class RegistAsCompanyFragment extends Fragment {
         // Imageview
         avatar_img=view.findViewById(R.id.company_profileImage_img);
 
-        //forgote pass
-        answer_et=view.findViewById(R.id.answer);
+
     }
 
     @Override
@@ -254,7 +228,7 @@ public class RegistAsCompanyFragment extends Fragment {
         confirm_password = confirm_password_et.getText().toString().trim();
         address = address_et.getText().toString().trim();
         websiteUrl = websiteUrl_et.getText().toString().trim();
-        answer=answer_et.getText().toString().trim();
+
 
                        //0     1      2       3         4           5         6
         if(checkInputs(name,email,password,phone,confirm_password,address,websiteUrl)){
@@ -431,8 +405,6 @@ public class RegistAsCompanyFragment extends Fragment {
         currentCompany.setAddress(address);
         currentCompany.setTours(tours);
         currentCompany.setWebUrl(websiteUrl);
-//        currentCompany.setQuestion(question);
-//        currentCompany.setAnswer(answer);
         return currentCompany;
     }
 }

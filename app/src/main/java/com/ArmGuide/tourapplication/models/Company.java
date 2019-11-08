@@ -13,15 +13,14 @@ public class Company {
     private String webUrl;
     private boolean IsCompany;
     private List<Tour> tours;
-    private String question;
-    private String answer;
+
 
     public Company() {
     }
 
     public Company(String id, String email, String companyName, String password,
                    String phoneNumber, String address, String avatarUrl, String webUrl,
-                   boolean isCompany, List<Tour> tours, String question, String answer) {
+                   boolean isCompany, List<Tour> tours) {
         this.id = id;
         this.email = email;
         this.companyName = companyName;
@@ -32,25 +31,9 @@ public class Company {
         this.webUrl = webUrl;
         IsCompany = isCompany;
         this.tours = tours;
-        this.question = question;
-        this.answer = answer;
+
     }
 
-    public String getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
 
     public String getId() {
         return id;
